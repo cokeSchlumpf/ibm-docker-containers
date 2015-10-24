@@ -35,7 +35,7 @@ RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs,mqm iibuser \
 
 # Configure system
 COPY kernel-settings.sh /tmp/
-RUN chmod +x /tmp/kernel_settings.sh && /tmp/kernel_settings.sh
+RUN chmod +x /tmp/kernel_settings.sh && /tmp/kernel-settings.sh
 
 
 # Copy in script files
@@ -44,7 +44,7 @@ COPY iib-env.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Set BASH_ENV to source mqsiprofile when using docker exec bash -c
-ENV BASH_ENV=/usr/local/bin/iib_env.sh
+ENV BASH_ENV=/usr/local/bin/iib-env.sh
 
 # Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
@@ -56,4 +56,4 @@ ENV QUEUE_MGR_NAME=IIB_QM
 ENV BROKER_NAME=IIB_NODE
 
 # Set entrypoint to run management script
-ENTRYPOINT ["iib_manage.sh"]
+ENTRYPOINT ["iib-manage.sh"]
