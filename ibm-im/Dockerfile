@@ -15,9 +15,7 @@ RUN wget -O /tmp/installation_manager.tar.gz ${DOWNLOAD_BASE_URL}/installation-m
     && tar -zxvf ./installation_manager.tar.gz \
     && mkdir /tmp/logs \
     && /tmp/installation_manager/installc -acceptLicense -log /tmp/logs/installation_manager_install.log \
-    && rm -rf /tmp/installation_manager \
-    && ls -l /tmp \
-    && ls -l /tmp/installation_manager
+    && rm -rf /tmp/installation_manager
 
 # Start Bash on Startup
 CMD ["/bin/bash"]
