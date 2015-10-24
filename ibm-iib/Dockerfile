@@ -25,11 +25,11 @@ RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere
 RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integrationbus_${IIB_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./integrationbus.tar.gz \
-  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE \
+  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; exit 0  \
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
-# Expose ports from IIB to the outside world
+# Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
 
 # Start Bash on Startup
