@@ -30,7 +30,8 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && rm -rf /tmp/*
 
 # Add IIB user
-RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs,mqm iibuser \
+RUN usermod -G mqbrkrs mqm  \
+  && useradd --create-home --home-dir /home/iibuser -G mqbrkrs,mqm iibuser \
   && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
 
 # Configure system
