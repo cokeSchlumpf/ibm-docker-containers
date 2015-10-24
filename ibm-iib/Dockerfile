@@ -31,9 +31,7 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
 
 # Configure system
 COPY kernel_settings.sh /tmp/
-RUN echo touch /var/log/syslog \
-  && chown syslog:adm /var/log/syslog \
-  && chmod +x /tmp/kernel_settings.sh \
+RUN chmod +x /tmp/kernel_settings.sh \
   && /tmp/kernel_settings.sh
 
 
