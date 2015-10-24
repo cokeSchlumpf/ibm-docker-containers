@@ -29,8 +29,24 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
+# Configure system
+COPY kernel_settings.sh /tmp/
+RUN echo touch /var/log/syslog \
+  && chown syslog:adm /var/log/syslog \
+  && chmod +x /tmp/kernel_settings.sh \
+  && /tmp/kernel_settings.sh
+
+
+# Copy in script files
+COPY iib_manage.sh /usr/local/bin/
+COPY iib_env.sh /usr/local/bin/
+RUN chmod +rx /usr/local/bin/*.sh
+
+# Set BASH_ENV to source mqsiprofile when using docker exec bash -c
+ENV BASH_ENV=/usr/local/bin/iib_env.sh
+
 # Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
 
-# Start Bash on Startup
-CMD ["/bin/bash"]
+# Set entrypoint to run management script
+ENTRYPOINT ["iib_manage.sh"]
