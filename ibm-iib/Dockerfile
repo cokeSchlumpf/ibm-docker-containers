@@ -29,10 +29,13 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
+# Add IIB user
+RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs,sudo iibuser \
+  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
+
 # Configure system
 COPY kernel_settings.sh /tmp/
-RUN chmod +x /tmp/kernel_settings.sh \
-  && /tmp/kernel_settings.sh
+RUN chmod +x /tmp/kernel_settings.sh && /tmp/kernel_settings.sh
 
 
 # Copy in script files

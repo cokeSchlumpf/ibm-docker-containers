@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "Configuring sysctl.conf"
+
 echo "net.ipv4.tcp_fin_timeout = 30" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_keepalive_time = 300" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_keepalive_intvl = 15" >> /etc/sysctl.conf
@@ -12,5 +14,6 @@ echo "kernel.shmall = 2097152" >> /etc/sysctl.conf
 echo "net.core.netdev_max_backlog = 3000" >> /etc/sysctl.conf
 echo "net.core.somaxconn = 3000" >> /etc/sysctl.conf
 
+echo "Configuring limits.conf"
 echo "iibuser hard nofile 8192" >> /etc/security/limits.conf
 echo "iibuser soft nofile 8192" >> /etc/security/limits.conf
