@@ -19,7 +19,15 @@ RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere
   && rpm -ivh MQSeriesRuntime-*.rpm MQSeriesServer-*.rpm MQSeriesSamples-*.rpm MQSeriesSDK-*.rpm MQSeriesAMS-*.rpm MQSeriesFT*.rpm MQSeriesJava-*.rpm MQSeriesJRE-*.rpm \
   && cd /opt/mqm/bin \
   && ./setmqinst -p /opt/mqm -i \
-  && rm -rf /tmp
+  && rm -rf /tmp/*
+
+# Install Integration Bus
+RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integrationbus_${IIB_VERSION}.tar.gz \
+  && cd /tmp \
+  && tar -zxvf ./integrationbus.tar.gz \
+  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; exit 0 \
+  && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
+  && rm -rf /tmp/*
 
 # Start Bash on Startup
 CMD ["/bin/bash"]
