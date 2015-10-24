@@ -29,5 +29,8 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
+# Expose ports from IIB to the outside world
+EXPOSE 1414 4414 7800
+
 # Start Bash on Startup
 CMD ["/bin/bash"]
