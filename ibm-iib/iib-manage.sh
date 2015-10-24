@@ -22,7 +22,7 @@ start() {
   if [ ${NODE_EXISTS} -ne 0 ]; then
     echo "Node ${BROKER_NAME} does not exist..."
     echo "Creating node ${BROKER_NAME}"
-		mqsicreatebroker ${BROKER_NAME}
+		mqsicreatebroker ${BROKER_NAME} -q ${QUEUE_MGR_NAME}
   fi
 
   echo "Starting Message Broker ${BROKER_NAME}..."
