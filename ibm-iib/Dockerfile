@@ -8,7 +8,7 @@ ENV IIB_VERSION 9.0
 ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
 
 # Install helpful tools and IIB prerequisites
-RUN yum -y update && yum install -y nano wget tar glibc.i686 libgcc.x86_64 libgcc.i686 && yum -y clean all
+RUN yum -y update && yum install -y nano wget tar glibc.i686 libgcc.x86_64 libgcc.i686 sudo && yum -y clean all
 
 # Install WebSphere MQ
 RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere_mq_${WMQ_VERSION}.tar.gz \
@@ -31,7 +31,7 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
 
 # Add IIB user
 RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs iibuser \
-  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
+  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers.d/docker
 
 # Configure system
 COPY kernel_settings.sh /tmp/
