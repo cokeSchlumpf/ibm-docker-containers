@@ -13,5 +13,11 @@ RUN yum -y update && yum install -y nano wget tar
 RUN wget -O /tmp/installation_manager.tar.gz ${DOWNLOAD_BASE_URL}/installation-manager/installation_manager_${IM_VERSION}.tar.gz \
     && cd /tmp \
     && tar -zxvf ./installation_manager.tar.gz \
+    && mkdir /tmp/logs \
+    && /tmp/installation_manager/installc -acceptLicense -log /tmp/logs/installation_manager_install.log \
+    && rm -rf /tmp/installation_manager \
     && ls -l /tmp \
     && ls -l /tmp/installation_manager
+
+# Start Bash on Startup
+CMD ["/bin/bash"]
