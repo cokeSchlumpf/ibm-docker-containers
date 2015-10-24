@@ -25,7 +25,7 @@ RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere
 RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integrationbus_${IIB_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./integrationbus.tar.gz \
-  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; exit 0 \
+  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE \
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
