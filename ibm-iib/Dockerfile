@@ -51,7 +51,7 @@ ENV BASH_ENV=/usr/local/bin/iib-env.sh
 EXPOSE 1414 4414 7800
 
 # Use iibuser
-USER iibuser
+# USER iibuser
 
 ENV QUEUE_MGR_NAME=IIB_QM
 ENV BROKER_NAME=IIB_NODE
