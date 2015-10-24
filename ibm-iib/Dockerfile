@@ -30,8 +30,8 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && rm -rf /tmp/*
 
 # Add IIB user
-RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs iibuser \
-  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers.d/docker
+RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs,mqm iibuser \
+  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
 
 # Configure system
 COPY kernel_settings.sh /tmp/
@@ -48,6 +48,12 @@ ENV BASH_ENV=/usr/local/bin/iib_env.sh
 
 # Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
+
+# Use iibuser
+USER iibuser
+
+ENV QUEUE_MGR_NAME=IIB_QM
+ENV BROKER_NAME=IIB_NODE
 
 # Set entrypoint to run management script
 ENTRYPOINT ["iib_manage.sh"]
