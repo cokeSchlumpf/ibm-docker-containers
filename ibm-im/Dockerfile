@@ -7,7 +7,7 @@ ENV IM_VERSION 1.6.2
 ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
 
 # Install helpful tools
-RUN yum -y update && yum install -y nano wget
+RUN yum -y update && yum install -y nano wget tar
 
 # Install IBM Installation Manager
 RUN wget -O /tmp/installation_manager.tar.gz ${DOWNLOAD_BASE_URL}/installation-manager/installation_manager_${IM_VERSION}.tar.gz \
