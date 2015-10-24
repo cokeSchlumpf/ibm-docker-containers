@@ -35,7 +35,7 @@ RUN useradd --create-home --home-dir /home/iibuser -G mqbrkrs,mqm iibuser \
 
 # Configure system
 COPY kernel-settings.sh /tmp/
-RUN chmod +x /tmp/kernel_settings.sh && /tmp/kernel-settings.sh
+RUN chmod +x /tmp/kernel-settings.sh && /tmp/kernel-settings.sh
 
 
 # Copy in script files
