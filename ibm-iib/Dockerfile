@@ -5,9 +5,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 # Set up some configuration environment variables
 ENV WMQ_VERSION 7.5.0.3
 ENV IIB_VERSION 9.0
-ENV DOWNLOAD_BASE_URL http://${DOWNLOAD_BASE_URL}:8080
-
-RUN echo $DOWNLOAD_BASE_URL
+ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
 
 # Install helpful tools and IIB prerequisites
 RUN yum -y update && yum install -y nano wget tar glibc.i686 libgcc.x86_64 libgcc.i686 sudo && yum -y clean all
