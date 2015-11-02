@@ -30,8 +30,9 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && rm -rf /tmp/*
 
 # Add IIB user
-RUN usermod -G mqbrkrs mqm  \
-  && useradd --create-home --home-dir /home/iibuser -G mqbrkrs,mqm iibuser \
+RUN usermod -G mqbrkrs mqm \
+  && useradd -G mqm --create-home --password $(echo "iibuser" | openssl passwd -1 -stdin) iibuser \
+  && usermod -a -G mqbrkrs iibuser \
   && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
 
 # Configure system
@@ -50,8 +51,8 @@ ENV BASH_ENV=/usr/local/bin/iib-env.sh
 # Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
 
-# Use iibuser
-USER iibuser
+# Use mqm when starting up.
+USER mqm
 
 ENV QUEUE_MGR_NAME=IIB_QM
 ENV BROKER_NAME=IIB_NODE

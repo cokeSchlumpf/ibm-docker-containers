@@ -1,6 +1,7 @@
 #!/bin/bash
 
 start() {
+  whoami
   mqsiservice -v
 
   . /opt/mqm/bin/setmqenv -s
@@ -31,10 +32,10 @@ start() {
 
 stop() {
   echo "Stopping Message Broker..."
-  # mqsistop ${BROKER_NAME}
+  mqsistop ${BROKER_NAME}
 
   echo "Stopping Queue Manager..."
-  # endmqm ${QUEUE_MGR_NAME}
+  endmqm ${QUEUE_MGR_NAME}
 }
 
 monitor() {
