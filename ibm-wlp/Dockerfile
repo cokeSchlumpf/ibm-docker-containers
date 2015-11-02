@@ -12,6 +12,7 @@ RUN yum -y update && yum install -y nano wget tar && yum -y clean all
 # Install WebSphere MQ
 RUN wget -O /tmp/websphere-liberty.tar.gz ${DOWNLOAD_BASE_URL}/websphere-liberty/websphere-liberty_${WLP_VERSION}.tar.gz \
   && cd /tmp \
+  && mkdir -p /opt/wlp \
   && tar -zxvf ./websphere-liberty.tar.gz -C /opt/wlp \
   && ls -l /opt && ls -l /opt/wlp
 
