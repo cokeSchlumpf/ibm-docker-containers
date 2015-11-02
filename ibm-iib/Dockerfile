@@ -11,7 +11,7 @@ ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
 RUN yum -y update && yum install -y nano wget tar glibc.i686 libgcc.x86_64 libgcc.i686 sudo && yum -y clean all
 
 # Install WebSphere MQ
-RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere_mq_${WMQ_VERSION}.tar.gz \
+RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere-mq_${WMQ_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./websphere_mq.tar.gz \
   && cd /tmp/websphere_mq \
@@ -38,7 +38,6 @@ RUN usermod -G mqbrkrs mqm \
 # Configure system
 COPY kernel-settings.sh /tmp/
 RUN chmod +x /tmp/kernel-settings.sh && /tmp/kernel-settings.sh
-
 
 # Copy in script files
 COPY iib-manage.sh /usr/local/bin/
