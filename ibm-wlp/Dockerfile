@@ -12,7 +12,6 @@ RUN yum -y update && yum install -y nano wget tar && yum -y clean all
 # Install WebSphere MQ
 RUN wget -O /tmp/websphere-liberty.tar.gz ${DOWNLOAD_BASE_URL}/websphere-liberty/websphere-liberty_${WLP_VERSION}.tar.gz \
   && cd /tmp \
-  && mkdir /opt \
   && tar -zxvf ./websphere-liberty.tar.gz -C /opt
 
 # Start Bash on Startup
