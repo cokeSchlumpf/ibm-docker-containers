@@ -18,6 +18,10 @@ RUN wget -O /tmp/websphere-liberty.zip ${DOWNLOAD_BASE_URL}/websphere-liberty/we
 # Install openssh-server to deploy applications
 RUN yum install -y openssh-server
 
+# Copy SSH Configuration (SSH Keys should always be the same)
+ADD ssh-keys.zip /tmp
+RUN ls -l /tmp
+
 # Create user for WLP
 RUN useradd --user-group --create-home --password $(echo "wlp" | openssl passwd -1 -stdin) wlp \
   && chown -R wlp /opt/wlp \
