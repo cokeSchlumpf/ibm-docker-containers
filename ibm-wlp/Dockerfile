@@ -20,8 +20,8 @@ RUN yum install -y openssh-server && chkconfig sshd on
 
 # Create user for WLP
 RUN useradd --user-group --create-home --password $(echo "wlp" | openssl passwd -1 -stdin) wlp \
-  && chown -R /opt/wlp wlp \
-  && chgrp -R /opt/wlp wlp
+  && chown -R wlp /opt/wlp \
+  && chgrp -R wlp /opt/wlp
 
 # Expose ports from WLP to the outside world.
 EXPOSE 9080 9443 22
