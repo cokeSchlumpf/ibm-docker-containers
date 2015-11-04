@@ -1,4 +1,4 @@
-# This docker image provides a Websphere Liberty Profile Server.
+# This docker image provides a WebSphere Liberty Profile Server.
 FROM centos:6.6
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
