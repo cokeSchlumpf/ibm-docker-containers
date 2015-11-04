@@ -23,8 +23,12 @@ RUN useradd --user-group --create-home --password $(echo "wlp" | openssl passwd 
   && chown -R wlp /opt/wlp \
   && chgrp -R wlp /opt/wlp
 
+# WLP management script
+COPY wlp-manage.sh /usr/local/bin/
+RUN chmod +rx /usr/local/bin/*.sh
+
 # Expose ports from WLP to the outside world.
 EXPOSE 9080 9443 22
 
 # Start WLP on Startup
-CMD ["/opt/wlp/bin/server", "run"]
+ENTRYPOINT ["wlp-manage.sh"]
