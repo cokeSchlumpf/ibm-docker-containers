@@ -22,7 +22,9 @@ RUN yum install -y openssh-server
 COPY ssh-keys.zip /tmp/
 RUN cd /tmp \
   && unzip ssh-keys.zip -d ./ \
-  && /bin/cp -f ssh_host* /etc/ssh/
+  && /bin/cp -f ssh_host* /etc/ssh/ \
+  && chmod 600 /etc/ssh/*key \
+  && chown root /etc/ssh/*
 
 # Create user for WLP
 RUN useradd --user-group --create-home --password $(echo "wlp" | openssl passwd -1 -stdin) wlp \
