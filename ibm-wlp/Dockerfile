@@ -15,8 +15,11 @@ RUN wget -O /tmp/websphere-liberty.zip ${DOWNLOAD_BASE_URL}/websphere-liberty/we
   && unzip ./websphere-liberty.zip -d /opt \
   && rm -rf /opt/._websphere-liberty /tmp/*
 
+# Install openssh-server to deploy applications
+RUN yum install -y openssh-server && chkconfig sshd on
+
 # Expose ports from WLP to the outside world.
-EXPOSE 9080 9443
+EXPOSE 9080 9443 22
 
 # Start WLP on Startup
 CMD ["/opt/wlp/bin/server", "run"]
