@@ -39,7 +39,7 @@ RUN chmod +rx /usr/local/bin/*.sh
 EXPOSE 9080 9443 22
 
 # Workaround to get nano running
-ENV TERM=xterm
+ENV TERM xterm
 
 # Start WLP on Startup
 ENTRYPOINT ["wlp-manage.sh"]
