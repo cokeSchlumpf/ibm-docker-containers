@@ -56,7 +56,7 @@ You can build the image with the following command (run the command from this di
 docker build -t ibm/buildserver .
 ```
 
-During the installation you need to make the following files available. See also [installation-files](../installation-files).
+During the installation you need to make the following files available. Before running the build make sure that the versions defined in the Dockerfile are available in `installation-files`. See also [installation-files](../installation-files).
 
 ```
 installation-files
