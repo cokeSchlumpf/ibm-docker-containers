@@ -5,7 +5,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 # Define Versions
 ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
 ENV ARTIFACTORY_VERSION 4.2.1
-ENV JDK_VERSION 8u66
+ENV JDK_VERSION 1.8.0_66
 ENV JENKINS_VERSION 1.625.1
 ENV TOMCAT_VERSION 8.0.28
 
@@ -13,7 +13,7 @@ ENV TOMCAT_VERSION 8.0.28
 RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./jdk.tar.gz \
-  && mv /tmp/jdk /opt/jdk \
+  && mv /tmp/jdk${JDK_VERSION} /opt/jdk \
   && alternatives --install /usr/bin/java java /opt/jdk/bin/java 2 \
   && alternatives --install /usr/bin/jar jar /opt/jdk/bin/jar 2 \
   && alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 2 \
@@ -31,7 +31,7 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
 RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-tomcat_${TOMCAT_VERSION}.tar.gz \
   && cd /tmp \
   && tar -xzvf ./apache-tomcat.tar.gz \
-  && mv /tmp/apache-tomcat /usr/local/apache-tomcat
+  && mv /tmp/apache-tomcat-${TOMCAT_VERSION} /usr/local/apache-tomcat
 
 # Deploy Jenkins
 ENV JENKINS_HOME /var/jenkins
