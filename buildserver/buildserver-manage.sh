@@ -20,6 +20,10 @@ monitor() {
 	done
 }
 
+stop() {
+  service postfix stop
+}
+
 start
 trap stop SIGTERM SIGINT
 monitor
