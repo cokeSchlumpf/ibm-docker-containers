@@ -3,7 +3,7 @@ FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Install helpful tools
-RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo which && apt-get -y clean all
+RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo && apt-get -y clean all
 
 # Define Versions
 ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
@@ -18,12 +18,12 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./jdk.tar.gz \
   && mv /tmp/jdk${JDK_VERSION} /opt/jdk \
-  && alternatives --install /usr/bin/java java /opt/jdk/bin/java 2 \
-  && alternatives --install /usr/bin/jar jar /opt/jdk/bin/jar 2 \
-  && alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 2 \
-  && alternatives --set java /opt/jdk/bin/java \
-  && alternatives --set jar /opt/jdk/bin/jar \
-  && alternatives --set javac /opt/jdk/bin/javac \
+  && update-alternatives --install /usr/bin/java java /opt/jdk/bin/java 2 \
+  && update-alternatives --install /usr/bin/jar jar /opt/jdk/bin/jar 2 \
+  && update-alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 2 \
+  && update-alternatives --set java /opt/jdk/bin/java \
+  && update-alternatives --set jar /opt/jdk/bin/jar \
+  && update-alternatives --set javac /opt/jdk/bin/javac \
   && rm -rf /tmp/* \
   && export JAVA_HOME=/opt/jdk \
   && export JRE_HOME=/opt/jdk/jre \
@@ -72,6 +72,9 @@ RUN cd /tmp \
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
+
+# Workaround to get nano running
+ENV TERM=xterm
 
 # Expose Ports
 EXPOSE 8080 8081 22
