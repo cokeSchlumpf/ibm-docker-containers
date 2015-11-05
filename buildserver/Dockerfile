@@ -54,8 +54,7 @@ RUN yum install -y curl openssh-server postfix cronie \
 
 RUN wget -O /tmp/gitlab-ce.rpm ${DOWNLOAD_BASE_URL}/gitlab-ce/gitlab-ce_${GITLAB_VERSION}.rpm \
   && cd /tmp \
-  && yum install -y gitlab-ce.rpm \
-  && gitlab-ctl reconfigure
+  && yum install -y gitlab-ce.rpm
 VOLUME ["/var/opt/gitlab"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)

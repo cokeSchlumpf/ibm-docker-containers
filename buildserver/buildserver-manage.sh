@@ -8,7 +8,7 @@ start() {
   service postfix start
 
   # Start gitlab
-  gitlab-ctl start
+  gitlab-ctl reconfigure
 }
 
 monitor() {
