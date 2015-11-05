@@ -2,10 +2,11 @@
 
 This docker image contains a complete buildserver with the following features:
 
-* Java 8
-* Jenkins
 * Artifactory
 * GitLab
+* Java 8
+* Jenkins
+* Maven
 
 Detailed versions are defined within the Dockerfile.
 
