@@ -3,6 +3,12 @@
 start() {
   # Start Tomcat
   /usr/local/apache-tomcat/bin/startup.sh
+
+  # Start Postfix for gitlab
+  service postfix start
+
+  # Start gitlab
+  gitlab-ctl start
 }
 
 monitor() {

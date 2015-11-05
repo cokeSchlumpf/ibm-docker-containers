@@ -45,6 +45,15 @@ RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL
   && mkdir ${ARTIFACTORY_HOME}
 VOLUME ["/var/artifactory"]
 
+# Install gitlab
+RUN yum install curl openssh-server postfix cronie \
+  && service postfix start \
+  && chkconfig postfix on \
+  && lokkit -s http -s ssh \
+  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash \
+  && sudo yum install gitlab-ce \
+  && gitlab-ctl reconfigure
+
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
