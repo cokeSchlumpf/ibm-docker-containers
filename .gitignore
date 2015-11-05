@@ -2,4 +2,5 @@
 installation-files/**/*.zip
 installation-files/**/*.tar.gz
 installation-files/**/*.war
+installation-files/**/*.rpm
 .DS_Store
