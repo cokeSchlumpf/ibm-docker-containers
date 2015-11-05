@@ -22,3 +22,5 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin \
   && java -version \
   && which java
+
+CMD["/bin/bash"]
