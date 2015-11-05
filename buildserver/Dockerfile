@@ -50,14 +50,9 @@ RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL
 VOLUME ["${ARTIFACTORY_HOME}"]
 
 # Install gitlab
-RUN apt-get install -y curl openssh-server postfix cronie \
-  && service postfix start \
-  && chkconfig postfix on \
-  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
-
-RUN wget -O /tmp/gitlab-ce.rpm ${DOWNLOAD_BASE_URL}/gitlab-ce/gitlab-ce_${GITLAB_VERSION}.rpm \
-  && cd /tmp \
-  && apt-get install -y gitlab-ce.rpm
+RUN apt-get install -y curl openssh-server ca-certificates postfix \
+  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
+  && apt-get install gitlab-ce
 VOLUME ["/var/opt/gitlab"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
