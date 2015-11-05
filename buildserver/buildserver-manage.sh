@@ -8,14 +8,7 @@ start() {
   service postfix start
 
   # Start gitlab
-  gitlab-ctl reconfigure & sleep 40; kill $!
-  pkill -f chef-client
-  sleep 10
-  pkill -f chef-client
-  # Execute workaround for freezing reconfigure process. See https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/common_installation_problems/README.md#reconfigure-freezes-at-ruby_blocksupervise_redis_sleep-action-run.
-  cp /opt/gitlab/embedded/cookbooks/runit/files/default/gitlab-runsvdir.conf /etc/init/
-  initctl start gitlab-runsvdir
-  gitlab-ctl reconfigure
+  sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
 }
 
 monitor() {
