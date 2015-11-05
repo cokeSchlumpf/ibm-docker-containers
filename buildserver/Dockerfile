@@ -1,6 +1,9 @@
 # This image contains a simple build server with Java 8, Git, Jenkins, Artifactory and GitLab.
-FROM ibm/centos-base
+FROM ubuntu:12.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
+
+# Install helpful tools
+RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo which && apt-get -y clean all
 
 # Define Versions
 ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
@@ -47,14 +50,14 @@ RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL
 VOLUME ["${ARTIFACTORY_HOME}"]
 
 # Install gitlab
-RUN yum install -y curl openssh-server postfix cronie \
+RUN apt-get install -y curl openssh-server postfix cronie \
   && service postfix start \
   && chkconfig postfix on \
   && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
 
 RUN wget -O /tmp/gitlab-ce.rpm ${DOWNLOAD_BASE_URL}/gitlab-ce/gitlab-ce_${GITLAB_VERSION}.rpm \
   && cd /tmp \
-  && yum install -y gitlab-ce.rpm
+  && apt-get install -y gitlab-ce.rpm
 VOLUME ["/var/opt/gitlab"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
