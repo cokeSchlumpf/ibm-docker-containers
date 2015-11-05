@@ -4,7 +4,9 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Define Versions
 ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
+ENV ARTIFACTORY_VERSION 4.2.1
 ENV JDK_VERSION 8u66
+ENV JENKINS_VERSION 1.625.1
 ENV TOMCAT_VERSION 8.0.28
 
 # Install Java 8
@@ -26,10 +28,26 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && which java
 
 # Install Tomcat
-RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-tomcat_${JDK_VERSION}.tar.gz \
+RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-tomcat_${TOMCAT_VERSION}.tar.gz \
   && cd /tmp \
   && tar -xzvf ./apache-tomcat.tar.gz \
   && mv /tmp/apache-tomcat /usr/local/apache-tomcat
 
+# Deploy Jenkins
+ENV JENKINS_HOME /var/jenkins
+RUN wget -O /usr/local/apache-tomcat/webapps/jenkins.war ${DOWNLOAD_BASE_URL}/jenkins/jenkins_${JENKINS_VERSION}.war \
+  && mkdir ${JENKINS_HOME}
+VOLUME ["/var/jenkins"]
 
-CMD["/bin/bash"]
+# Deploy Artifactory
+ENV ARTIFACTORY_HOME /var/artifactory
+RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL}/artifactory/artifactory_${ARTIFACTORY_VERSION}.war \
+  && mkdir ${ARTIFACTORY_HOME}
+VOLUME ["/var/artifactory"]
+
+# Add manage script
+COPY buildserver-manage.sh /usr/local/bin/
+RUN chmod +rx /usr/local/bin/*.sh
+
+# Set entrypoint to run management script
+ENTRYPOINT ["buildserver-manage"]
