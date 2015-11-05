@@ -49,9 +49,9 @@ VOLUME ["${ARTIFACTORY_HOME}"]
 RUN yum install -y curl openssh-server postfix cronie \
   && service postfix start \
   && chkconfig postfix on \
-  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash \
-  && yum install -y gitlab-ce \
-  && gitlab-ctl reconfigure
+  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
+#  && yum install -y gitlab-ce \
+#  && gitlab-ctl reconfigure
 VOLUME ["/var/opt/gitlab"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
