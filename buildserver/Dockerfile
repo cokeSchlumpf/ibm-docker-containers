@@ -34,16 +34,16 @@ RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-
   && mv /tmp/apache-tomcat-${TOMCAT_VERSION} /usr/local/apache-tomcat
 
 # Deploy Jenkins
-ENV JENKINS_HOME /var/jenkins
+ENV JENKINS_HOME /var/opt/jenkins
 RUN wget -O /usr/local/apache-tomcat/webapps/jenkins.war ${DOWNLOAD_BASE_URL}/jenkins/jenkins_${JENKINS_VERSION}.war \
-  && mkdir ${JENKINS_HOME}
-VOLUME [${}]
+  && mkdir -p ${JENKINS_HOME}
+VOLUME [JENKINS_HOME]
 
 # Deploy Artifactory
-ENV ARTIFACTORY_HOME /var/artifactory
+ENV ARTIFACTORY_HOME /var/opt/artifactory
 RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL}/artifactory/artifactory_${ARTIFACTORY_VERSION}.war \
-  && mkdir ${ARTIFACTORY_HOME}
-VOLUME ["/var/artifactory"]
+  && mkdir -p ${ARTIFACTORY_HOME}
+VOLUME [ARTIFACTORY_HOME]
 
 # Install gitlab
 RUN yum install -y curl openssh-server postfix cronie \
@@ -52,6 +52,7 @@ RUN yum install -y curl openssh-server postfix cronie \
   && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash \
   && yum install -y gitlab-ce \
   && gitlab-ctl reconfigure
+VOLUME ["/var/opt/gitlab"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
 COPY ssh-keys.zip /tmp/
