@@ -1,4 +1,4 @@
-# This image contains a simple build server with Java 8, Git, Jenkins, Artifactory and GitLab.
+# This image contains a simple build server with Java 8, Git, Maven, Jenkins, Artifactory and GitLab.
 FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
@@ -63,6 +63,9 @@ RUN cd /tmp \
   && chmod 600 /etc/ssh/*key \
   && chown root /etc/ssh/* \
   && rm -rf /tmp/*
+
+# Install Maven
+RUN apt-get install -y maven
 
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
