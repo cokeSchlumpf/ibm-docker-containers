@@ -1,5 +1,5 @@
 # This image contains a simple build server with Java 8, Git, Jenkins and Artifactory.
-FROM rodenstock/centos-base
+FROM ibm/centos-base
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Define Versions
