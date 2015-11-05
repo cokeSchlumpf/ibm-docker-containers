@@ -68,7 +68,7 @@ COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Expose Ports
-EXPOSE 8080
+EXPOSE 8080 8081 22
 
 # Set entrypoint to run management script
 ENTRYPOINT ["buildserver-manage.sh"]

@@ -41,6 +41,7 @@ The image offers the following persistent volumes:
 
 The image exposes the following ports:
 
+* `22` - SSH Port for git remote access
 * `8080` - Tomcat HTTP Port for artifactory and jenkins
 * `8081` - GitLab HTTP Port
 
