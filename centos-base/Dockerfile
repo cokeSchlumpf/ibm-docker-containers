@@ -8,4 +8,4 @@ RUN yum -y update && yum install -y nano wget tar unzip sudo which && yum -y cle
 # Workaround to get nano running
 ENV TERM=xterm
 
-CMD["/bin/bash"]
+CMD ["/bin/bash"]
