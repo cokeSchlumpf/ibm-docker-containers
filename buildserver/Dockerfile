@@ -49,5 +49,8 @@ VOLUME ["/var/artifactory"]
 COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
+# Expose Ports
+EXPOSE 8080
+
 # Set entrypoint to run management script
 ENTRYPOINT ["buildserver-manage.sh"]
