@@ -13,7 +13,7 @@ ENV TOMCAT_VERSION 8.0.28
 RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./jdk.tar.gz \
-  && mv /tmp/jdk /opt/ \
+  && mv /tmp/jdk /opt/jdk \
   && alternatives --install /usr/bin/java java /opt/jdk/bin/java 2 \
   && alternatives --install /usr/bin/jar jar /opt/jdk/bin/jar 2 \
   && alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 2 \
