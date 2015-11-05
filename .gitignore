@@ -1,4 +1,3 @@
-*.tar.gz
 installation-files/**/*.zip
 installation-files/**/*.tar.gz
 installation-files/**/*.war
