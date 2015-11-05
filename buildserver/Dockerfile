@@ -37,7 +37,7 @@ RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-
 ENV JENKINS_HOME /var/jenkins
 RUN wget -O /usr/local/apache-tomcat/webapps/jenkins.war ${DOWNLOAD_BASE_URL}/jenkins/jenkins_${JENKINS_VERSION}.war \
   && mkdir ${JENKINS_HOME}
-VOLUME ["/var/jenkins"]
+VOLUME [${}]
 
 # Deploy Artifactory
 ENV ARTIFACTORY_HOME /var/artifactory
@@ -46,7 +46,7 @@ RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL
 VOLUME ["/var/artifactory"]
 
 # Install gitlab
-RUN yum install curl openssh-server postfix cronie \
+RUN yum install -y curl openssh-server postfix cronie \
   && service postfix start \
   && chkconfig postfix on \
   && lokkit -s http -s ssh \
