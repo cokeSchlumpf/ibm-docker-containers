@@ -29,6 +29,21 @@ It may take a few seconds until all applications are started up. If so you can a
 * `http://${DOCKER_HOST}:8080/jenkins` for Jenkins Web UI
 * `http://${DOCKER_HOST}:8081` for GitLab Web UI
 
+### Available volumes
+
+The image offers the following persistent volumes:
+
+* `/var/opt/artifactory` - Artifactory configuration and repository
+* `/var/opt/gitlab` - GitLab configuration and repositories
+* `/var/opt/jenkins` - Jenkins configurations and projects
+
+### Available ports
+
+The image exposes the following ports:
+
+* `8080` - Tomcat HTTP Port for artifactory and jenkins
+* `8081` - GitLab HTTP Port
+
 ## Building the image
 
 You can build the image with the following command (run the command from this directory):
@@ -50,18 +65,3 @@ installation-files
   └ jenkins
     └ jenkins_${JENKINS_VERSION}.war
 ```
-
-## Available volumes
-
-The image offers the following persistent volumes:
-
-* `/var/opt/artifactory` - Artifactory configuration and repository
-* `/var/opt/gitlab` - GitLab configuration and repositories
-* `/var/opt/jenkins` - Jenkins configurations and projects
-
-## Available ports
-
-The image exposes the following ports:
-
-* `8080` - Tomcat HTTP Port for artifactory and jenkins
-* `8081` - GitLab HTTP Port
