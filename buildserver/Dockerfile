@@ -1,5 +1,5 @@
 # This image contains a simple build server with Java 8, Git, Jenkins, Artifactory and GitLab.
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Install helpful tools
