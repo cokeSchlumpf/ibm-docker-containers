@@ -51,7 +51,8 @@ RUN yum install -y curl openssh-server postfix cronie \
   && service postfix start \
   && chkconfig postfix on \
   && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
-  && wget -O /tmp/gitlab-ce.rpm ${DOWNLOAD_BASE_URL}/gitlab-ce/gitlab-ce_${GITLAB_VERSION}.rpm \
+
+RUN wget -O /tmp/gitlab-ce.rpm ${DOWNLOAD_BASE_URL}/gitlab-ce/gitlab-ce_${GITLAB_VERSION}.rpm \
   && cd /tmp \
   && yum install -y gitlab-ce.rpm \
   && gitlab-ctl reconfigure
