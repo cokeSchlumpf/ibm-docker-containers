@@ -3,11 +3,11 @@ FROM ibm/centos-base
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Define Versions
-ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
-ENV ARTIFACTORY_VERSION 4.2.1
-ENV JDK_VERSION 1.8.0_66
-ENV JENKINS_VERSION 1.625.1
-ENV TOMCAT_VERSION 8.0.28
+ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
+  ARTIFACTORY_VERSION=4.2.1 \
+  JDK_VERSION=1.8.0_66 \
+  JENKINS_VERSION=1.625.1 \
+  TOMCAT_VERSION=8.0.28
 
 # Install Java 8
 RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
@@ -50,4 +50,4 @@ COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Set entrypoint to run management script
-ENTRYPOINT ["buildserver-manage"]
+ENTRYPOINT ["buildserver-manage.sh"]
