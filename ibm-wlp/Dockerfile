@@ -24,7 +24,8 @@ RUN cd /tmp \
   && unzip ssh-keys.zip -d ./ \
   && /bin/cp -f ssh_host* /etc/ssh/ \
   && chmod 600 /etc/ssh/*key \
-  && chown root /etc/ssh/*
+  && chown root /etc/ssh/* \
+  && rm -rf /tmp/*
 
 # Create user for WLP
 RUN useradd --user-group --create-home --password $(echo "wlp" | openssl passwd -1 -stdin) wlp \

@@ -49,10 +49,18 @@ VOLUME ["/var/artifactory"]
 RUN yum install -y curl openssh-server postfix cronie \
   && service postfix start \
   && chkconfig postfix on \
-  && lokkit -s http -s ssh \
-  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash \
+  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash \
   && yum install -y gitlab-ce \
   && gitlab-ctl reconfigure
+
+# Copy SSH Configuration (SSH Keys should always be the same)
+COPY ssh-keys.zip /tmp/
+RUN cd /tmp \
+  && unzip ssh-keys.zip -d ./ \
+  && /bin/cp -f ssh_host* /etc/ssh/ \
+  && chmod 600 /etc/ssh/*key \
+  && chown root /etc/ssh/* \
+  && rm -rf /tmp/*
 
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
