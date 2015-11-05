@@ -1,4 +1,4 @@
-# This image contains a simple build server with Java 8, Git, Jenkins and Artifactory.
+# This image contains a simple build server with Java 8, Git, Jenkins, Artifactory and GitLab.
 FROM ibm/centos-base
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
@@ -51,7 +51,7 @@ RUN yum install curl openssh-server postfix cronie \
   && chkconfig postfix on \
   && lokkit -s http -s ssh \
   && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash \
-  && sudo yum install gitlab-ce \
+  && yum install -y gitlab-ce \
   && gitlab-ctl reconfigure
 
 # Add manage script
