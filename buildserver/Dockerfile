@@ -72,7 +72,7 @@ RUN chmod +rx /usr/local/bin/*.sh
 ENV TERM=xterm
 
 # Expose Ports
-EXPOSE 8080 8090 222
+EXPOSE 80 222 8090
 
 # Set entrypoint to run management script
 ENTRYPOINT ["buildserver-manage.sh"]
