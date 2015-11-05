@@ -38,5 +38,8 @@ RUN chmod +rx /usr/local/bin/*.sh
 # Expose ports from WLP to the outside world.
 EXPOSE 9080 9443 22
 
+# Workaround to get nano running
+ENV TERM=xterm
+
 # Start WLP on Startup
 ENTRYPOINT ["wlp-manage.sh"]
