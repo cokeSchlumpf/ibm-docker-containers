@@ -65,11 +65,9 @@ RUN cd /tmp \
   && rm -rf /tmp/*
 
 # Install Maven
-RUN apt-get install -y maven
+RUN apt-get install -y maven git
 
 # Install NodeJS and NPM
-#RUN curl -sL https://deb.nodesource.com/setup | bash - \
-#  && apt-get install -y nodejs build-essential
 RUN apt-get install -y build-essential libssl-dev \
   && curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | sh \
   && . ~/.profile \

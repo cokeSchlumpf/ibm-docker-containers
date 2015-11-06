@@ -3,6 +3,7 @@
 This docker image contains a complete buildserver with the following features:
 
 * Artifactory
+* Git
 * GitLab
 * Java 8
 * Jenkins
