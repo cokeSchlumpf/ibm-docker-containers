@@ -81,7 +81,8 @@ COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
-RUN ssh-keygen -t rsa -C "jenkins@wellnr.com"
+RUN ssh-keygen -t rsa -C "jenkins@buildserver.com" -f ~/.ssh/id_rsa -q -N "" \
+  && cat ~/.ssh/id_rsa.pub
 
 # Workaround to get nano running
 ENV TERM=xterm

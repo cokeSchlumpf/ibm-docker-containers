@@ -68,7 +68,7 @@ Afterwords you can access:
 
 To allow Jenkins to access the git repositories execute the following steps:
 
-* Go to gitlab and create as user for Jenkins
+* Go to gitlab and create as user for Jenkins with `jenkins@buildserver.com` as mail address.
 * For this user, add the SSH-Key you obtain from the Buildserver in the following way:
 
 ```
