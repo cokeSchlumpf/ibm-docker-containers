@@ -7,6 +7,7 @@ This docker image contains a complete buildserver with the following features:
 * Java 8
 * Jenkins
 * Maven
+* NPM managed by NVM
 
 Detailed versions are defined within the Dockerfile.
 

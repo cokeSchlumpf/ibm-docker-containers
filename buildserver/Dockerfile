@@ -70,7 +70,7 @@ RUN apt-get install -y maven
 # Install NodeJS and NPM
 #RUN curl -sL https://deb.nodesource.com/setup | bash - \
 #  && apt-get install -y nodejs build-essential
-RUN apt-get install -y build-essential libssl-dev \
+RUN apt-get install -y build-essential libssl-dev source \
   && curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | sh \
   && source ~/.profile \
   && nvm install 5.0.0 \
