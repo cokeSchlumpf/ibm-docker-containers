@@ -26,11 +26,19 @@ docker run -id \
 ```
 **Note:** It's important that you use 9080 and 222 as external ports as shown in the example due to the configuration of gitlab. You should also made your docker host available via `buildserver` in `/etc/hosts`.
 
-It may take a few minutes until all applications are started up. If so you can access:
+It may take a few minutes until all applications are started up. To check if everything started up, you can use:
 
-* `http://${DOCKER_HOST}:8080/artifactory` for Artifactory Web UI
-* `http://${DOCKER_HOST}:8080/jenkins` for Jenkins Web UI
-* `http://${DOCKER_HOST}:9080` for GitLab Web UI
+```
+docker logs -f buildserver
+[...]
+gitlab Reconfigured! # Indicates that everything is started up.
+```
+
+Afterwords you can access:
+
+* `http://buildserver:8080/artifactory` for Artifactory Web UI
+* `http://buildserver:8080/jenkins` for Jenkins Web UI
+* `http://buildserver:9080` for GitLab Web UI
 
 ### Available volumes
 
