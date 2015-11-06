@@ -76,7 +76,7 @@ RUN apt-get install -y build-essential libssl-dev \
   && curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | sh \
   && . $NVM_DIR/nvm.sh \
   && nvm install $NODE_VERSION \
-  %% nvm alias default $NODE_VERSION \
+  && nvm alias default $NODE_VERSION \
   && nvm use default \
   && node -v \
   && npm -v
