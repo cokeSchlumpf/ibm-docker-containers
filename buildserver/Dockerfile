@@ -68,13 +68,22 @@ RUN cd /tmp \
 RUN apt-get install -y maven git
 
 # Install NodeJS and NPM
+ENV \
+  NVM_DIR=/usr/local/nvm \
+  NODE_VERSION=5.0.0
+
 RUN apt-get install -y build-essential libssl-dev \
   && curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | sh \
-  && . ~/.profile \
-  && nvm install 5.0.0 \
-  && nvm use 5.0.0 \
+  && . $NVM_DIR/nvm.sh \
+  && nvm install $NODE_VERSION \
+  %% nvm alias default $NODE_VERSION \
+  && nvm use default \
   && node -v \
   && npm -v
+
+ENV \
+  NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules \
+  PATH=$NVM_DIR/v$NODE_VERSION/bin:$PATH
 
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
@@ -82,7 +91,8 @@ RUN chmod +rx /usr/local/bin/*.sh
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
 RUN ssh-keygen -t rsa -C "jenkins@buildserver.com" -f ~/.ssh/id_rsa -q -N "" \
-  && cat ~/.ssh/id_rsa.pub
+  && cat ~/.ssh/id_rsa.pub \
+  && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts
 
 # Workaround to get nano running
 ENV TERM=xterm
