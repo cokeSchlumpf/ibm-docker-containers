@@ -83,13 +83,14 @@ RUN apt-get install -y build-essential libssl-dev \
 
 ENV \
   NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules \
-  PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+  PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
+# The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
 RUN ssh-keygen -t rsa -C "jenkins@buildserver.com" -f ~/.ssh/id_rsa -q -N "" \
   && cat ~/.ssh/id_rsa.pub \
   && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts
