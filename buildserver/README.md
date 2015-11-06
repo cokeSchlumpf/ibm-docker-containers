@@ -64,6 +64,20 @@ Afterwords you can access:
 * `http://buildserver:8080/jenkins` for Jenkins Web UI
 * `http://buildserver:9080` for GitLab Web UI
 
+### Necessary configuration after first startup
+
+To allow Jenkins to access the git repositories execute the following steps:
+
+* Go to gitlab and create as user for Jenkins
+* For this user, add the SSH-Key you obtain from the Buildserver in the following way:
+
+```
+# On docker host
+> docker exec -it buildserver /bin/bash -c "cat ~/.ssh/id_rsa.pub"
+```
+
+* Ensure that every project you'd like to manage with Jenkins needs to have the Jenkins Gitlab user as member (if the project is private).
+
 ### Available volumes
 
 The image offers the following persistent volumes:
