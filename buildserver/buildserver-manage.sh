@@ -25,10 +25,14 @@ monitor() {
 	while [ -z "$EXIT_CONTAINER" ]; do
 		sleep 1
 	done
+
+  echo "Received stopping signal. Stopping now."
+  service postfix stop
+  service ssh stop
+  gitlab-ctl stop
 }
 
 stop() {
-  service postfix stop
   export EXIT_CONTAINER=1
 }
 

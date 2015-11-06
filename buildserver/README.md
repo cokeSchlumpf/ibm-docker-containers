@@ -11,7 +11,9 @@ This docker image contains a complete buildserver with the following features:
 Detailed versions are defined within the Dockerfile.
 
 ## Run the image
+
 Start the image with the following command:
+
 ```
 docker run -id \
   -p 8080:8080 \
@@ -24,12 +26,32 @@ docker run -id \
   --name buildserver \
   ibm/buildserver
 ```
+
+If you would like to map the persistent volumes to a local directory do:
+
+```
+mkdir -p \
+  ~/docker-data/artifactory \
+  ~/docker-data/gitlab \
+  ~/docker-data/jenkins \
+&& docker run -id \
+  -p 8080:8080 \
+  -p 9080:9080 \
+  -p 222:22 \
+  -v ~/docker-data/artifactory:/var/opt/artifactory \
+  -v ~/docker-data/gitlab:/var/opt/gitlab \
+  -v ~/docker-data/jenkins:/var/opt/jenkins \
+  --hostname buildserver \
+  --name buildserver \
+  ibm/buildserver
+```
+
 **Note:** It's important that you use 9080 and 222 as external ports as shown in the example due to the configuration of gitlab. You should also made your docker host available via `buildserver` in `/etc/hosts`.
 
 It may take a few minutes until all applications are started up. To check if everything started up, you can use:
 
 ```
-docker logs -f buildserver
+> docker logs -f buildserver
 [...]
 gitlab Reconfigured! # Indicates that everything is started up.
 ```
