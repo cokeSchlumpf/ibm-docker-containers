@@ -67,6 +67,17 @@ RUN cd /tmp \
 # Install Maven
 RUN apt-get install -y maven
 
+# Install NodeJS and NPM
+#RUN curl -sL https://deb.nodesource.com/setup | bash - \
+#  && apt-get install -y nodejs build-essential
+RUN apt-get install -y build-essential libssl-dev \
+  && curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | sh \
+  && source ~/.profile \
+  && nvm install 5.0.0 \
+  && nvm use 5.0.0 \
+  && node -v \
+  && npm -v
+
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
