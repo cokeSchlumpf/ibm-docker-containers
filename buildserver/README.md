@@ -66,6 +66,15 @@ Afterwords you can access:
 
 ### Necessary configuration after first startup
 
+The initial Log-In for GitLab is:
+
+```
+root
+5iveL!fe
+```
+
+You must login with this user and change the password. You may create additional users in GitLab afterwords.
+
 To allow Jenkins to access the git repositories execute the following steps:
 
 * Go to gitlab and create as user for Jenkins with `jenkins@buildserver.com` as mail address.
