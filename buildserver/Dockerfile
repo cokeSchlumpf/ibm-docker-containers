@@ -1,35 +1,13 @@
 # This image contains a simple build server with Java 8, Git, Maven, NPM, Jenkins, Artifactory and GitLab.
-FROM ubuntu:14.04
+FROM devserver
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
-# Install helpful tools
-RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo && apt-get -y clean all
-
 # Define Versions
-ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
+ENV DOWNLOAD_BASE_URL=http://dockerhost:8080 \
   ARTIFACTORY_VERSION=4.2.1 \
-  JDK_VERSION=1.8.0_66 \
   JENKINS_VERSION=1.625.1 \
   GITLAB_VERSION=8.1.2 \
   TOMCAT_VERSION=8.0.28
-
-# Install Java 8
-RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
-  && cd /tmp \
-  && tar -zxvf ./jdk.tar.gz \
-  && mv /tmp/jdk${JDK_VERSION} /opt/jdk \
-  && update-alternatives --install /usr/bin/java java /opt/jdk/bin/java 2 \
-  && update-alternatives --install /usr/bin/jar jar /opt/jdk/bin/jar 2 \
-  && update-alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 2 \
-  && update-alternatives --set java /opt/jdk/bin/java \
-  && update-alternatives --set jar /opt/jdk/bin/jar \
-  && update-alternatives --set javac /opt/jdk/bin/javac \
-  && rm -rf /tmp/* \
-  && export JAVA_HOME=/opt/jdk \
-  && export JRE_HOME=/opt/jdk/jre \
-  && export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin \
-  && java -version \
-  && which java
 
 # Install Tomcat
 RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-tomcat_${TOMCAT_VERSION}.tar.gz \
@@ -63,27 +41,6 @@ RUN cd /tmp \
   && chmod 600 /etc/ssh/*key \
   && chown root /etc/ssh/* \
   && rm -rf /tmp/*
-
-# Install Maven
-RUN apt-get install -y maven git
-
-# Install NodeJS and NPM
-ENV \
-  NVM_DIR=/usr/local/nvm \
-  NODE_VERSION=5.0.0
-
-RUN apt-get install -y build-essential libssl-dev \
-  && curl https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | sh \
-  && . $NVM_DIR/nvm.sh \
-  && nvm install $NODE_VERSION \
-  && nvm alias default $NODE_VERSION \
-  && nvm use default \
-  && node -v \
-  && npm -v
-
-ENV \
-  NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules \
-  PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Add manage script
 COPY buildserver-manage.sh /usr/local/bin/
