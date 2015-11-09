@@ -49,7 +49,8 @@ ENV \
   PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Volume for workspace
-VOLUME ["/var/workspace"]
+VOLUME /var/workspace
+WORKDIR /var/workspace
 
 # Start Bash on Startup
 CMD ["/bin/bash"]
