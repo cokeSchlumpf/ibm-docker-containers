@@ -29,3 +29,9 @@ docker run -id \
   --name buildserver \
   ibm/buildserver
 ```
+
+## Build the image
+
+```
+docker build -t ibm/buildserver-dvc .
+```

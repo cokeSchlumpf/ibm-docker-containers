@@ -66,7 +66,7 @@ mkdir -p \
   ibm/buildserver
 ```
 
-Alternatively you could use a [data volume container](./buildserver-dvc/README.md) for the purpose.
+Alternatively you could use a [data volume container](./buildserver-dvc) for the purpose.
 
 **Note:** It's important that you use 9080 and 222 as external ports as shown in the example due to the configuration of gitlab. You should also made your docker host available via `buildserver` in `/etc/hosts`.
 
