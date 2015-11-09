@@ -15,7 +15,11 @@ Start the image with the following command:
 
 ```
 docker run -id \
-  -v ${LOCAL_WORKSPACE_DIR}:/var/workspace \
+  -v ~/.m2:/root/.m2 \
+  -v ~/.npm:/root/.npm \
+  -v ~/Workspaces:/var/opt/workspace \
+  -p 7080:80 \
+  -p 7443:443 \
   --name devserver \
   --hostname devserver \
   ibm/devserver
@@ -26,7 +30,7 @@ Afterwords you are able to run build and tests within the container:
 ```
 > docker exec -it devserver /bin/bash
 
-root@devserver:/# cd /var/workspace/${PROJECT_DIR}
+root@devserver:/# cd /var/opt/workspace/${PROJECT_DIR}
 root@devserver:/# npm install
 ```
 
@@ -34,11 +38,16 @@ root@devserver:/# npm install
 
 The image offers the following persistent volumes:
 
-* `/var/workspace` - Volume to mount workspace including necessary project folders and files
+* `/var/opt/workspace` - Volume to mount workspace including necessary project folders and files
+* `/root/.m2` - Local Maven repository and settings
+* `/root/.npm` - Local NPM repository and settings
 
 ### Available ports
 
-The container doesn't expose any ports yet.
+The container exposes the following ports:
+
+* `80` - HTTP Port for testing
+* `443` - HTTPS Port for testing
 
 ## Building the image
 

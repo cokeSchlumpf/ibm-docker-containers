@@ -50,8 +50,11 @@ ENV \
   PATH=$NVM_DIR:$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Volume for workspace
-VOLUME /var/workspace
-WORKDIR /var/workspace
+VOLUME [ "/var/opt/workspace", "/root/.m2", "/root/.npm" ]
+WORKDIR /var/opt/workspace
+
+# Expose Port for JEE Server
+EXPOSE 80 443
 
 # Start Bash on Startup
 CMD ["/bin/bash"]
