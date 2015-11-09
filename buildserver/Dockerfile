@@ -1,9 +1,15 @@
 # This image contains a simple build server with Java 8, Git, Maven, NPM, Jenkins, Artifactory and GitLab.
-FROM devserver
+FROM ibm/devserver
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
+# Install helpful tools
+RUN unset TERM \
+  && apt-get -y update \
+  && apt-get install -y openssh-server ca-certificates postfix \
+  && apt-get -y clean all
+
 # Define Versions
-ENV DOWNLOAD_BASE_URL=http://dockerhost:8080 \
+ENV DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   ARTIFACTORY_VERSION=4.2.1 \
   JENKINS_VERSION=1.625.1 \
   GITLAB_VERSION=8.1.2 \
@@ -28,8 +34,7 @@ RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL
 VOLUME ["${ARTIFACTORY_HOME}"]
 
 # Install gitlab
-RUN apt-get install -y curl openssh-server ca-certificates postfix \
-  && curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
+RUN curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
   && apt-get install gitlab-ce
 VOLUME ["/var/opt/gitlab"]
 
@@ -51,9 +56,6 @@ RUN chmod +rx /usr/local/bin/*.sh
 RUN ssh-keygen -t rsa -C "jenkins@buildserver.com" -f ~/.ssh/id_rsa -q -N "" \
   && cat ~/.ssh/id_rsa.pub \
   && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts
-
-# Workaround to get nano running
-ENV TERM=xterm
 
 # Expose Ports
 EXPOSE 22 8080 9080

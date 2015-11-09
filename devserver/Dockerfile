@@ -7,11 +7,12 @@ RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo curl && apt
 
 # Define Versions
 ENV \
-  DOWNLOAD_BASE_URL=http://dockerhost:8080 \
+  DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \
   NVM_VERSION=0.29.0 \
-  NVM_DIR=/usr/local/nvm
+  NVM_DIR=/usr/local/nvm \
+  TERM=xterm
 
 # Install Java 8
 RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
