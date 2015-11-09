@@ -8,4 +8,7 @@ ENV \
   GITLAB_HOME=/var/opt/gitlab
 
 # Define volumes
-VOLUME [c"${ARTIFACTORY_HOME}", "${JENKINS_HOME}", "${GITLAB_HOME}" ]
+VOLUME [ "${ARTIFACTORY_HOME}", "${JENKINS_HOME}", "${GITLAB_HOME}" ]
+
+# Startup command
+CMD ["/bin/bash"]

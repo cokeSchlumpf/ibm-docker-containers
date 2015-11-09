@@ -33,16 +33,16 @@ If you would like to map the persistent volumes to a local directory do:
 
 ```
 mkdir -p \
-  ~/Workspaces/docker-data/artifactory \
-  ~/Workspaces/docker-data/gitlab \
-  ~/Workspaces/docker-data/jenkins \
+  ~/docker-data/artifactory \
+  ~/docker-data/gitlab \
+  ~/docker-data/jenkins \
 && docker run -id \
   -p 8080:8080 \
   -p 9080:9080 \
   -p 222:22 \
-  -v ~/Workspaces/docker-data/artifactory:/var/opt/artifactory \
-  -v ~/Workspaces/docker-data/gitlab:/var/opt/gitlab \
-  -v ~/Workspaces/docker-data/jenkins:/var/opt/jenkins \
+  -v ~/docker-data/artifactory:/var/opt/artifactory \
+  -v ~/docker-data/gitlab:/var/opt/gitlab \
+  -v ~/docker-data/jenkins:/var/opt/jenkins \
   --hostname buildserver \
   --name buildserver \
   ibm/buildserver
@@ -52,15 +52,15 @@ Due to a [bug](https://github.com/boot2docker/boot2docker/issues/581) in boot2do
 
 ```
 mkdir -p \
-  ~/Workspaces/docker-data/artifactory \
-  ~/Workspaces/docker-data/jenkins \
+  ~/docker-data/artifactory \
+  ~/docker-data/jenkins \
 && docker run -id \
   -p 8080:8080 \
   -p 9080:9080 \
   -p 222:22 \
-  -v ~/Workspaces/docker-data/artifactory:/var/opt/artifactory \
+  -v ~/docker-data/artifactory:/var/opt/artifactory \
   -v /var/opt/gitlab \
-  -v ~/Workspaces/docker-data/jenkins:/var/opt/jenkins \
+  -v ~/docker-data/jenkins:/var/opt/jenkins \
   --hostname buildserver \
   --name buildserver \
   ibm/buildserver
