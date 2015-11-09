@@ -8,6 +8,13 @@ start() {
   service postfix start
   service ssh start
 
+  # Make volumes writeable for every user (GitLab uses several non-root users)
+  echo "Make ${GITLAB_HOME} writable for everyone ..."
+  chown -R root ${GITLAB_HOME}
+  chgrp -R root ${GITLAB_HOME}
+  ls -l /var/opt
+  ls -l /var/opt/${GITLAB_HOME}
+
   # Start gitlab
   echo "Configuring gitlab ..."
   echo "unicorn['port'] = 9090" >> /etc/gitlab/*.rb

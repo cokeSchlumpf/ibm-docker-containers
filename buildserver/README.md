@@ -33,20 +33,40 @@ If you would like to map the persistent volumes to a local directory do:
 
 ```
 mkdir -p \
-  ~/docker-data/artifactory \
-  ~/docker-data/gitlab \
-  ~/docker-data/jenkins \
+  ~/Workspaces/docker-data/artifactory \
+  ~/Workspaces/docker-data/gitlab \
+  ~/Workspaces/docker-data/jenkins \
 && docker run -id \
   -p 8080:8080 \
   -p 9080:9080 \
   -p 222:22 \
-  -v ~/docker-data/artifactory:/var/opt/artifactory \
-  -v ~/docker-data/gitlab:/var/opt/gitlab \
-  -v ~/docker-data/jenkins:/var/opt/jenkins \
+  -v ~/Workspaces/docker-data/artifactory:/var/opt/artifactory \
+  -v ~/Workspaces/docker-data/gitlab:/var/opt/gitlab \
+  -v ~/Workspaces/docker-data/jenkins:/var/opt/jenkins \
   --hostname buildserver \
   --name buildserver \
   ibm/buildserver
 ```
+
+Due to a [bug](https://github.com/boot2docker/boot2docker/issues/581) in boot2docker on Mac OS it's currently not possible to use a local directory from Mac OS as gitlab Home directory:
+
+```
+mkdir -p \
+  ~/Workspaces/docker-data/artifactory \
+  ~/Workspaces/docker-data/jenkins \
+&& docker run -id \
+  -p 8080:8080 \
+  -p 9080:9080 \
+  -p 222:22 \
+  -v ~/Workspaces/docker-data/artifactory:/var/opt/artifactory \
+  -v /var/opt/gitlab \
+  -v ~/Workspaces/docker-data/jenkins:/var/opt/jenkins \
+  --hostname buildserver \
+  --name buildserver \
+  ibm/buildserver
+```
+
+Alternatively you could use a [data volume container](./buildserver-dvc/README.md) for the purpose.
 
 **Note:** It's important that you use 9080 and 222 as external ports as shown in the example due to the configuration of gitlab. You should also made your docker host available via `buildserver` in `/etc/hosts`.
 

@@ -13,7 +13,10 @@ ENV DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   ARTIFACTORY_VERSION=4.2.1 \
   JENKINS_VERSION=1.625.1 \
   GITLAB_VERSION=8.1.2 \
-  TOMCAT_VERSION=8.0.28
+  TOMCAT_VERSION=8.0.28 \
+  ARTIFACTORY_HOME=/var/opt/artifactory \
+  JENKINS_HOME=/var/opt/jenkins \
+  GITLAB_HOME=/var/opt/gitlab
 
 # Install Tomcat
 RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-tomcat_${TOMCAT_VERSION}.tar.gz \
@@ -22,13 +25,11 @@ RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-
   && mv /tmp/apache-tomcat-${TOMCAT_VERSION} /usr/local/apache-tomcat
 
 # Deploy Jenkins
-ENV JENKINS_HOME /var/opt/jenkins
 RUN wget -O /usr/local/apache-tomcat/webapps/jenkins.war ${DOWNLOAD_BASE_URL}/jenkins/jenkins_${JENKINS_VERSION}.war \
   && mkdir -p ${JENKINS_HOME}
 VOLUME ["${JENKINS_HOME}"]
 
 # Deploy Artifactory
-ENV ARTIFACTORY_HOME /var/opt/artifactory
 RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL}/artifactory/artifactory_${ARTIFACTORY_VERSION}.war \
   && mkdir -p ${ARTIFACTORY_HOME}
 VOLUME ["${ARTIFACTORY_HOME}"]
@@ -36,7 +37,7 @@ VOLUME ["${ARTIFACTORY_HOME}"]
 # Install gitlab
 RUN curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
   && apt-get install gitlab-ce
-VOLUME ["/var/opt/gitlab"]
+VOLUME ["${GITLAB_HOME}"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
 COPY ssh-keys.zip /tmp/
@@ -59,6 +60,9 @@ RUN ssh-keygen -t rsa -C "jenkins@buildserver.com" -f ~/.ssh/id_rsa -q -N "" \
 
 # Expose Ports
 EXPOSE 22 8080 9080
+
+# Set TERM again
+ENV TERM=xterm
 
 # Set entrypoint to run management script
 ENTRYPOINT ["buildserver-manage.sh"]
