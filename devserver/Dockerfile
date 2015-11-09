@@ -3,7 +3,7 @@ FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Install helpful tools
-RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo && apt-get -y clean all
+RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo curl && apt-get -y clean all
 
 # Define Versions
 ENV \
