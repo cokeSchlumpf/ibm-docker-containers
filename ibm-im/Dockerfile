@@ -3,8 +3,8 @@ FROM centos:6.6
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Set up some configuration environment variables
-ENV IM_VERSION 1.6.2
-ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
+ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
+  IM_VERSION 1.6.2
 
 # Install helpful tools
 RUN yum -y update && yum install -y nano wget tar &&  yum -y clean all

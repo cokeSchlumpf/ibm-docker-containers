@@ -2,12 +2,11 @@
 # Use this shell script to update docker host Address within Dockerfiles before build.
 #
 # Usage:
-# update-host OLD_IP NEW_IP
+# update-host NEW_HOST
 
-if [ -z "$1" ] || [ -z "$2" ]; then
+if [ -z "$1" ]; then
   echo "Usage:"
-  echo "update-host OLD_IP NEW_IP"
+  echo "update-host NEW_HOST"
 else
-  find .. -name Dockerfile -exec echo {} +
-  find .. -name Dockerfile -exec sed -i '' -e "s/DOWNLOAD_BASE_URL=http\:\/\/[a-zA-Z0-9\.]+(\:[0-9]+)?)/DOWNLOAD_BASE_URL=http\:\/\/$2/g" {} +
+  find .. -name Dockerfile -exec sed -i '' -e "s#DOWNLOAD_BASE_URL=http://[^:]*:[^[:space:]]*#DOWNLOAD_BASE_URL=http://$1#g" {} +
 fi

@@ -3,9 +3,9 @@ FROM centos:6.6
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Set up some configuration environment variables
-ENV WMQ_VERSION 7.5.0.3
-ENV IIB_VERSION 9.0
-ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
+ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
+  WMQ_VERSION=7.5.0.3 \
+  IIB_VERSION 9.0
 
 # Install helpful tools and IIB prerequisites
 RUN yum -y update && yum install -y nano wget tar glibc.i686 libgcc.x86_64 libgcc.i686 sudo && yum -y clean all

@@ -3,8 +3,8 @@ FROM centos:6.6
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Set up some configuration environment variables
-ENV WLP_VERSION 8.5.5.7
-ENV DOWNLOAD_BASE_URL http://172.16.166.1:8080
+ENV DOWNLOAD_BASE_URL=http://172.16.166.1:8080 \
+  WLP_VERSION=8.5.5.7
 
 # Install helpful tools and IIB prerequisites
 RUN yum -y update && yum install -y nano wget unzip tar && yum -y clean all
