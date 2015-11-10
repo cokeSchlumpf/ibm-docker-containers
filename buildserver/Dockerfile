@@ -1,10 +1,9 @@
 # This image contains a simple build server with Java 8, Git, Maven, NPM, Jenkins, Artifactory and GitLab.
-FROM ibm/devserver
+FROM ibm/devserver-base
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Install helpful tools
-RUN unset TERM \
-  && apt-get -y update \
+RUN apt-get -y update \
   && apt-get install -y openssh-server ca-certificates postfix \
   && apt-get -y clean all
 

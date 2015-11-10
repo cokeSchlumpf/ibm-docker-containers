@@ -10,7 +10,7 @@ This docker image contains a complete buildserver with the following features:
 * Maven
 * NPM managed by NVM
 
-The container is based on the [devserver](../devserver) container. Detailed versions are defined within the Dockerfile.
+The image is based on [devserver-base](../devserver-base). Detailed versions are defined within the Dockerfile.
 
 ## Run the image
 
