@@ -8,5 +8,5 @@ if [ -z "$1" ] || [ -z "$2" ]; then
   echo "Usage:"
   echo "update-host OLD_IP NEW_IP"
 else
-  find . -name Dockerfile -exec sed -i '' -e "s/$1/$2/g" {} +
+  find ../ -name Dockerfile -exec sed -i '' -e "s/DOWNLOAD_BASE_URL=http://[a-zA-Z0-9\.]+:[:digit:]+/DOWNLOAD_BASE_URL=http://$2/g" {} +
 fi
