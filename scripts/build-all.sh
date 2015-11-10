@@ -11,13 +11,13 @@ if [ -n $1 ]; then
 fi
 
 # Build images
-cd ../centos-base && docker build -t ibm/centos-base . && cd -
-cd ../ibm-iib && docker build -t ibm/iib . && cd -
-cd ../ibm-wlp && docker build -t ibm/wlp . && cd -
-cd ../devserver-base && docker build -t devserver-base . && cd -
-cd ../devserver && docker build -t devserver . && cd -
-cd ../buildserver/buildserver-dvc && docker build -t buildserver-dvc . && cd -
-cd ../buildserver && docker build -t buildserver . && cd -
+cd ../base-centos     && docker build -t ibm/base-centos .  && cd -
+cd ../ibm-iib         && docker build -t ibm/iib .          && cd -
+cd ../ibm-wlp         && docker build -t ibm/wlp .          && cd -
+cd ../base-dev        && docker build -t ibm/base-dev .     && cd -
+cd ../dev             && docker build -t ibm/dev .          && cd -
+cd ../build/build-dvc && docker build -t ibm/build-dvc .    && cd -
+cd ../build           && docker build -t ibm/build .        && cd -
 
 cd $CURRENTDIR
 docker images
