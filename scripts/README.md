@@ -4,7 +4,7 @@ This directory contains some useful scripts for easier development and docker ma
 
 ## build-all.sh
 
-Builds all images based on available Dockerfiles within the repository. Optionally you can defined the DOWNLOAD_BASE_URL which will be replaced in all Dockerfiles before building. Usage:
+Builds all images based on available Dockerfiles within the repository. Optionally you can define the `DOWNLOAD_BASE_URL` which will be replaced in all Dockerfiles before building. Usage:
 
 ```
 ./build-all.sh [DOWNLOAD_BASE_URL]
