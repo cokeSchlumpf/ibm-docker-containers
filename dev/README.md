@@ -14,17 +14,18 @@ The image is based on [base-dev](../base-dev).
 Start the image with the following command:
 
 ```
-docker run -id \
-  -v ~/.gitconfig:/root/.gitconfig \
-  -v ~/.git-credentials:/root/.git-credentials \
-  -v ~/.m2:/root/.m2 \
-  -v ~/.npm:/root/.npm \
-  -v ~/Workspaces:/var/opt/workspace \
-  -p 7080:80 \
-  -p 7443:443 \
-  --name dev \
-  --hostname dev \
-  ibm/dev
+touch ~/.gitconfig ~/.git-credentials \
+  && docker run -id \
+    -v ~/.gitconfig:/root/.gitconfig \
+    -v ~/.git-credentials:/root/.git-credentials \
+    -v ~/.m2:/root/.m2 \
+    -v ~/.npm:/root/.npm \
+    -v ~/Workspaces:/var/opt/workspace \
+    -p 7080:80 \
+    -p 7443:443 \
+    --name dev \
+    --hostname dev \
+    ibm/dev
 ```
 
 Afterwords you are able to run build and tests within the container:
