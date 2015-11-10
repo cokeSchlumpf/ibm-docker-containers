@@ -34,5 +34,5 @@ During the installation you need to make the following files available. Before r
 ```
 installation-files
   └ jdk
-    └ jdk_${TOMCAT_VERSION}.tar.gz
+    └ jdk_${JDK_VERSION}.tar.gz
 ```
