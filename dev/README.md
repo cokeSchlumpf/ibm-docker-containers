@@ -15,6 +15,8 @@ Start the image with the following command:
 
 ```
 docker run -id \
+  -v ~/.gitconfig:/root/.gitconfig \
+  -v ~/.git-credentials:/root/.git-credentials \
   -v ~/.m2:/root/.m2 \
   -v ~/.npm:/root/.npm \
   -v ~/Workspaces:/var/opt/workspace \
