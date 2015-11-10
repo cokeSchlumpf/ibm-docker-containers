@@ -9,7 +9,7 @@ ENV DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
 
 # Install helpful tools and IIB prerequisites
 RUN yum -y update \
-  && yum install -y glibc.i686 libgcc.x86_64 libgcc.i686 \
+  && yum install -y glibc.i686 libgcc.x86_64 libgcc.i686 lsof \
   && yum -y clean all
 
 # Install WebSphere MQ
@@ -37,9 +37,11 @@ RUN usermod -G mqbrkrs mqm \
   && usermod -a -G mqbrkrs iibuser \
   && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
 
-# Configure system
+# Configure system, use lsof to overcome "Bad Interpreter Error"
 COPY kernel-settings.sh /tmp/
-RUN chmod +x /tmp/kernel-settings.sh && /tmp/kernel-settings.sh
+RUN chmod +x /tmp/kernel-settings.sh \
+  && lsof \
+  && /tmp/kernel-settings.sh
 
 # Copy in script files
 COPY iib-manage.sh iib-env.sh /usr/local/bin/
@@ -56,7 +58,7 @@ USER mqm
 
 ENV \
   QUEUE_MGR_NAME=IIB_QM \
-  BROKER_NAME=IIB_NODE
+  BROKER_NAME=IIB_NODE \
   TERM=xterm
 
 # Set entrypoint to run management script

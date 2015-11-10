@@ -6,8 +6,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 ENV TERM=xterm
 
 # Install senseful npm packages
-RUN npm install -g npm-check-updates \
-  && npm install -g npm-watch \
+RUN npm install -g npm-watch \
   && npm install -g babel-cli \
   && npm install -g node-notifier
 
