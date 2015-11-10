@@ -24,10 +24,10 @@ docker run -id \
   -p 8080:8080 \
   -p 9080:9080 \
   -p 222:22 \
-  --volumes-from buildserver-dvc \
-  --hostname buildserver \
-  --name buildserver \
-  ibm/buildserver
+  --volumes-from build-dvc \
+  --hostname build \
+  --name build \
+  ibm/build
 ```
 
 ## Build the image
