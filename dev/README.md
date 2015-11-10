@@ -20,9 +20,29 @@ touch ~/.gitconfig ~/.git-credentials \
     -v ~/.git-credentials:/root/.git-credentials \
     -v ~/.m2:/root/.m2 \
     -v ~/.npm:/root/.npm \
+    -v ~/.ssh:/root/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
     -p 7080:80 \
     -p 7443:443 \
+    --name dev \
+    --hostname dev \
+    ibm/dev
+```
+
+Or, if you need to connect to a running [build container](../build):
+
+```
+touch ~/.gitconfig ~/.git-credentials \
+  && docker run -id \
+    -v ~/.gitconfig:/root/.gitconfig \
+    -v ~/.git-credentials:/root/.git-credentials \
+    -v ~/.m2:/root/.m2 \
+    -v ~/.npm:/root/.npm \
+    -v ~/.ssh:/root/.ssh \
+    -v ~/Workspaces:/var/opt/workspace \
+    -p 7080:80 \
+    -p 7443:443 \
+    --link build:build \
     --name dev \
     --hostname dev \
     ibm/dev
