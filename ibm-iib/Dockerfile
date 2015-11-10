@@ -1,5 +1,5 @@
 # This docker image provides a basic CentOS with IBM Integration Bus.
-FROM centos:6.6
+FROM ibm/base-centos
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Set up some configuration environment variables
@@ -8,7 +8,9 @@ ENV DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   IIB_VERSION 9.0
 
 # Install helpful tools and IIB prerequisites
-RUN yum -y update && yum install -y nano wget tar glibc.i686 libgcc.x86_64 libgcc.i686 sudo && yum -y clean all
+RUN yum -y update \
+  && yum install -y glibc.i686 libgcc.x86_64 libgcc.i686 \
+  && yum -y clean all
 
 # Install WebSphere MQ
 RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere-mq_${WMQ_VERSION}.tar.gz \
@@ -40,8 +42,7 @@ COPY kernel-settings.sh /tmp/
 RUN chmod +x /tmp/kernel-settings.sh && /tmp/kernel-settings.sh
 
 # Copy in script files
-COPY iib-manage.sh /usr/local/bin/
-COPY iib-env.sh /usr/local/bin/
+COPY iib-manage.sh iib-env.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Set BASH_ENV to source mqsiprofile when using docker exec bash -c
@@ -53,8 +54,10 @@ EXPOSE 1414 4414 7800
 # Use mqm when starting up.
 USER mqm
 
-ENV QUEUE_MGR_NAME=IIB_QM
-ENV BROKER_NAME=IIB_NODE
+ENV \
+  QUEUE_MGR_NAME=IIB_QM \
+  BROKER_NAME=IIB_NODE
+  TERM=xterm
 
 # Set entrypoint to run management script
 ENTRYPOINT ["iib-manage.sh"]

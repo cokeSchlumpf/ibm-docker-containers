@@ -1,23 +1,23 @@
-# Buildserver Data Volume Container (DVC) Docker Image
+# Buildserver Data Volume Container (DVC) Docker Image (ibm/build-dvc)
 
 This image can be used to create a data volume container which holds persistent data volumes for the buildserver. See [docker docs](http://docs.docker.com/v1.8/userguide/dockervolumes/#creating-and-mounting-a-data-volume-container) for more details about the concept.
 
 ## Create the volume container
 
-Before starting the actual buildserver create a volume container based on the `buildserver-dvc` image:
+Before starting the actual buildserver create a volume container based on the `build-dvc` image:
 
 ```
 docker create \
   -v /var/opt/artifactory \
   -v /var/opt/gitlab \
   -v /var/opt/jenkins \
-  --name buildserver-dvc \
-  ibm/buildserver-dvc
+  --name build-dvc \
+  ibm/build-dvc
 ```
 
 **Note:** You should never delete that container since this will discard all the data (indirectly)!
 
-Start the buildserver and mount the volumes from `buildserver-dvc`:
+Start the buildserver and mount the volumes from `build-dvc`:
 
 ```
 docker run -id \
@@ -33,5 +33,5 @@ docker run -id \
 ## Build the image
 
 ```
-docker build -t ibm/buildserver-dvc .
+docker build -t ibm/build-dvc .
 ```

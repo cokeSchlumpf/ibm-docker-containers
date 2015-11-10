@@ -1,4 +1,4 @@
-# Buildserver Docker Image
+# Buildserver Docker Image (ibm/build)
 
 This docker image contains a complete buildserver with the following features:
 
@@ -10,7 +10,7 @@ This docker image contains a complete buildserver with the following features:
 * Maven
 * NPM managed by NVM
 
-The image is based on [devserver-base](../devserver-base). Detailed versions are defined within the Dockerfile.
+The image is based on [base-dev](../base-dev). Detailed versions are defined within the Dockerfile.
 
 ## Run the image
 
@@ -24,9 +24,9 @@ docker run -id \
   -v /var/opt/artifactory \
   -v /var/opt/gitlab \
   -v /var/opt/jenkins \
-  --hostname buildserver \
-  --name buildserver \
-  ibm/buildserver
+  --hostname build \
+  --name build \
+  ibm/build
 ```
 
 If you would like to map the persistent volumes to a local directory do:
@@ -43,9 +43,9 @@ mkdir -p \
   -v ~/docker-data/artifactory:/var/opt/artifactory \
   -v ~/docker-data/gitlab:/var/opt/gitlab \
   -v ~/docker-data/jenkins:/var/opt/jenkins \
-  --hostname buildserver \
-  --name buildserver \
-  ibm/buildserver
+  --hostname build \
+  --name build \
+  ibm/build
 ```
 
 Due to a [bug](https://github.com/boot2docker/boot2docker/issues/581) in boot2docker on Mac OS it's currently not possible to use a local directory from Mac OS as gitlab Home directory:
@@ -61,28 +61,28 @@ mkdir -p \
   -v ~/docker-data/artifactory:/var/opt/artifactory \
   -v /var/opt/gitlab \
   -v ~/docker-data/jenkins:/var/opt/jenkins \
-  --hostname buildserver \
-  --name buildserver \
-  ibm/buildserver
+  --hostname build \
+  --name build \
+  ibm/build
 ```
 
-Alternatively you could use a [data volume container](./buildserver-dvc) for the purpose.
+Alternatively you could use a [data volume container](./build-dvc) for the purpose.
 
-**Note:** It's important that you use 9080 and 222 as external ports as shown in the example due to the configuration of gitlab. You should also made your docker host available via `buildserver` in `/etc/hosts`.
+**Note:** It's important that you use 9080 and 222 as external ports as shown in the example due to the configuration of gitlab. You should also made your docker host available via `build` in `/etc/hosts`.
 
 It may take a few minutes until all applications are started up. To check if everything started up, you can use:
 
 ```
-> docker logs -f buildserver
+> docker logs -f build
 [...]
 gitlab Reconfigured! # Indicates that everything is started up.
 ```
 
 Afterwords you can access:
 
-* `http://buildserver:8080/artifactory` for Artifactory Web UI
-* `http://buildserver:8080/jenkins` for Jenkins Web UI
-* `http://buildserver:9080` for GitLab Web UI
+* `http://build:8080/artifactory` for Artifactory Web UI
+* `http://build:8080/jenkins` for Jenkins Web UI
+* `http://build:9080` for GitLab Web UI
 
 ### Necessary configuration after first startup
 
@@ -102,7 +102,7 @@ To allow Jenkins to access the git repositories execute the following steps:
 
 ```
 # On docker host
-> docker exec -it buildserver /bin/bash -c "cat ~/.ssh/id_rsa.pub"
+> docker exec -it build /bin/bash -c "cat ~/.ssh/id_rsa.pub"
 ```
 
 * Ensure that every project you'd like to manage with Jenkins needs to have the Jenkins Gitlab user as member (if the project is private).
@@ -128,7 +128,7 @@ The image exposes the following ports:
 You can build the image with the following command (run the command from this directory):
 
 ```
-docker build -t ibm/buildserver .
+docker build -t ibm/build .
 ```
 
 During the installation you need to make the following files available. Before running the build make sure that the versions defined in the Dockerfile are available in `installation-files`. See also [installation-files](../installation-files).

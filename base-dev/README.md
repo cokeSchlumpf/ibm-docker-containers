@@ -1,4 +1,4 @@
-# Development Base Server Docker Image
+# Development Base Server Docker Image (base-dev)
 
 This docker image contains a base development server to develop JEE based web applications with the following features:
 
@@ -11,7 +11,7 @@ Detailed versions are defined within the Dockerfile.
 
 ## Run the image
 
-Don't run this image directly. Use [ibm/devserver](../devserver) instead.
+Don't run this image directly. Use [ibm/dev](../dev) instead.
 
 ### Available volumes
 
@@ -26,7 +26,7 @@ This image doesn't expose any ports.
 You can build the image with the following command (run the command from this directory):
 
 ```
-docker build -t ibm/devserver-base .
+docker build -t ibm/base-base .
 ```
 
 During the installation you need to make the following files available. Before running the build make sure that the versions defined in the Dockerfile are available in `installation-files`. See also [installation-files](../installation-files).

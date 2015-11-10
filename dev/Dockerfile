@@ -1,12 +1,15 @@
 # This image contains a simple development server with Java 8, Git, Maven and NPM.
-FROM ibm/devserver-base
+FROM ibm/base-dev
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Export TERM
 ENV TERM=xterm
 
 # Install senseful npm packages
-RUN npm install -g npm-check-updates
+RUN npm install -g npm-check-updates \
+  && npm install -g npm-watch \
+  && npm install -g babel-cli \
+  && npm install -g node-notifier
 
 # Volume for workspace
 VOLUME [ "/var/opt/workspace", "/root/.m2", "/root/.npm" ]

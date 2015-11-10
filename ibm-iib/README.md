@@ -1,61 +1,42 @@
-# IBM Integration Bus v9 Docker Image
+# IBM Integration Bus v9 Docker Image (ibm/iib)
 
-This docker image contains an IBM Integration Bus v9.
+This docker image contains an IBM Integration Bus v9. It's based on [ibm/base-centos](../base-centos). See Dockerfile for version details.
 
 ## Run the image
 Start the image with the following command:
 ```
 docker run -id \
-  -p 8080:8080 \
-  -p 8081:8081 \
-  -p 222:22 \
-  -v /var/opt/artifactory \
-  -v /var/opt/gitlab \
-  -v /var/opt/jenkins \
-  -h buildserver \
-  -n buildserver \
-  ibm/buildserver
+  -h iib \
+  -n iib \
+  ibm/iib
 ```
-It may take a few seconds until all applications are started up. If so you can access:
-
-* `http://${DOCKER_HOST}:8080/artifactory` for Artifactory Web UI
-* `http://${DOCKER_HOST}:8080/jenkins` for Jenkins Web UI
-* `http://${DOCKER_HOST}:8081` for GitLab Web UI
 
 ### Available volumes
 
-The image offers the following persistent volumes:
-
-* `/var/opt/artifactory` - Artifactory configuration and repository
-* `/var/opt/gitlab` - GitLab configuration and repositories
-* `/var/opt/jenkins` - Jenkins configurations and projects
+This image contains no volumes.
 
 ### Available ports
 
 The image exposes the following ports:
 
-* `22` - SSH Port for git remote access
-* `8080` - Tomcat HTTP Port for artifactory and jenkins
-* `8081` - GitLab HTTP Port
+* `1414` - Remote Admin port.
+* `4414` - Web Admin port.
+* `7800` - Default HTTP Port for SOAP- and HTTP Input Nodes.
 
 ## Building the image
 
 You can build the image with the following command (run the command from this directory):
 
 ```
-docker build -t ibm/buildserver .
+docker build -t ibm/iib .
 ```
 
 During the installation you need to make the following files available. See also [installation-files](../installation-files).
 
 ```
 installation-files
-  ├ apache-tomcat
-  │ └ apache-tomcat_${TOMCAT_VERSION}.tar.gz
-  ├ artifactory
-  │ └ artifactory_${ARTIFACTORY_VERSION}.war
-  ├ jdk
-  │ └ jdk_${JDK_VERSION}.tar.gz
-  └ jenkins
-    └ jenkins_${JENKINS_VERSION}.war
+  ├ integrationbus
+  │ └ integrationbus_${IIB_VERSION}.tar.gz
+  └ websphere-mq
+    └ websphere-mq_${WMQ_VERSION}.tar.gz
 ```

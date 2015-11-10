@@ -1,5 +1,5 @@
 # This image contains a simple build server with Java 8, Git, Maven, NPM, Jenkins, Artifactory and GitLab.
-FROM ibm/devserver-base
+FROM ibm/base-dev
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Install helpful tools

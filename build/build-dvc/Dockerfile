@@ -1,4 +1,4 @@
-# Data volume container for ibm/buildserver
+# Data volume container for ibm/build
 FROM ubuntu:14.04
 
 # Define Versions

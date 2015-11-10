@@ -1,4 +1,4 @@
-# Development server Docker Image
+# Development Server Docker Image (ibm/dev)
 
 This docker image contains a development server to develop JEE based web applications with the following features:
 
@@ -7,7 +7,7 @@ This docker image contains a development server to develop JEE based web applica
 * Maven
 * NPM managed by NVM
 
-The image is based on [devserver-base](../devserver-base).
+The image is based on [base-dev](../base-dev).
 
 ## Run the image
 
@@ -20,15 +20,15 @@ docker run -id \
   -v ~/Workspaces:/var/opt/workspace \
   -p 7080:80 \
   -p 7443:443 \
-  --name devserver \
-  --hostname devserver \
-  ibm/devserver
+  --name dev \
+  --hostname dev \
+  ibm/dev
 ```
 
 Afterwords you are able to run build and tests within the container:
 
 ```
-> docker exec -it devserver /bin/bash
+> docker exec -it dev /bin/bash
 
 root@devserver:/# cd /var/opt/workspace/${PROJECT_DIR}
 root@devserver:/# npm install
@@ -54,5 +54,5 @@ The container exposes the following ports:
 You can build the image with the following command (run the command from this directory):
 
 ```
-docker build -t ibm/devserver .
+docker build -t ibm/dev .
 ```
