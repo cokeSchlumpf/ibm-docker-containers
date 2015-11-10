@@ -5,7 +5,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 # Set up some configuration environment variables
 ENV DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   WMQ_VERSION=7.5.0.3 \
-  IIB_VERSION 9.0
+  IIB_VERSION=9.0
 
 # Install helpful tools and IIB prerequisites
 RUN yum -y update \
