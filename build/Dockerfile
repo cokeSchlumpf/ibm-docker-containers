@@ -4,7 +4,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Install helpful tools
 RUN apt-get -y update \
-  && apt-get install -y openssh-server ca-certificates postfix \
+  && apt-get install -y openssh-server ca-certificates postfix jq \
   && apt-get -y clean all
 
 # Define Versions
@@ -53,8 +53,12 @@ RUN chmod +rx /usr/local/bin/*.sh
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
 # The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
-RUN ssh-keygen -t rsa -C "jenkins@buildserver.com" -f ~/.ssh/id_rsa -q -N "" \
-  && cat ~/.ssh/id_rsa.pub \
+COPY ssh-keys.own.zip /tmp/
+RUN cd /tmp \
+  && unzip ssh-keys.own.zip -d ./ \
+  && mkdir ~/.ssh \
+  && cp id_rsa* ~/.ssh/ \
+  && rm -rf /tmp/* \
   && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts
 
 # Expose Ports

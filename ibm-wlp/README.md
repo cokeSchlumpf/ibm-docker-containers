@@ -8,18 +8,18 @@ Start the image with the following command:
 
 ```
 docker run -id \
-  -p 9080:9080 \
-  -p 9443:9443 \
-  -p 222:22 \
-  -h wlp \
-  -n wlp \
+  -p 6080:9080 \
+  -p 6443:9443 \
+  -p 223:22 \
+  --hostname wlp \
+  --name wlp \
   ibm/wlp
 ```
 
 The image installs an OpenSSH server and configures a user to connect via SSH:
 
 ```
-ssh wlp@dockerhost -p 222 # password: wlp
+ssh wlp@dockerhost -p 223 # password: wlp
 ```
 
 ### Available volumes

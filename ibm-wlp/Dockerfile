@@ -29,6 +29,10 @@ RUN useradd --user-group --create-home --password $(echo "wlp" | openssl passwd 
   && chown -R wlp /opt/wlp \
   && chgrp -R wlp /opt/wlp
 
+# Configure authorized keys
+RUN mkdir /home/wlp/.ssh \
+  && echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyod44T9cOtQu8njkehz2aKiA4Nm6RiQc2AYcj7tjYwxRB0WGQcu4rUZVd2xbAfT0lWuDB5XPK5NPmgKrNEgWIDMPSKCH+9dLL6RRlU72vkBSgEQG6Rz5YVA2LMuJCycf3zFEvH0fYWqMdZiI4GAcKVBS73vtCd2rFKkRTmRKLoziGKqqsrkimXClS57mAiqCo0jrQxcf4V8jpGe+4NYXTk1rgeWozspy5CktmYN6NPDxLKVbeB7dwik2SVvF1592Fv8a5ZsRdvvNha9W8PZM+45p4pEiDcG0/5tct34V0OrhbqqZUJDcFYGOGhBHhDdmQ7T/5BQXQr28m6zdY1k9P jenkins@buildserver.com" >> /home/wlp/.ssh/authorized_keys
+
 # WLP management script
 COPY wlp-manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh

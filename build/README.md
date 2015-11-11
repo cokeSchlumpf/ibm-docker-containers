@@ -24,6 +24,8 @@ docker run -id \
   -v /var/opt/artifactory \
   -v /var/opt/gitlab \
   -v /var/opt/jenkins \
+  -v ~/.m2:/root/.m2 \
+  -v ~/.npm:/root/.npm \
   --hostname build \
   --name build \
   ibm/build
@@ -43,6 +45,8 @@ mkdir -p \
   -v ~/docker-data/artifactory:/var/opt/artifactory \
   -v ~/docker-data/gitlab:/var/opt/gitlab \
   -v ~/docker-data/jenkins:/var/opt/jenkins \
+  -v ~/.m2:/root/.m2 \
+  -v ~/.npm:/root/.npm \
   --hostname build \
   --name build \
   ibm/build
@@ -61,6 +65,8 @@ mkdir -p \
   -v ~/docker-data/artifactory:/var/opt/artifactory \
   -v /var/opt/gitlab \
   -v ~/docker-data/jenkins:/var/opt/jenkins \
+  -v ~/.m2:/root/.m2 \
+  -v ~/.npm:/root/.npm \
   --hostname build \
   --name build \
   ibm/build
