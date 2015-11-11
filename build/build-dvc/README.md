@@ -30,6 +30,20 @@ docker run -id \
   ibm/build
 ```
 
+You may add additional links to other servers:
+
+```
+docker run -id \
+  -p 8080:8080 \
+  -p 9080:9080 \
+  -p 222:22 \
+  --volumes-from build-dvc \
+  --link wlp:wlp \
+  --hostname build \
+  --name build \
+  ibm/build
+```
+
 ## Build the image
 
 ```
