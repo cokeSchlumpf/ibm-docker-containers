@@ -15,7 +15,12 @@ ENV DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   TOMCAT_VERSION=8.0.28 \
   ARTIFACTORY_HOME=/var/opt/artifactory \
   JENKINS_HOME=/var/opt/jenkins \
-  GITLAB_HOME=/var/opt/gitlab
+  GITLAB_HOME=/var/opt/gitlab \
+  TOMCAT_HOME=/usr/local/apache-tomcat \
+  TOMCAT_PORT=8080 \
+  GITLAB_PORT=9080 \
+  GITLAB_UNICORN_PORT=9090 \
+  EXTERNAL_SSH_PORT=222
 
 # Install Tomcat
 RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-tomcat_${TOMCAT_VERSION}.tar.gz \
@@ -24,18 +29,22 @@ RUN wget -O /tmp/apache-tomcat.tar.gz ${DOWNLOAD_BASE_URL}/apache-tomcat/apache-
   && mv /tmp/apache-tomcat-${TOMCAT_VERSION} /usr/local/apache-tomcat
 
 # Deploy Jenkins
-RUN wget -O /usr/local/apache-tomcat/webapps/jenkins.war ${DOWNLOAD_BASE_URL}/jenkins/jenkins_${JENKINS_VERSION}.war \
+RUN wget -O ${TOMCAT_HOME}/webapps/jenkins.war ${DOWNLOAD_BASE_URL}/jenkins/jenkins_${JENKINS_VERSION}.war \
   && mkdir -p ${JENKINS_HOME}
 VOLUME ["${JENKINS_HOME}"]
 
 # Deploy Artifactory
-RUN wget -O /usr/local/apache-tomcat/webapps/artifactory.war ${DOWNLOAD_BASE_URL}/artifactory/artifactory_${ARTIFACTORY_VERSION}.war \
+RUN wget -O ${TOMCAT_HOME}/webapps/artifactory.war ${DOWNLOAD_BASE_URL}/artifactory/artifactory_${ARTIFACTORY_VERSION}.war \
   && mkdir -p ${ARTIFACTORY_HOME}
 VOLUME ["${ARTIFACTORY_HOME}"]
 
 # Install gitlab
 RUN curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
-  && apt-get install gitlab-ce
+  && apt-get install gitlab-ce \
+  && echo "Configuring gitlab ..." \
+  && echo "unicorn['port'] = ${GITLAB_UNICORN_PORT}" >> /etc/gitlab/*.rb \
+  && echo "gitlab_rails['gitlab_shell_ssh_port'] = ${EXTERNAL_SSH_PORT}" >> /etc/gitlab/*.rb \
+  && echo "external_url 'http://`hostname`:${GITLAB_PORT}'" >> /etc/gitlab/*.rb
 VOLUME ["${GITLAB_HOME}"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
@@ -48,8 +57,12 @@ RUN cd /tmp \
   && rm -rf /tmp/*
 
 # Add manage script
-COPY buildserver-manage.sh /usr/local/bin/
+COPY manage.sh manage-jenkins.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
+
+# Configure Jenkins
+RUN ${TOMCAT_HOME}/bin/startup.sh \
+  && manage-jenkins.sh ${TOMCAT_HOME}/webapps/jenkins/WEB-INF/jenkins-cli.jar http://localhost:${TOMCAT_PORT}/jenkins
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
 # The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
@@ -63,10 +76,10 @@ RUN cd /tmp \
   && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts
 
 # Expose Ports
-EXPOSE 22 8080 9080
+EXPOSE 22 "${TOMCAT_PORT}" ${GITLAB_PORT}
 
 # Set TERM again
 ENV TERM=xterm
 
 # Set entrypoint to run management script
-ENTRYPOINT ["buildserver-manage.sh"]
+ENTRYPOINT ["manage.sh"]

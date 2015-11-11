@@ -9,11 +9,6 @@ start() {
   service ssh start
 
   # Start gitlab
-  echo "Configuring gitlab ..."
-  echo "unicorn['port'] = 9090" >> /etc/gitlab/*.rb
-  echo "gitlab_rails['gitlab_shell_ssh_port'] = 222" >> /etc/gitlab/*.rb
-  echo "external_url 'http://`hostname`:9080'" >> /etc/gitlab/*.rb
-
   echo "Starting gitlab ..."
   sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
 }
