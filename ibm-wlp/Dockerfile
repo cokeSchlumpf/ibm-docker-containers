@@ -13,7 +13,7 @@ RUN wget -O /tmp/websphere-liberty.zip ${DOWNLOAD_BASE_URL}/websphere-liberty/we
   && rm -rf /opt/._websphere-liberty /tmp/*
 
 # Install openssh-server to deploy applications
-RUN yum install -y openssh-server
+RUN yum install -y openssh-server openssh-clients
 
 # Copy SSH Configuration (SSH Keys should always be the same)
 COPY ssh-keys.zip /tmp/

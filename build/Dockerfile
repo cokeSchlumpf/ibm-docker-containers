@@ -42,9 +42,8 @@ VOLUME ["${ARTIFACTORY_HOME}"]
 RUN curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | bash \
   && apt-get install gitlab-ce \
   && echo "Configuring gitlab ..." \
-  && echo "unicorn['port'] = ${GITLAB_UNICORN_PORT}" >> /etc/gitlab/*.rb \
-  && echo "gitlab_rails['gitlab_shell_ssh_port'] = ${EXTERNAL_SSH_PORT}" >> /etc/gitlab/*.rb \
-  && echo "external_url 'http://`hostname`:${GITLAB_PORT}'" >> /etc/gitlab/*.rb
+  && echo "unicorn['port'] = ${GITLAB_UNICORN_PORT}" >> /etc/gitlab/gitlab.rb \
+  && echo "gitlab_rails['gitlab_shell_ssh_port'] = ${EXTERNAL_SSH_PORT}" >> /etc/gitlab/gitlab.rb
 VOLUME ["${GITLAB_HOME}"]
 
 # Copy SSH Configuration (SSH Keys should always be the same)
@@ -56,8 +55,8 @@ RUN cd /tmp \
   && chown root /etc/ssh/* \
   && rm -rf /tmp/*
 
-# Add manage script
-COPY manage.sh manage-jenkins.sh /usr/local/bin/
+# Add manage-jenkins script
+COPY manage-jenkins.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Configure Jenkins
@@ -73,7 +72,12 @@ RUN cd /tmp \
   && cp id_rsa* ~/.ssh/ \
   && chmod 0600 ~/.ssh/id_rsa* \
   && rm -rf /tmp/* \
-  && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts
+  && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts \
+  && ssh-keyscan -p 22 build >> ~/.ssh/known_hosts
+
+# Add manage script
+COPY manage.sh /usr/local/bin/
+RUN chmod +rx /usr/local/bin/*.sh
 
 # Expose Ports
 EXPOSE 22 "${TOMCAT_PORT}" ${GITLAB_PORT}

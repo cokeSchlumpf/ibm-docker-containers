@@ -4,11 +4,17 @@ start() {
   # Start Tomcat
   /usr/local/apache-tomcat/bin/startup.sh
 
+  # Update Jenkins after startup
+  manage-jenkins.sh ${TOMCAT_HOME}/webapps/jenkins/WEB-INF/jenkins-cli.jar http://localhost:${TOMCAT_PORT}/jenkins
+
   # Start necessary services for gitlab
   service postfix start
   service ssh start
 
   # Start gitlab
+  echo "Configuring gitlab ..."
+  echo "external_url 'http://`hostname`:${GITLAB_PORT}'" >> /etc/gitlab/gitlab.rb
+
   echo "Starting gitlab ..."
   sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
 }

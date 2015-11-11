@@ -17,13 +17,16 @@ ERROR_JENKINS_NOT_STARTED=1;
 if [ $1 = "--help" ] || [ $1 = "-h" ]; then
   echo "Updates and installs necessary jenkins plugins. Usage:"
   echo
-  echo "manage-jenkins [JENKINS_CLI] [JENKINS_URL]"
+  echo "manage-jenkins [JENKINS_CLI] [JENKINS_URL] [JAVA_HOME]"
   echo
   echo "JENKINS_CLI. Optional. Default = /usr/local/apache-tomcat/webapps/jenkins/WEB-INF/jenkins-cli.jar"
   echo "  - Location of jenkins-cli.jar (contained within jenkins.war)."
   echo
   echo "JENKINS_URL. Optional. Default = http://localhost:8080/jenkins"
   echo "  - URL of Jenkins instance to configure."
+  echo
+  echo "JAVA_HOME. Optional. Default = /opt/jdk"
+  echo "  - Java home path."
   echo
   sleep 3;
   exit 0;
@@ -32,6 +35,7 @@ fi;
 # Match arguments or use default values
 jenkins_cli=${1-"/usr/local/apache-tomcat/webapps/jenkins/WEB-INF/jenkins-cli.jar"};
 jenkins_url=${2-"http://localhost:8080/jenkins"};
+java_home=${3-"/opt/jdk"};
 
 main() {
   check_started
@@ -39,6 +43,8 @@ main() {
 
   # Declare necessary plugins for Jenkins
   install_plugins "gitlab-hook" "job-dsl"
+
+  setJDK
 
   if [ ! -z "$JENKINS_CHANGED" ]; then
     restart
@@ -89,6 +95,28 @@ update_plugins() {
   else
     echo "Everything up-to-date. Nothing to do."
   fi
+}
+
+setJDK() {
+  rm configure-jdk.groovy && touch configure-jdk.groovy
+  echo 'name = "Native Java";' >> configure-jdk.groovy
+  echo 'home = "/opt/jdk";' >> configure-jdk.groovy
+  echo '' >> configure-jdk.groovy
+  echo 'dis = new hudson.model.JDK.DescriptorImpl();' >> configure-jdk.groovy
+  echo 'dis.setInstallations( new hudson.model.JDK(name, home));' >> configure-jdk.groovy
+  echo '' >> configure-jdk.groovy
+  echo 'println "$name defined with $home";' >> configure-jdk.groovy
+
+  curl --data-urlencode "script=$(<./test)" $jenkins_url/scriptText
+  rm configure-jdk.groovy
+}
+
+setGit() {
+  # TODO
+}
+
+setMaven() {
+  # TODO
 }
 
 main
