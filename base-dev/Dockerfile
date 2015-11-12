@@ -2,9 +2,6 @@
 FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
-# Install helpful tools
-RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo curl && apt-get -y clean all
-
 # Define Versions
 ENV \
   http_proxy=http://auto \
@@ -14,6 +11,9 @@ ENV \
   NODE_VERSION=5.0.0 \
   NVM_VERSION=0.29.0 \
   NVM_DIR=/usr/local/nvm
+
+# Install helpful tools
+RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo curl && apt-get -y clean all
 
 # Install Java 8
 RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
