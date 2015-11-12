@@ -46,6 +46,16 @@ Usage:
 update-host DOWNLOAD_BASE_URL
 ```
 
+## sed.sh
+
+Helper script to distinct between the sed versions of Mac OS and Linux.
+
+Usage:
+
+```
+sed EXPRESSION
+```
+
 ## update-proxy.sh
 
 Use this shell script to update proxy configuration within Dockerfiles before build.

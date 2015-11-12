@@ -7,7 +7,7 @@
 
 CHECK_SED=`sed -h 2>&1 >/dev/null | grep "i extension"`
 
-if [ ! -z CHECK_SED ]; then
+if [ ! -z $CHECK_SED ]; then
   # Mac OS
   sed -i '' -e $@
 else
