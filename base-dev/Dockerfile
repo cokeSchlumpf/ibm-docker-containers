@@ -7,8 +7,8 @@ RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo curl && apt
 
 # Define Versions
 ENV \
-  http_proxy_disabled=http://localhost:8080 \
-  https_proxy_disabled=http://localhost:8080 \
+  http_proxy=http://auto \
+  https_proxy=http://auto \
   DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \

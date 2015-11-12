@@ -50,16 +50,16 @@ fi;
 if [ "${MODE}" = "disable" ]; then
   echo "Disable proxy ..."
 
-  find .. -name Dockerfile -exec sed -i '' -e "s#http_proxy=#http_proxy_disabled=#g" {} +
-  find .. -name Dockerfile -exec sed -i '' -e "s#https_proxy=#https_proxy_disabled=#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#http_proxy=#http_proxy_disabled=#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#https_proxy=#https_proxy_disabled=#g" {} +
 else
   echo "Enable proxy ${HTTP_PROXY} ..."
 
-  find .. -name Dockerfile -exec sed -i '' -e "s#http_proxy_disabled=#http_proxy=#g" {} +
-  find .. -name Dockerfile -exec sed -i '' -e "s#https_proxy_disabled=#https_proxy=#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#http_proxy_disabled=#http_proxy=#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#https_proxy_disabled=#https_proxy=#g" {} +
 
-  find .. -name Dockerfile -exec sed -i '' -e "s#http_proxy=\(http://\)\{0,1\}[^[:space:]]*#http_proxy=\1${HTTP_PROXY}#g" {} +
-  find .. -name Dockerfile -exec sed -i '' -e "s#https_proxy=\(http://\)\{0,1\}[^[:space:]]*#https_proxy=\1${HTTP_PROXY}#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#http_proxy=\(http://\)\{0,1\}[^[:space:]]*#http_proxy=\1${HTTP_PROXY}#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#https_proxy=\(http://\)\{0,1\}[^[:space:]]*#https_proxy=\1${HTTP_PROXY}#g" {} +
 fi;
 
 git status
