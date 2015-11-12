@@ -1,4 +1,4 @@
-# Development Base Server Docker Image (base-dev)
+# Development Base Server Docker Image (ibm/base-dev)
 
 This docker image contains a base development server to develop JEE based web applications with the following features:
 

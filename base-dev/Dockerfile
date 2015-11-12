@@ -4,8 +4,9 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Define Versions
 ENV \
-  http_proxy=http://auto \
-  https_proxy=http://auto \
+  http_proxy_disabled=http://auto \
+  https_proxy_disabled=http://auto \
+  no_proxy="127.0.0.1, localhost" \
   DOWNLOAD_BASE_URL=http://192.168.2.108:8080 \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \

@@ -29,9 +29,13 @@ All image tags should start with `ibm/`. All base images which shouldn't be star
 
 Files which are used during image build process are located within [installation-files](./installation-files). The actual files are not contained within the repository due to large file sizes.
 
-## Scripts
+## Building the images
 
-Some helpful scripts to manage docker and this repository are located within the [scripts](./scripts) directory.
+Some helpful scripts to manage docker and this repository are located within the [scripts](./scripts) directory. There is also a script to build the images easily. Just execute the following steps:
+
+* Serve the [installation-files](./installation-files) as described in the [installation-files/README.md](./installation-files/README.md).
+* Make sure that you have configured `${http_proxy}` if required by your docker host machine, e.g. `export http_proxy=proxy-web.group.local:3128`.
+* Execute the [scripts/build-all.sh](./scripts/build-all.sh), e.g. `build-all.sh -d localhost:8080`.
 
 ## Tips & Tricks
 ### Volumes on CentOS
