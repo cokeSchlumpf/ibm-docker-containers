@@ -1,12 +1,16 @@
 #!/bin/bash
-# Use this shell script to update docker host Address within Dockerfiles before build.
+# (c) michael.wellner@de.ibm.com
+#
+# Use this shell script to update DOWNLOAD_BASE_URL within Dockerfiles before build.
 #
 # Usage:
-# update-host NEW_HOST
+# update-host DOWNLOAD_BASE_URL
 
-if [ -z "$1" ]; then
+if [ -z "$1" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Use this shell script to update DOWNLOAD_BASE_URL within Dockerfiles before build."
+  echo
   echo "Usage:"
-  echo "update-host NEW_HOST"
+  echo "update-host DOWNLOAD_BASE_URL"
 else
   CURRENTDIR=`pwd`
   BASEDIR=$(dirname $0)
