@@ -16,7 +16,7 @@ else
   BASEDIR=$(dirname $0)
 
   cd $BASEDIR
-  find .. -name Dockerfile -exec sed -i '' -e "s#DOWNLOAD_BASE_URL=http://[^:]*:[^[:space:]]*#DOWNLOAD_BASE_URL=http://$1#g" {} +
+  find .. -name Dockerfile -exec ./sed.sh "s#DOWNLOAD_BASE_URL=http://[^:]*:[^[:space:]]*#DOWNLOAD_BASE_URL=http://$1#g" {} +
   git status
   cd $CURRENTDIR
 fi
