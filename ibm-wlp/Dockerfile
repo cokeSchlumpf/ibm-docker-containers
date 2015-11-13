@@ -38,7 +38,7 @@ RUN mkdir /home/wlp/.ssh \
   && chmod 600 /home/wlp/.ssh/authorized_keys
 
 # WLP management script
-COPY wlp-manage.sh /usr/local/bin/
+COPY manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Expose ports from WLP to the outside world.
@@ -48,4 +48,4 @@ EXPOSE 9080 9443 22
 ENV TERM xterm
 
 # Start WLP on Startup
-ENTRYPOINT ["wlp-manage.sh"]
+ENTRYPOINT ["manage.sh"]
