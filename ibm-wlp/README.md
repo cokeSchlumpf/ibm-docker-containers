@@ -8,6 +8,15 @@ Start the image with the following command:
 
 ```
 docker run -id \
+  --hostname wlp \
+  --name wlp \
+  ibm/wlp
+```
+
+Or, if you like to expose the ports:
+
+```
+docker run -id \
   -p 6080:9080 \
   -p 6443:9443 \
   -p 223:22 \
