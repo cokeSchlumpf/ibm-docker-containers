@@ -76,7 +76,7 @@ RUN cd /tmp \
   && ssh-keyscan -p 22 build >> ~/.ssh/known_hosts
 
 # Configure Git
-RUN git config --global user.email "jenkins@rodenstock.com" \
+RUN git config --global user.email "jenkins@buildserver.com" \
   && git config --global user.name "Jenkins"
 
 # Add manage script
