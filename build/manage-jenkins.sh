@@ -42,7 +42,7 @@ main() {
   update_plugins
 
   # Declare necessary plugins for Jenkins
-  install_plugins "gitlab-hook" "job-dsl" "greenballs"
+  install_plugins "gitlab-hook" "job-dsl" "greenballs" "uno-choice"
 
   setJDK
 
