@@ -75,6 +75,10 @@ RUN cd /tmp \
   && echo "|1|I4hFTXEb30uD0YfbYAUwCGVVdts=|6u8pKolY1GdXCBMZIuGY18pmAg8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMn5k7S2Gxngvdz12CNf/R52P6NeZg1Llx8P24qoLJ2WFoKWWriQCXEQEDyJD7+PqOvmeqCuW+sik9g1PIxODz0=" >> ~/.ssh/known_hosts \
   && ssh-keyscan -p 22 build >> ~/.ssh/known_hosts
 
+# Configure Git
+RUN git config --global user.email "jenkins@rodenstock.com" \
+  && git config --global user.name "Jenkins"
+
 # Add manage script
 COPY manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
