@@ -3,7 +3,7 @@ FROM ibm/base-centos
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Set up some configuration environment variables
-ENV DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
+ENV DOWNLOAD_BASE_URL=http://10.90.14.29:8080 \
   WLP_VERSION=8.5.5.7
 
 # Install WebSphere Liberty Profile
