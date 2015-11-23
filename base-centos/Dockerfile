@@ -12,9 +12,8 @@ RUN yum -y update \
   && yum install -y nano wget tar unzip sudo which \
   && yum -y clean all
 
-RUN \
-  (([ ! -z http_proxy ] && echo "http_proxy=proxy-web.group.local:3128 >> ~/.bashrc) || exit 0) \
-  && (([ ! -z https_proxy ] && echo "https_proxy=proxy-web.group.local:3128 >> ~/.bashrc) || exit 0) \
-  && (([ ! -z no_proxy ] && echo "no_proxy=${no_proxy}" >> ~/.bashrc) || exit 0)
+RUN ([ ! -z http_proxy ] && echo "http_proxy=${http_proxy}" >> ~/.bashrc) || exit 0
+RUN ([ ! -z https_proxy ] && echo "https_proxy=${https_proxy}" >> ~/.bashrc) || exit 0
+RUN ([ ! -z no_proxy ] && echo "no_proxy=${no_proxy}" >> ~/.bashrc) || exit 0
 
 CMD ["/bin/bash"]
