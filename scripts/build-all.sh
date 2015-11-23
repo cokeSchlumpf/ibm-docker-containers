@@ -77,7 +77,7 @@ if [ ! -z ${DOWNLOAD_BASE_URL} ]; then
 fi
 
 # Update proxy
-if [ ! -z ${PROXY_MODE} ]; then
+if [  -z ${PROXY_MODE} ]; then
   ./update-proxy.sh auto
 else
   ./update-proxy.sh ${PROXY_MODE} ${PROXY}
