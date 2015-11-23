@@ -5,7 +5,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 ENV \
   http_proxy_disabled=auto \
   https_proxy_disabled=auto \
-  no_proxy="127.0.0.1, localhost"
+  no_proxy="10.90.14.29,127.0.0.1,localhost"
 
 # Install helpful tools
 RUN yum -y update \
