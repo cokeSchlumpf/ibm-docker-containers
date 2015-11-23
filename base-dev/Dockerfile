@@ -14,7 +14,7 @@ ENV \
   NVM_DIR=/usr/local/nvm
 
 # Install helpful tools
-RUN apt-get -y update && apt-get install -y nano wget tar unzip sudo curl && apt-get -y clean all
+RUN apt-get -y update && apt-get install -y nano wget tar unzip zip sudo curl && apt-get -y clean all
 
 # Install Java 8
 RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
