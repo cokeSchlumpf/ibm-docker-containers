@@ -26,7 +26,7 @@ This image doesn't expose any ports.
 You can build the image with the following command (run the command from this directory):
 
 ```
-docker build -t ibm/base-base .
+docker build -t ibm/base-dev .
 ```
 
 During the installation you need to make the following files available. Before running the build make sure that the versions defined in the Dockerfile are available in `installation-files`. See also [installation-files](../installation-files).
