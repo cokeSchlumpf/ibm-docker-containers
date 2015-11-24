@@ -17,6 +17,8 @@ start() {
 
   echo "Starting gitlab ..."
   sleep 3 && gitlab-ctl reconfigure & /opt/gitlab/embedded/bin/runsvdir-start
+
+  ssh-keyscan -p 22 build >> ~/.ssh/known_hosts
 }
 
 monitor() {
