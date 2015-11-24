@@ -4,8 +4,8 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
 # Set proxy
 ENV \
-  http_proxy_disabled=proxy-web.group.local:3128 \
-  https_proxy_disabled=proxy-web.group.local:3128 \
+  http_proxy=http://proxy-web.group.local:3128 \
+  https_proxy=http://proxy-web.group.local:3128 \
   no_proxy="10.90.14.29,127.0.0.1,localhost"
 
 RUN apt-get install -y python
