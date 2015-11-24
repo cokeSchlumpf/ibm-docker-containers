@@ -2,6 +2,9 @@
 
 start() {
   cd /var/opt/http
+  echo "Serving files from `pwd` ..."
+  ls -l
+  
   python -m SimpleHTTPServer 8080
 }
 
