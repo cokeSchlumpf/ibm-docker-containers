@@ -49,7 +49,7 @@ touch ~/.gitconfig ~/.git-credentials \
     ibm/dev
 
 # Afterwards you should run docker exec with -u option to use 'dev' user:
-docker exec -it -u dev /bin/bash
+docker exec -it -u dev dev /bin/bash
 ```
 
 Or, if you need to connect to a running [build container](../build):

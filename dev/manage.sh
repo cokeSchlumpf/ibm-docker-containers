@@ -15,6 +15,8 @@ start() {
     find /home -user $OLDUID -exec chown -h $UID {} \;
     find /home -group $OLDGID -exec chgrp -h $GID {} \;
     usermod -g $GID dev
+    chmod -R dev /home/dev
+    chgrp -R dev /home/dev
 
     ls -n "/var/opt/workspace"
   fi
