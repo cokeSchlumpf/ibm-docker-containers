@@ -21,9 +21,12 @@ start() {
   fi
 
   # Add internal DNS Servers if necessary.
-  INTRANET=`(ping -c 1 -W 5 10.99.14.10 | grep "1 received");echo $?`
+  ping -c 1 -W 5 10.99.14.10 | grep "1 received"
+  INTRANET=$(echo $?)
 
-  if [ 0 -eq $INTRANET ]; then
+  echo "Ping result: ${INTRANET}"
+
+  if [ 0 = "${INTRANET}" ]; then
     echo "Setting resolv.conf to intranet DNS server ..."
 
     echo "search group.local" > /etc/resolv.conf
