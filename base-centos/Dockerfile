@@ -16,4 +16,6 @@ RUN ([ ! -z http_proxy ] && echo "http_proxy=${http_proxy}" >> ~/.bashrc) || exi
 RUN ([ ! -z https_proxy ] && echo "https_proxy=${https_proxy}" >> ~/.bashrc) || exit 0
 RUN ([ ! -z no_proxy ] && echo "no_proxy=${no_proxy}" >> ~/.bashrc) || exit 0
 
+RUN cat ~/.bashrc
+
 CMD ["/bin/bash"]
