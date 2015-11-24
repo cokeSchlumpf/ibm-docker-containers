@@ -36,11 +36,11 @@ touch ~/.gitconfig ~/.git-credentials \
   && docker run -id \
     -e UID=`id -u $(whoami)` \
     -e GID=`id -g $(whoami)` \
-    -v ~/.gitconfig:/dev/.gitconfig \
-    -v ~/.git-credentials:/dev/.git-credentials \
-    -v ~/.m2:/dev/.m2 \
-    -v ~/.npm:/dev/.npm \
-    -v ~/.ssh:/dev/.ssh \
+    -v ~/.gitconfig:/home/dev/.gitconfig \
+    -v ~/.git-credentials:/home/dev/.git-credentials \
+    -v ~/.m2:/home/dev/.m2 \
+    -v ~/.npm:/home/dev/.npm \
+    -v ~/.ssh:/home/dev/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
     -p 7080:80 \
     -p 7443:443 \
