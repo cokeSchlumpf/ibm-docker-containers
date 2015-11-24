@@ -6,6 +6,7 @@ start() {
     echo "Changing uid and gid of user 'dev' to uid=$UID and gid=$GID ..."
 
     ls -n "/var/opt/workspace"
+    ls -al "/home/dev/.ssh"
 
     OLDUID=`id -u dev`
     OLDGID=`id -g dev`

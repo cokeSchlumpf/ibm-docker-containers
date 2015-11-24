@@ -16,11 +16,11 @@ Start the image with the following command:
 ```
 touch ~/.gitconfig ~/.git-credentials \
   && docker run -id \
-    -v ~/.gitconfig:/dev/.gitconfig \
-    -v ~/.git-credentials:/dev/.git-credentials \
-    -v ~/.m2:/dev/.m2 \
-    -v ~/.npm:/dev/.npm \
-    -v ~/.ssh:/dev/.ssh \
+    -v ~/.gitconfig:/root/.gitconfig \
+    -v ~/.git-credentials:/root/.git-credentials \
+    -v ~/.m2:/root/.m2 \
+    -v ~/.npm:/root/.npm \
+    -v ~/.ssh:/root/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
     -p 7080:80 \
     -p 7443:443 \
@@ -36,11 +36,11 @@ touch ~/.gitconfig ~/.git-credentials \
   && docker run -id \
     -e UID=`id -u $(whoami)` \
     -e GID=`id -g $(whoami)` \
-    -v ~/.gitconfig:/dev/.gitconfig \
-    -v ~/.git-credentials:/dev/.git-credentials \
-    -v ~/.m2:/dev/.m2 \
-    -v ~/.npm:/dev/.npm \
-    -v ~/.ssh:/dev/.ssh \
+    -v ~/.gitconfig:/home/dev/.gitconfig \
+    -v ~/.git-credentials:/home/dev/.git-credentials \
+    -v ~/.m2:/home/dev/.m2 \
+    -v ~/.npm:/home/dev/.npm \
+    -v ~/.ssh:/home/dev/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
     -p 7080:80 \
     -p 7443:443 \
@@ -57,11 +57,11 @@ Or, if you need to connect to a running [build container](../build):
 ```
 touch ~/.gitconfig ~/.git-credentials \
   && docker run -id \
-    -v ~/.gitconfig:/dev/.gitconfig \
-    -v ~/.git-credentials:/dev/.git-credentials \
-    -v ~/.m2:/dev/.m2 \
-    -v ~/.npm:/dev/.npm \
-    -v ~/.ssh:/dev/.ssh \
+    -v ~/.gitconfig:/root/.gitconfig \
+    -v ~/.git-credentials:/root/.git-credentials \
+    -v ~/.m2:/root/.m2 \
+    -v ~/.npm:/root/.npm \
+    -v ~/.ssh:/root/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
     -p 7080:80 \
     -p 7443:443 \
