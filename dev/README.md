@@ -48,7 +48,7 @@ touch ~/.gitconfig ~/.git-credentials \
     ibm/dev
 ```
 
-Afterwords you are able to run build and tests within the container:
+Afterwards you are able to run build and tests within the container:
 
 ```
 > docker exec -it dev /bin/bash
