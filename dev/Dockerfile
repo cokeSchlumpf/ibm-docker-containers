@@ -18,7 +18,7 @@ COPY manage.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Volume for workspace
-VOLUME [ "/var/opt/workspace", "/home/dev/.m2", "/home/dev/.npm" ]
+VOLUME [ "/var/opt/workspace" ]
 WORKDIR /var/opt/workspace
 
 # Expose Port for JEE Server
