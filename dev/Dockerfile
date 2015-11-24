@@ -10,12 +10,19 @@ RUN npm install -g npm-watch \
   && npm install -g babel-cli \
   && npm install -g node-notifier
 
+# Create User for development
+RUN useradd --create-home dev
+
+# Add manage script
+COPY manage.sh /usr/local/bin/
+RUN chmod +rx /usr/local/bin/*.sh
+
 # Volume for workspace
-VOLUME [ "/var/opt/workspace", "/root/.m2", "/root/.npm" ]
+VOLUME [ "/var/opt/workspace" ]
 WORKDIR /var/opt/workspace
 
 # Expose Port for JEE Server
 EXPOSE 80 443
 
-# Start Bash on Startup
-CMD ["/bin/bash"]
+# Set entrypoint to run management script
+ENTRYPOINT ["manage.sh"]
