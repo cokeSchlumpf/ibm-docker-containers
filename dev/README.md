@@ -29,6 +29,29 @@ touch ~/.gitconfig ~/.git-credentials \
     ibm/dev
 ```
 
+If you like to share your workspace within a linux host you should provide your user UID and GID:
+
+```
+touch ~/.gitconfig ~/.git-credentials \
+  && docker run -id \
+    -e UID=`id -u $(whoami)` \
+    -e GID=`id -g $(whoami)` \
+    -v ~/.gitconfig:/root/.gitconfig \
+    -v ~/.git-credentials:/root/.git-credentials \
+    -v ~/.m2:/root/.m2 \
+    -v ~/.npm:/root/.npm \
+    -v ~/.ssh:/root/.ssh \
+    -v ~/Workspaces:/var/opt/workspace \
+    -p 7080:80 \
+    -p 7443:443 \
+    --name dev \
+    --hostname dev \
+    ibm/dev
+
+# Afterwards you should run docker exec with -u option to use 'dev' user:
+docker exec -it -u dev /bin/bash
+```
+
 Or, if you need to connect to a running [build container](../build):
 
 ```
