@@ -113,10 +113,12 @@ setJDK() {
 
 setGit() {
   # TODO
+  echo "TODO"
 }
 
 setMaven() {
   # TODO
+  echo "TODO"
 }
 
 main
