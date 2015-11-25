@@ -51,10 +51,10 @@ main() {
   	  | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" \
   	  > ../${PROJECT}/Dockerfile.proxy
 
-  	./docker-exec.sh build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
+  	./docker-exec.sh --args build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
   	rm ../${PROJET}/Dockerfile.proxy
   else
-  	./docker-exec.sh build -t ibm/${TAGNAME} ../${PROJECT}/
+  	./docker-exec.sh --args build -t ibm/${TAGNAME} ../${PROJECT}/
   fi
   cd ${CURRENTDIR}
 }
