@@ -48,7 +48,7 @@ main() {
   	fi
   
   	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
-  		export DOWNLOAD_HOST=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+  		export DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
   		export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
   		echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
   	else
