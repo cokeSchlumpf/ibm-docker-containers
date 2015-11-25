@@ -25,14 +25,8 @@ main() {
   read_variables "$@"
   check_required
   
-  ./docker-exec.sh --args ps -a | grep "http-server"
-  HTTP_SERVER_EXISTS=$?
-  
-  # Stop http-server if running
-  if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
-  	echo "Stoping and removing container http-server ..."
-  	./docker-exec.sh --args rm -f http-server
-  fi
+  echo "Stoping and removing container http-server ..."
+  ./docker-exec.sh --args rm -f http-server || true
   
   # Build and start http-server
   echo "Building ibm/http-server ..."
