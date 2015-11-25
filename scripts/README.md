@@ -31,3 +31,17 @@ Options:
   * **-p|--project** - The project to be build, e.g. base-dev, ibm-iib, ... 
   * **-t|--tagname** - The tagname of the docker image - Will be prefixed with ibm/... *Optional. Default: ${PROJECT}.*
 
+## docker-exec.sh
+
+This script detects whether to call docker with sudo or not. Just calls docker with the given arguments.
+
+
+Usage:
+
+```
+docker-exec [ -h | --help | OPTIONS ]
+```
+
+Options:
+  * **--args** - Arguments passed to docker. 
+

@@ -55,3 +55,21 @@ script docker-build "builds the docker image for the Dockerfile within the given
 	}}}
 
 }
+
+script docker-exec "detects whether to call docker with sudo or not. Just calls docker with the given arguments" {
+
+	argument "--args" reads remaining "Arguments passed to docker"
+
+	{{{
+		SUDO=`(docker ps > /dev/null || false);echo $?`
+
+	  if [ "$SUDO" -gt 0 ]; then
+			echo "Executing docker with sudo ..."
+			sudo docker ${ARGS[@]}
+		else
+			echo "Executing docker ..."
+			docker ${ARGS[@]}
+		fi
+	}}}
+
+}
