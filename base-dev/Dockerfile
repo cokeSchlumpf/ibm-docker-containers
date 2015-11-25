@@ -2,11 +2,14 @@
 FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
+# Define Proxy
+ENV \
+  http_proxy_disabled \
+  https_proxy_disabled \
+  no_proxy_disabled
+
 # Define Versions
 ENV \
-  http_proxy_disabled=proxy-web.group.local:3128 \
-  https_proxy_disabled=proxy-web.group.local:3128 \
-  no_proxy="docker,group.local,127.0.0.1,localhost" \
   DOWNLOAD_BASE_URL="http-server.docker:8080" \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \
@@ -15,10 +18,11 @@ ENV \
 
 # Echo some build information
 RUN echo "Building with: " \
-  && echo "http_proxy > ${http_proxy}" \
-  && echo "https_proxy > ${https_proxy}" \
-  && echo "no_proxy" > ${no_proxy} \
-  && echo "DOWNLOAD_BASE_URL > ${DOWNLOAD_BASE_URL}"
+  && echo "http_proxy: ${http_proxy}" \
+  && echo "https_proxy: ${https_proxy}" \
+  && echo "no_proxy": ${no_proxy} \
+  && echo "DOWNLOAD_BASE_URL: ${DOWNLOAD_BASE_URL} ???" \
+  && echo ${DOWNLOAD_BASE_URL}
 
 # Install helpful tools
 RUN apt-get -y update && apt-get install -y nano wget tar unzip zip sudo curl && apt-get -y clean all

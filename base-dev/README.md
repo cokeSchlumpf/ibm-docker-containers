@@ -29,6 +29,16 @@ You can build the image with the following command (run the command from this di
 docker build -t ibm/base-dev .
 ```
 
+To build the image behind a proxy use:
+
+```
+cat Dockerfile \
+  | sed "s#http_proxy_disabled#$http_proxy=${http_proxy}#g" \
+  | sed "s#https_proxy_disabled#$https_proxy=${https_proxy}#g" \
+  | sed "s#no_proxy_disabled#no_proxy=\"`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4":8080" }'`,docker,${no_proxy}\""
+docker build -t ibm/base-dev -
+```
+
 ### Installation files
 
 During the installation you need to make the following files available. Before running the build make sure that the versions defined in the Dockerfile are available in `installation-files`. See also [installation-files](../installation-files).
