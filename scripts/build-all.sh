@@ -25,7 +25,8 @@ main() {
   read_variables "$@"
   check_required
   
-  $HTTP_SERVER_EXISTS=`docker ps -a | grep "http-server"; echo $?`
+  docker ps -a | grep "http-server"
+  $HTTP_SERVER_EXISTS=`echo $?`
   
   # Stop http-server if running
   if [ $HTTP_SERVER_EXISTS -eq 0 ]; then

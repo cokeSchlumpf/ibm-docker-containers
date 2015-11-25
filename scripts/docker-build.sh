@@ -33,7 +33,8 @@ main() {
   if [ ! -z ${http_proxy} ]; then
   	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
   
-  	$HTTP_SERVER_EXISTS=`docker ps -a | grep "http-server"; echo $?`
+  	docker ps -a | grep "http-server"
+  	$HTTP_SERVER_EXISTS=`echo $?`
   
   	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
   		export DOWNLOAD_HOST=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
@@ -50,9 +51,9 @@ main() {
   	  | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" \
   	  > ../${PROJECT}/Dockerfile.proxy
   
-  	docker build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
+  	./docker-exec.sh build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
   else
-  	docker build -t ibm/${TAGNAME} ../${PROJECT}/
+  	./docker-exec.sh build -t ibm/${TAGNAME} ../${PROJECT}/
   fi
   cd ${CURRENTDIR}
 }
