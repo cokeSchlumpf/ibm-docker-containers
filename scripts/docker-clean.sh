@@ -18,15 +18,11 @@ BASEDIR=$(dirname $0)
 main() {
   cd ${BASEDIR} 
   read_variables "$@"
-  check_required
   
   ./docker-exec.sh --args ps -a | grep 'Exited' | awk '{print $1}' | xargs ./docker-exec.sh --args rm -v  || true
   ./docker-exec.sh --args  images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
   ./docker-exec.sh --args  volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
   cd ${CURRENTDIR}
-}
-
-check_required() {
 }
 
 read_variables() {
