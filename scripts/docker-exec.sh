@@ -25,7 +25,9 @@ main() {
   read_variables "$@"
   check_required
   
-  SUDO=`(docker ps > /dev/null || false);echo $?`
+  echo "Evaluating if sudo is needed for docker ..."
+  
+  SUDO=$(docker ps > /dev/null && echo 0 || echo 1)
   
    if [ "$SUDO" -gt 0 ]; then
   	echo "Executing docker with sudo ..."

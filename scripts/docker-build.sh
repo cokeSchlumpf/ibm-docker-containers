@@ -33,8 +33,7 @@ main() {
   if [ ! -z ${http_proxy} ]; then
   	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
   
-  	./docker-exec.sh --args ps -a | grep "http-server"
-  	HTTP_SERVER_EXISTS=$?
+  	HTTP_SERVER_EXISTS=$(./docker-exec.sh --args ps -a | grep "http-server" > /dev/null && echo 0 || echo 1)
   
   	cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu"
   	NEED_HTTP=$?

@@ -37,8 +37,7 @@ script docker-build "builds the docker image for the Dockerfile within the given
 		if [ ! -z ${http_proxy} ]; then
 			echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
 
-			./docker-exec.sh --args ps -a | grep "http-server"
-			HTTP_SERVER_EXISTS=$?
+			HTTP_SERVER_EXISTS=$(./docker-exec.sh --args ps -a | grep "http-server" > /dev/null && echo 0 || echo 1)
 
 			cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu"
 			NEED_HTTP=$?
@@ -87,7 +86,9 @@ script docker-exec "detects whether to call docker with sudo or not. Just calls 
 	argument "--args" reads remaining "Arguments passed to docker"
 
 	{{{
-		SUDO=`(docker ps > /dev/null || false);echo $?`
+		echo "Evaluating if sudo is needed for docker ..."
+
+		SUDO=$(docker ps > /dev/null && echo 0 || echo 1)
 
 	  if [ "$SUDO" -gt 0 ]; then
 			echo "Executing docker with sudo ..."
