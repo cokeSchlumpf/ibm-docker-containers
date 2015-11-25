@@ -8,17 +8,20 @@ script build-all "builds all docker images" {
 
 	{{{
 		./docker-exec.sh --args ps -a | grep "http-server"
-		HTTP_SERVER_EXISTS=`echo $?`
+		HTTP_SERVER_EXISTS=$?
 
 		# Stop http-server if running
 		if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
+			echo "Stoping and removing container http-server ..."
 			./docker-exec.sh --args rm -f http-server
 		fi
 
 		# Build and start http-server
+		echo "Building ibm/http-server ..."
 		./docker-build.sh -p http-server
 
 		# Start http-server
+		echo "Running ibm/http-server ..."
 		./docker-exec.sh run -id \
 			--privileged=true \
 		  -v ${FILES}:/var/opt/http \
