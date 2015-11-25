@@ -51,13 +51,13 @@ script docker-build "builds the docker image for the Dockerfile within the given
 				unset DOWNLOAD_BASE_URL
 			fi
 
-			cat ../${PROJET}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${http_proxy}#g" > ../${PROJECT}/Dockerfile.proxy 
-			cat ../${PROJET}/Dockerfile | sed "s#https_proxy_disabled#https_proxy=${https_proxy}#g" >> ../${PROJECT}/Dockerfile.proxy
-			cat ../${PROJET}/Dockerfile | sed "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" >> ../${PROJECT}/Dockerfile.proxy
-			cat ../${PROJET}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" >> ../${PROJECT}/Dockerfile.proxy
+			cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${http_proxy}#g" > ../${PROJECT}/Dockerfile.proxy
+			cat ../${PROJECT}/Dockerfile | sed "s#https_proxy_disabled#https_proxy=${https_proxy}#g" >> ../${PROJECT}/Dockerfile.proxy
+			cat ../${PROJECT}/Dockerfile | sed "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" >> ../${PROJECT}/Dockerfile.proxy
+			cat ../${PROJECT}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" >> ../${PROJECT}/Dockerfile.proxy
 
 			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.proxy ../${PROJECT}/
-			rm ../${PROJET}/Dockerfile.proxy
+			rm ../${PROJECT}/Dockerfile.proxy
 		else
 			./docker-exec.sh --args build -t ibm/${TAGNAME} ../${PROJECT}/
 		fi
