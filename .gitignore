@@ -4,3 +4,4 @@ installation-files/**/*.war
 installation-files/**/*.rpm
 .DS_Store
 **/Dockerfile.proxy
+scripts.tmp/
