@@ -38,7 +38,7 @@ main() {
   	./docker-exec.sh --args run -id \
   		--privileged=true \
   	  -v ${FILES}:/var/opt/http \
-  		-p 32775:8080 \
+  		-P \
   	  --name http-server \
   	  --hostname http-server \
   	  ibm/http-server
