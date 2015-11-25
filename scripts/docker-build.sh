@@ -43,6 +43,7 @@ main() {
      httpsProxy=${https_proxy}
   
      if [ $NEED_HTTP -eq 0 ]; then
+  		echo "Using Proxy with http:// ..."
        httpProxy="http://${httpProxy}"
        httpsProxy="http://${httpsProxy}"
      fi
