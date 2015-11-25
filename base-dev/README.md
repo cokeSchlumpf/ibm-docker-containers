@@ -32,8 +32,12 @@ docker build -t ibm/base-dev .
 Optionally, you can set build-time environment variables (e.g. if you are running behind a proxy):
 
 ```
+DOWNLOAD_BASE_URL=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4":8080" }'`
+echo "Using ${DOWNLOAD_BASE_URL} to download installation files during build ..."
 docker build \
-  --build-arg http_proxy="http://proxy-web.group.local:3128"
+  --build-arg http_proxy="http://proxy-web.group.local:3128" \
+  --build-arg no_proxy="${DOWNLOAD_BASE_URL},docker,group.local,127.0.0.1,localhost" \
+  --build-arg DOWNLOAD_BASE_URL=${DOWNLOAD_BASE_URL}
   -t ibm/base-dev .
 ```
 
