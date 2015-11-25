@@ -2,14 +2,12 @@
 FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
-# Define build-time arguments
-ARG http_proxy
-ARG https_proxy=${http_proxy}
-ARG no_proxy="docker,group.local,127.0.0.1,localhost"
-ARG DOWNLOAD_BASE_URL=http://http-server.docker:8080
-
 # Define Versions
 ENV \
+  http_proxy_disabled=proxy-web.group.local:3128 \
+  https_proxy_disabled=proxy-web.group.local:3128 \
+  no_proxy="docker,group.local,127.0.0.1,localhost" \
+  DOWNLOAD_BASE_URL="http-server.docker:8080" \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \
   NVM_VERSION=0.29.0 \
