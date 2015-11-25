@@ -8,7 +8,8 @@ RUN apt-get -y update \
   && apt-get -y clean all
 
 # Define Versions
-ENV DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
+ENV \
+  DOWNLOAD_BASE_URL="http-server.docker:8080" \
   ARTIFACTORY_VERSION=4.2.1 \
   JENKINS_VERSION=1.625.1 \
   GITLAB_VERSION=8.1.2 \

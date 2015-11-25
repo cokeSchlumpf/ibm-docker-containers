@@ -23,6 +23,10 @@ script docker-build-all "builds all docker images" {
 		  --name http-server \
 		  --hostname http-server \
 		  ibm/http-server
+
+		./docker-build -p base-dev
+		./docker-build -p build/build-dvc -t build-dvc
+		./docker-build -p build
 	}}}
 
 }
@@ -88,7 +92,7 @@ script docker-clean "cleans docker environment" {
 		./docker-exec.sh --args  images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
 		./docker-exec.sh --args  volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
 	}}}
-	
+
 }
 
 script docker-exec "detects whether to call docker with sudo or not. Just calls docker with the given arguments" {

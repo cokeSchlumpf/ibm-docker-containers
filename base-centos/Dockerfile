@@ -2,10 +2,11 @@
 FROM centos:6.6
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
+# Define Proxy
 ENV \
-  http_proxy=proxy-web.group.local:3128 \
-  https_proxy=proxy-web.group.local:3128 \
-  no_proxy="10.90.14.29,127.0.0.1,localhost"
+  http_proxy_disabled \
+  https_proxy_disabled \
+  no_proxy_disabled
 
 # Install helpful tools
 RUN yum -y update \
