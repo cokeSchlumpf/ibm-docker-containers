@@ -107,7 +107,7 @@ setJDK() {
   echo '' >> configure-jdk.groovy
   echo 'println "$name defined with $home";' >> configure-jdk.groovy
 
-  curl --data-urlencode "script=$(<./test)" $jenkins_url/scriptText
+  curl --data-urlencode "script=$(<./configure-jdk.groovy)" $jenkins_url/scriptText
   rm configure-jdk.groovy
 }
 
