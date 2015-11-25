@@ -59,7 +59,7 @@ main() {
   	cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../${PROJECT}/Dockerfile.proxy
   	sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../${PROJECT}/Dockerfile.proxy
   
-  	if [ "${DOWNLOAD_BASE_URL}" = "" ]; then
+  	if [ "${DOWNLOAD_HOST}" = "" ]; then
   		sed -i "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
   	else
   		sed -i "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
