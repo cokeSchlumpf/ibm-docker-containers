@@ -46,8 +46,13 @@ main() {
   
   	cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${http_proxy}#g" > ../${PROJECT}/Dockerfile.proxy
   	cat ../${PROJECT}/Dockerfile.proxy | sed "s#https_proxy_disabled#https_proxy=${https_proxy}#g" >> ../${PROJECT}/Dockerfile.proxy
-  	cat ../${PROJECT}/Dockerfile.proxy | sed "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" >> ../${PROJECT}/Dockerfile.proxy
-  	cat ../${PROJECT}/Dockerfile.proxy | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" >> ../${PROJECT}/Dockerfile.proxy
+  
+  	if [ "${DOWNLOAD_BASE_URL}" = "" ]; then
+  		cat ../${PROJECT}/Dockerfile.proxy | sed "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" >> ../${PROJECT}/Dockerfile.proxy
+  	else
+  		cat ../${PROJECT}/Dockerfile.proxy | sed "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" >> ../${PROJECT}/Dockerfile.proxy
+  		cat ../${PROJECT}/Dockerfile.proxy | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" >> ../${PROJECT}/Dockerfile.proxy
+  	fi
   
   	echo "Transformed Dockerfile:"
   	cat ../${PROJECT}/Dockerfile.proxy
