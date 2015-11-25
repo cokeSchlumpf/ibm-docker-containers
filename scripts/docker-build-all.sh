@@ -3,10 +3,10 @@
 # (c) michael.wellner@de.ibm.com 2015.
 #
 # This script builds all docker images.
-# 
+#
 # Usage:
 # docker-build-all [ -h | --help | OPTIONS ]
-# 
+#
 # Options:
 #   -f|--files
 #     Optional.
@@ -22,32 +22,32 @@ FILES=
 
 
 main() {
-  cd ${BASEDIR} 
+  cd ${BASEDIR}
   read_variables "$@"
-  
+
   if [ ! -z $FILES ]; then
   	echo "Stoping and removing container http-server ..."
   	./docker-exec.sh --args rm -f http-server || true
-  
+
   	# Build and start http-server
   	echo "Building ibm/http-server ..."
   	./docker-build.sh -p http-server
-  
+
   	# Start http-server
   	echo "Running ibm/http-server ..."
   	./docker-exec.sh --args run -id \
   		--privileged=true \
   	  -v ${FILES}:/var/opt/http \
-  		-P \
+  		-p 32775:8080 \
   	  --name http-server \
   	  --hostname http-server \
   	  ibm/http-server
   fi
-  
+
   ./docker-build.sh -p base-dev
   ./docker-build.sh -p build/build-dvc -t build-dvc
   ./docker-build.sh -p build
-  
+
   ./docker-build.sh -p base-centos
   ./docker-build.sh -p ibm-wlp -t wlp
   ./docker-build.sh -p ibm-iib -t iib
@@ -86,7 +86,7 @@ show_help_and_exit() {
   echo "    Directory which contains the installation files - must be an absolute path."
   echo
   sleep 3
-  
+
   cd ${CURRENTDIR}
   exit $1
 }

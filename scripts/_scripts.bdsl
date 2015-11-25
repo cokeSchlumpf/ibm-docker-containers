@@ -20,7 +20,7 @@ script docker-build-all "builds all docker images" {
 			./docker-exec.sh --args run -id \
 				--privileged=true \
 			  -v ${FILES}:/var/opt/http \
-				-P \
+				-p 32775:8080 \
 			  --name http-server \
 			  --hostname http-server \
 			  ibm/http-server
