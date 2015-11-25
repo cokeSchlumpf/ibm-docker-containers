@@ -16,7 +16,7 @@ script build-all "builds all docker images" {
 
 		# Start http-server
 		echo "Running ibm/http-server ..."
-		./docker-exec.sh run -id \
+		./docker-exec.sh --args run -id \
 			--privileged=true \
 		  -v ${FILES}:/var/opt/http \
 			-P \
