@@ -30,13 +30,21 @@ main() {
   check_required
   init_defaults
   
+  HTTP_SERVER_EXISTS=$(./docker-exec.sh --args ps -a | grep "http-server" > /dev/null && echo 0 || echo 1)
+  
+  if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
+  	export DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+  	export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
+  	echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
+  else
+  	unset DOWNLOAD_HOST
+  	unset DOWNLOAD_BASE_URL
+  fi
+  
   if [ ! -z ${http_proxy} ]; then
   	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
   
-  	HTTP_SERVER_EXISTS=$(./docker-exec.sh --args ps -a | grep "http-server" > /dev/null && echo 0 || echo 1)
-  
-  	cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu"
-  	NEED_HTTP=$?
+  	NEED_HTTP=$(cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
   
   	httpProxy=${http_proxy}
   	httpsProxy=${https_proxy}
@@ -45,14 +53,6 @@ main() {
   		echo "Using Proxy with http:// ..."
   		httpProxy="http://${httpProxy}"
   		httpsProxy="http://${httpsProxy}"
-  	fi
-  
-  	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
-  		export DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
-  		export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
-  		echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
-  	else
-  		unset DOWNLOAD_BASE_URL
   	fi
   
   	cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../${PROJECT}/Dockerfile.proxy
@@ -71,8 +71,21 @@ main() {
   	./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.proxy ../${PROJECT}/
   	rm ../${PROJECT}/Dockerfile.proxy
   else
-  	./docker-exec.sh --args build -t ibm/${TAGNAME} ../${PROJECT}/
+  	if [ "${DOWNLOAD_HOST}" = "" ]; then
+  		cat ../${PROJECT}/Dockerfile > ../${PROJECT}/Dockerfile.tmp
+  	else
+  		cat ../${PROJECT}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" > ../${PROJECT}/Dockerfile.tmp
+  	fi
+  
+  	echo "Transformed Dockerfile:"
+  	cat ../${PROJECT}/Dockerfile.tmp
+  
+  	./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.tmp ../${PROJECT}/
+  	rm ../${PROJECT}/Dockerfile.tmp
   fi
+  
+  unset DOWNLOAD_HOST
+  unset DOWNLOAD_BASE_URL
   cd ${CURRENTDIR}
 }
 
