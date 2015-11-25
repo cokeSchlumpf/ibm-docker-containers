@@ -1,0 +1,57 @@
+@GenerateReadme(
+	"scripts",
+	"This directory contains scripts for easier execution of docker management tasks.")
+
+script build-all "builds all docker images" {
+
+	argument "-f|--files" "Directory which contains the installation files - must be an absolute path"
+
+	{{{
+		$HTTP_SERVER_EXISTS=`docker ps -a | grep "http-server"; echo $?`
+
+		# Stop http-server if running
+		if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
+			docker rm -f http-server
+		fi
+
+		# Build and start http-server
+		docker build -t ibm/http-server ../http-server
+		docker r
+	}}}
+
+}
+
+script docker-build "builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment" {
+
+	argument "-p|--project" "The project to be build, e.g. base-dev, ibm-iib, ..."
+
+	optional argument "-t|--tagname" with default "${PROJECT}" "The tagname of the docker image - Will be prefixed with ibm/..."
+
+	{{{
+		if [ ! -z ${http_proxy} ]; then
+			echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
+
+			$HTTP_SERVER_EXISTS=`docker ps -a | grep "http-server"; echo $?`
+
+			if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
+				export DOWNLOAD_HOST=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+				export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
+				echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
+			else
+				unset DOWNLOAD_BASE_URL
+			fi
+
+			cat ../${PROJET}/Dockerfile \
+			  | sed "s#http_proxy_disabled#http_proxy=${http_proxy}#g" \
+			  | sed "s#https_proxy_disabled#https_proxy=${https_proxy}#g" \
+			  | sed "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" \
+			  | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" \
+			  > ../${PROJECT}/Dockerfile.proxy
+
+			docker build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
+		else
+			docker build -t ibm/${TAGNAME} ../${PROJECT}/
+		fi
+	}}}
+
+}
