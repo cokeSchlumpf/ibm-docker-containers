@@ -3,10 +3,10 @@
 # (c) michael.wellner@de.ibm.com 2015.
 #
 # This script builds all docker images.
-# 
+#
 # Usage:
 # build-all [ -h | --help | OPTIONS ]
-# 
+#
 # Options:
 #   -f|--files
 #     Directory which contains the installation files - must be an absolute path.
@@ -21,21 +21,21 @@ FILES=
 
 
 main() {
-  cd ${BASEDIR} 
+  cd ${BASEDIR}
   read_variables "$@"
   check_required
-  
+
   ./docker-exec.sh --args ps -a | grep "http-server"
-  $HTTP_SERVER_EXISTS=`echo $?`
-  
+  HTTP_SERVER_EXISTS=`echo $?`
+
   # Stop http-server if running
   if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
   	docker rm -f http-server
   fi
-  
+
   # Build and start http-server
   ./docker-build.sh -p http-server
-  
+
   # Start http-server
   ./docker-exec.sh run -id \
   	--privileged=true \
@@ -85,7 +85,7 @@ show_help_and_exit() {
   echo "    Directory which contains the installation files - must be an absolute path."
   echo
   sleep 3
-  
+
   cd ${CURRENTDIR}
   exit $1
 }

@@ -3,10 +3,10 @@
 # (c) michael.wellner@de.ibm.com 2015.
 #
 # This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment.
-# 
+#
 # Usage:
 # docker-build [ -h | --help | OPTIONS ]
-# 
+#
 # Options:
 #   -p|--project
 #     The project to be build, e.g. base-dev, ibm-iib, ...
@@ -25,17 +25,17 @@ TAGNAME=
 
 
 main() {
-  cd ${BASEDIR} 
+  cd ${BASEDIR}
   read_variables "$@"
   check_required
   init_defaults
-  
+
   if [ ! -z ${http_proxy} ]; then
   	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
-  
+
   	./docker-exec.sh --args ps -a | grep "http-server"
-  	$HTTP_SERVER_EXISTS=`echo $?`
-  
+  	HTTP_SERVER_EXISTS=`echo $?`
+
   	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
   		export DOWNLOAD_HOST=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
   		export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
@@ -43,14 +43,14 @@ main() {
   	else
   		unset DOWNLOAD_BASE_URL
   	fi
-  
+
   	cat ../${PROJET}/Dockerfile \
   	  | sed "s#http_proxy_disabled#http_proxy=${http_proxy}#g" \
   	  | sed "s#https_proxy_disabled#https_proxy=${https_proxy}#g" \
   	  | sed "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" \
   	  | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" \
   	  > ../${PROJECT}/Dockerfile.proxy
-  
+
   	./docker-exec.sh build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
   	rm ../${PROJET}/Dockerfile.proxy
   else
@@ -108,7 +108,7 @@ show_help_and_exit() {
   echo "    The tagname of the docker image - Will be prefixed with ibm/..."
   echo
   sleep 3
-  
+
   cd ${CURRENTDIR}
   exit $1
 }
