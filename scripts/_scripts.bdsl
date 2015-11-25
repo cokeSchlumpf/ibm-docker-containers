@@ -7,7 +7,7 @@ script build-all "builds all docker images" {
 	argument "-f|--files" "Directory which contains the installation files - must be an absolute path"
 
 	{{{
-		docker ps -a | grep "http-server"
+		./docker-exec.sh --args ps -a | grep "http-server"
 		$HTTP_SERVER_EXISTS=`echo $?`
 
 		# Stop http-server if running
@@ -40,7 +40,7 @@ script docker-build "builds the docker image for the Dockerfile within the given
 		if [ ! -z ${http_proxy} ]; then
 			echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
 
-			docker ps -a | grep "http-server"
+			./docker-exec.sh --args ps -a | grep "http-server"
 			$HTTP_SERVER_EXISTS=`echo $?`
 
 			if [ $HTTP_SERVER_EXISTS -eq 0 ]; then

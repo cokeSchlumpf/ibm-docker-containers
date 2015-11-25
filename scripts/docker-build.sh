@@ -33,7 +33,7 @@ main() {
   if [ ! -z ${http_proxy} ]; then
   	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
   
-  	docker ps -a | grep "http-server"
+  	./docker-exec.sh --args ps -a | grep "http-server"
   	$HTTP_SERVER_EXISTS=`echo $?`
   
   	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
@@ -52,6 +52,7 @@ main() {
   	  > ../${PROJECT}/Dockerfile.proxy
   
   	./docker-exec.sh build -t ibm/${TAGNAME} -f Dockerfile.proxy ../${PROJECT}/
+  	rm ../${PROJET}/Dockerfile.proxy
   else
   	./docker-exec.sh build -t ibm/${TAGNAME} ../${PROJECT}/
   fi

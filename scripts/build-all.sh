@@ -25,7 +25,7 @@ main() {
   read_variables "$@"
   check_required
   
-  docker ps -a | grep "http-server"
+  ./docker-exec.sh --args ps -a | grep "http-server"
   $HTTP_SERVER_EXISTS=`echo $?`
   
   # Stop http-server if running
@@ -34,8 +34,16 @@ main() {
   fi
   
   # Build and start http-server
-  docker build -t ibm/http-server ../http-server
-  docker r
+  ./docker-build.sh -p http-server
+  
+  # Start http-server
+  ./docker-exec.sh run -id \
+  	--privileged=true \
+    -v ${FILES}:/var/opt/http \
+  	-P \
+    --name http-server \
+    --hostname http-server \
+    ibm/http-server
   cd ${CURRENTDIR}
 }
 
