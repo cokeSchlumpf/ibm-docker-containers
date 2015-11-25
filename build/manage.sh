@@ -1,6 +1,25 @@
 #!/bin/bash
 
 start() {
+  if [ ! -z ${http_proxy} ]; then
+    # Inject proxy settings into Tomcat.
+    httpProxyHost=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $1}'`
+    httpProxyPort=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $2}'`
+    httpNonProxyHosts=`$no_proxy | sed "s#,#|#g"`
+
+    echo "JAVA_OPTS=\"-Dhttp.proxySet=true \${JAVA_OPTS}\"" > /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttp.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttp.proxyPort=${httpProxyPort} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttp.nonProxyHosts=${httpNonProxyHosts} \$JAVA_OPTS\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttps.proxySet=true \${JAVA_OPTS}\"" > /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttps.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttps.proxyPort=${httpProxyPort} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    echo "JAVA_OPTS=\"-Dhttps.nonProxyHosts=${httpNonProxyHosts} \$JAVA_OPTS\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+
+    echo "Written /usr/local/apache-tomcat/bin/setenv.sh ..."
+    cat /usr/local/apache-tomcat/bin/setenv.sh
+  fi
+
   # Start Tomcat
   /usr/local/apache-tomcat/bin/startup.sh
 
