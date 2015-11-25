@@ -41,6 +41,14 @@ main() {
     --name http-server \
     --hostname http-server \
     ibm/http-server
+  
+  ./docker-build -p base-dev
+  ./docker-build -p build/build-dvc -t build-dvc
+  ./docker-build -p build
+  
+  ./docker-build -p base-centos
+  ./docker-build -p ibm-wlp -t wlp
+  ./docker-build -p ibm-iib -t iib
   cd ${CURRENTDIR}
 }
 
