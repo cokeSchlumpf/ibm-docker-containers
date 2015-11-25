@@ -11,13 +11,15 @@ start() {
     echo "JAVA_OPTS=\"-Dhttp.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
     echo "JAVA_OPTS=\"-Dhttp.proxyPort=${httpProxyPort} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
     echo "JAVA_OPTS=\"-Dhttp.nonProxyHosts=${httpNonProxyHosts} \$JAVA_OPTS\"" >> /usr/local/apache-tomcat/bin/setenv.sh
-    echo "JAVA_OPTS=\"-Dhttps.proxySet=true \${JAVA_OPTS}\"" > /usr/local/apache-tomcat/bin/setenv.sh
-    echo "JAVA_OPTS=\"-Dhttps.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
-    echo "JAVA_OPTS=\"-Dhttps.proxyPort=${httpProxyPort} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
-    echo "JAVA_OPTS=\"-Dhttps.nonProxyHosts=${httpNonProxyHosts} \$JAVA_OPTS\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    #echo "JAVA_OPTS=\"-Dhttps.proxySet=true \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    #echo "JAVA_OPTS=\"-Dhttps.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    #echo "JAVA_OPTS=\"-Dhttps.proxyPort=${httpProxyPort} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    #echo "JAVA_OPTS=\"-Dhttps.nonProxyHosts=${httpNonProxyHosts} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
+    echo "export JAVA_OPTS=${JAVA_OPTS}"
 
     echo "Written /usr/local/apache-tomcat/bin/setenv.sh ..."
     cat /usr/local/apache-tomcat/bin/setenv.sh
+    chmod +x setenv.sh
   fi
 
   # Start Tomcat
