@@ -6,7 +6,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 ENV \
   http_proxy=http://proxy-web.group.local:3128 \
   https_proxy=http://proxy-web.group.local:3128 \
-  no_proxy="10.90.14.29,127.0.0.1,localhost" \
+  no_proxy="10.*.*.*,127.0.0.1,localhost" \
   DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \

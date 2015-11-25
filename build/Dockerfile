@@ -59,10 +59,6 @@ RUN cd /tmp \
 COPY manage-jenkins.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
-# Configure Jenkins
-RUN ${TOMCAT_HOME}/bin/startup.sh \
-  && manage-jenkins.sh ${TOMCAT_HOME}/webapps/jenkins/WEB-INF/jenkins-cli.jar http://localhost:${TOMCAT_PORT}/jenkins
-
 # Add SSH-Keys to allow Jenkins to use SSH for Git
 # The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
 COPY ssh-keys.own.zip /tmp/
