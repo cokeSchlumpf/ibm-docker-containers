@@ -2,16 +2,25 @@
 FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
+# Define build-time arguments
+ARG http_proxy
+ARG https_proxy=${http_proxy}
+ARG no_proxy="docker,group.local,127.0.0.1,localhost"
+ARG DOWNLOAD_BASE_URL=http://http-server.docker:8080
+
 # Define Versions
 ENV \
-  http_proxy=http://proxy-web.group.local:3128 \
-  https_proxy=http://proxy-web.group.local:3128 \
-  no_proxy="10.*.*.*,127.0.0.1,localhost" \
-  DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \
   NVM_VERSION=0.29.0 \
   NVM_DIR=/usr/local/nvm
+
+# Echo some build information
+RUN echo "Building with: " \
+  && echo "http_proxy > ${http_proxy}" \
+  && echo "https_proxy > ${https_proxy}" \
+  && echo "no_proxy" > ${no_proxy} \
+  && echo "DOWNLOAD_BASE_URL > ${DOWNLOAD_BASE_URL}"
 
 # Install helpful tools
 RUN apt-get -y update && apt-get install -y nano wget tar unzip zip sudo curl && apt-get -y clean all
