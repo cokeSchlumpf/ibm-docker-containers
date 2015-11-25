@@ -42,8 +42,8 @@ touch ~/.gitconfig ~/.git-credentials \
     -v ~/.npm:/home/dev/.npm \
     -v ~/.ssh:/home/dev/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
-    -p 7080:80 \
-    -p 7443:443 \
+    -p 7080:8080 \
+    -p 7443:8443 \
     --name dev \
     --hostname dev \
     ibm/dev

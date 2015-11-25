@@ -22,7 +22,7 @@ VOLUME [ "/var/opt/workspace" ]
 WORKDIR /var/opt/workspace
 
 # Expose Port for JEE Server
-EXPOSE 80 443
+EXPOSE 8080 8443
 
 # Set entrypoint to run management script
 ENTRYPOINT ["manage.sh"]
