@@ -2,7 +2,7 @@
 
 This directory contains scripts for easier execution of docker management tasks.
 
-## build-all.sh
+## docker-build-all.sh
 
 This script builds all docker images.
 
@@ -10,7 +10,7 @@ This script builds all docker images.
 Usage:
 
 ```
-build-all [ -h | --help | OPTIONS ]
+docker-build-all [ -h | --help | OPTIONS ]
 ```
 
 Options:
@@ -30,6 +30,18 @@ docker-build [ -h | --help | OPTIONS ]
 Options:
   * **-p|--project** - The project to be build, e.g. base-dev, ibm-iib, ... 
   * **-t|--tagname** - The tagname of the docker image - Will be prefixed with ibm/... *Optional. Default: ${PROJECT}.*
+
+## docker-clean.sh
+
+This script cleans docker environment.
+
+
+Usage:
+
+```
+docker-clean [ -h | --help | OPTIONS ]
+```
+
 
 ## docker-exec.sh
 

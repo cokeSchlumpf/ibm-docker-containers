@@ -2,7 +2,7 @@
 	"scripts",
 	"This directory contains scripts for easier execution of docker management tasks.")
 
-script build-all "builds all docker images" {
+script docker-build-all "builds all docker images" {
 
 	argument "-f|--files" "Directory which contains the installation files - must be an absolute path"
 
@@ -79,6 +79,16 @@ script docker-build "builds the docker image for the Dockerfile within the given
 		fi
 	}}}
 
+}
+
+script docker-clean "cleans docker environment" {
+
+	{{{
+		./docker-exec.sh --args ps -a | grep 'Exited' | awk '{print $1}' | xargs ./docker-exec.sh --args rm -v  || true
+		./docker-exec.sh --args  images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
+		./docker-exec.sh --args  volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
+	}}}
+	
 }
 
 script docker-exec "detects whether to call docker with sudo or not. Just calls docker with the given arguments" {
