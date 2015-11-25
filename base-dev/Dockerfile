@@ -16,14 +16,6 @@ ENV \
   NVM_VERSION=0.29.0 \
   NVM_DIR=/usr/local/nvm
 
-# Echo some build information
-RUN echo "Building with: " \
-  && echo "http_proxy: ${http_proxy}" \
-  && echo "https_proxy: ${https_proxy}" \
-  && echo "no_proxy": ${no_proxy} \
-  && echo "DOWNLOAD_BASE_URL: ${DOWNLOAD_BASE_URL} ???" \
-  && echo ${DOWNLOAD_BASE_URL}
-
 # Install helpful tools
 RUN apt-get -y update && apt-get install -y nano wget tar unzip zip sudo curl && apt-get -y clean all
 

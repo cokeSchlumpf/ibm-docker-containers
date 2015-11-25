@@ -14,7 +14,7 @@ docker-build-all [ -h | --help | OPTIONS ]
 ```
 
 Options:
-  * **-f|--files** - Directory which contains the installation files - must be an absolute path. 
+  * **-f|--files** - Directory which contains the installation files - must be an absolute path. *Optional.*
 
 ## docker-build.sh
 

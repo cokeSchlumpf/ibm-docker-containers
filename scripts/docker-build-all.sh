@@ -9,6 +9,7 @@
 # 
 # Options:
 #   -f|--files
+#     Optional.
 #     Directory which contains the installation files - must be an absolute path.
 #
 
@@ -23,24 +24,25 @@ FILES=
 main() {
   cd ${BASEDIR} 
   read_variables "$@"
-  check_required
   
-  echo "Stoping and removing container http-server ..."
-  ./docker-exec.sh --args rm -f http-server || true
+  if [ ! -z $FILES ]; then
+  	echo "Stoping and removing container http-server ..."
+  	./docker-exec.sh --args rm -f http-server || true
   
-  # Build and start http-server
-  echo "Building ibm/http-server ..."
-  ./docker-build.sh -p http-server
+  	# Build and start http-server
+  	echo "Building ibm/http-server ..."
+  	./docker-build.sh -p http-server
   
-  # Start http-server
-  echo "Running ibm/http-server ..."
-  ./docker-exec.sh --args run -id \
-  	--privileged=true \
-    -v ${FILES}:/var/opt/http \
-  	-P \
-    --name http-server \
-    --hostname http-server \
-    ibm/http-server
+  	# Start http-server
+  	echo "Running ibm/http-server ..."
+  	./docker-exec.sh --args run -id \
+  		--privileged=true \
+  	  -v ${FILES}:/var/opt/http \
+  		-P \
+  	  --name http-server \
+  	  --hostname http-server \
+  	  ibm/http-server
+  fi
   
   ./docker-build.sh -p base-dev
   ./docker-build.sh -p build/build-dvc -t build-dvc
@@ -50,13 +52,6 @@ main() {
   ./docker-build.sh -p ibm-wlp -t wlp
   ./docker-build.sh -p ibm-iib -t iib
   cd ${CURRENTDIR}
-}
-
-check_required() {
-  if [ -z "${FILES}" ]; then
-    >&2 echo "Missing required parameter: -f|--files."
-    show_help_and_exit 1
-  fi;
 }
 
 read_variables() {
@@ -87,6 +82,7 @@ show_help_and_exit() {
   echo ""
   echo "Options:"
   echo "  -f|--files"
+  echo "    Optional."
   echo "    Directory which contains the installation files - must be an absolute path."
   echo
   sleep 3
