@@ -37,27 +37,27 @@ main() {
   	HTTP_SERVER_EXISTS=$?
   
   	cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu"
-     NEED_HTTP=$?
+  	NEED_HTTP=$?
   
-     httpProxy=${http_proxy}
-     httpsProxy=${https_proxy}
+  	httpProxy=${http_proxy}
+  	httpsProxy=${https_proxy}
   
-     if [ $NEED_HTTP -eq 0 ]; then
+  	if [ $NEED_HTTP -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
-       httpProxy="http://${httpProxy}"
-       httpsProxy="http://${httpsProxy}"
-     fi
+  		httpProxy="http://${httpProxy}"
+  		httpsProxy="http://${httpsProxy}"
+  	fi
   
-   	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
-   		export DOWNLOAD_HOST=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
-   		export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
-   		echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
-   	else
-   		unset DOWNLOAD_BASE_URL
-   	fi
+  	if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
+  		export DOWNLOAD_HOST=`docker inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+  		export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
+  		echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
+  	else
+  		unset DOWNLOAD_BASE_URL
+  	fi
   
-   	cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" ../${PROJECT}/Dockerfile.proxy
-   	sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../${PROJECT}/Dockerfile.proxy
+  	cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../${PROJECT}/Dockerfile.proxy
+  	sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../${PROJECT}/Dockerfile.proxy
   
   	if [ "${DOWNLOAD_BASE_URL}" = "" ]; then
   		sed -i "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
