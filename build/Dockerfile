@@ -11,7 +11,7 @@ RUN apt-get -y update \
 ENV \
   DOWNLOAD_BASE_URL="http-server.docker:8080" \
   ARTIFACTORY_VERSION=4.2.1 \
-  JENKINS_VERSION=1.625.1 \
+  JENKINS_VERSION=1.625.2 \
   GITLAB_VERSION=8.1.2 \
   TOMCAT_VERSION=8.0.28 \
   ARTIFACTORY_HOME=/var/opt/artifactory \
