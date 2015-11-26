@@ -16,7 +16,7 @@ build:
   volumes_from:
     - build-dvc
   links:
-    - wlp
+    - wlp:wlp.docker
 
 wlp:
   image: ibm/wlp
