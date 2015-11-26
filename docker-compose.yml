@@ -16,7 +16,15 @@ build:
   volumes_from:
     - build-dvc
   links:
+    - iib:iib.docker
     - wlp:wlp.docker
+
+iib:
+  image: ibm/iib
+  ports:
+    - 6414:1414
+    - 6415:4414
+    - 6800:7800
 
 wlp:
   image: ibm/wlp
