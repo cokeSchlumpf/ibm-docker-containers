@@ -8,7 +8,7 @@ build-dvc:
 
 build:
   image: ibm/build
-  hostname: build
+  hostname: build.docker.rodenstock.com
   ports:
     - 8080:8080
     - 9080:9080
@@ -16,8 +16,8 @@ build:
   volumes_from:
     - build-dvc
   links:
-    - iib:iib.docker
-    - wlp:wlp.docker
+    - iib:iib.docker.rodenstock.com
+    - wlp:wlp.docker.rodenstock.com
 
 iib:
   image: ibm/iib
