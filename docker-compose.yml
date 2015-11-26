@@ -1,0 +1,25 @@
+build-dvc:
+  image: ibm/build-dvc
+  volumes:
+    - /var/opt/artifactory
+    - /var/opt/gitlab
+    - /var/opt/jenkins
+
+build:
+  image: ibm/build
+  hostname: build
+  ports:
+    - 8080:8080
+    - 9080:9080
+    - 222:22
+  volumes_from:
+    - build-dvc
+  links:
+    - wlp
+
+wlp:
+  image: ibm/wlp
+  ports:
+    - 6080:9080
+    - 6443:9443
+    - 223:22
