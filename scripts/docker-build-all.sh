@@ -3,10 +3,10 @@
 # (c) michael.wellner@de.ibm.com 2015.
 #
 # This script builds all docker images.
-#
+# 
 # Usage:
 # docker-build-all [ -h | --help | OPTIONS ]
-#
+# 
 # Options:
 #   -f|--files
 #     Optional.
@@ -22,32 +22,44 @@ FILES=
 
 
 main() {
-  cd ${BASEDIR}
+  cd ${BASEDIR} 
   read_variables "$@"
-
-  if [ ! -z $FILES ]; then
+  
+  HTTP_STARTED=$(./docker-exec --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
+  
+  if [ ! -z $FILES ] && [ $HTTP_STARTED -eq 0 ]; then
   	echo "Stoping and removing container http-server ..."
   	./docker-exec.sh --args rm -f http-server || true
-
+  
+  	LINKS=(find ./installation-files -type l -ls | awk -F\> '{ print $2 }' | sed -e 's/^[ \t]*//' | tr '\n' ' ')
+  	VOLUMES = "-v ${FILES}:/var/opt/http"
+  
+  	if [ ${#LINKS[@]} -gt 0 ]; then
+  		VOLUME_PATH=`longest_common_prefix ${LINKS[@]}`
+  		VOLUMES = "${VOLUMES} -v ${VOLUME_PATH}:${VOLUME_PATH}"
+  
+  		echo "Using volumes ${VOLUMES} ..."
+  	fi;
+  
   	# Build and start http-server
   	echo "Building ibm/http-server ..."
   	./docker-build.sh -p http-server
-
+  
   	# Start http-server
   	echo "Running ibm/http-server ..."
   	./docker-exec.sh --args run -id \
   		--privileged=true \
-  	  -v ${FILES}:/var/opt/http \
+  	  -v ${VOLUMES} \
   		-P \
   	  --name http-server \
   	  --hostname http-server \
   	  ibm/http-server
   fi
-
+  
   ./docker-build.sh -p base-dev
   ./docker-build.sh -p build/build-dvc -t build-dvc
   ./docker-build.sh -p build
-
+  
   ./docker-build.sh -p base-centos
   ./docker-build.sh -p ibm-wlp -t wlp
   ./docker-build.sh -p ibm-iib -t iib
@@ -86,10 +98,36 @@ show_help_and_exit() {
   echo "    Directory which contains the installation files - must be an absolute path."
   echo
   sleep 3
-
+  
   cd ${CURRENTDIR}
   exit $1
 }
 
+longest_common_prefix() {
+  declare -a names
+    declare -a parts
+    declare i=0
+  
+    names=("$@")
+    name="$1"
+    while x=$(dirname "$name"); [ "$x" != "/" ]
+    do
+        parts[$i]="$x"
+        i=$(($i + 1))
+        name="$x"
+    done
+  
+    for prefix in "${parts[@]}" /
+    do
+        for name in "${names[@]}"
+        do
+            if [ "${name#$prefix/}" = "${name}" ]
+            then continue 2
+            fi
+        done
+        echo "$prefix"
+        break
+    done
+}
 
 main "$@"
