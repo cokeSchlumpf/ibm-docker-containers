@@ -1,5 +1,6 @@
 build-dvc:
   image: ibm/build-dvc
+  container_name: build-dvc
   volumes:
     - /var/opt/artifactory
     - /var/opt/gitlab
