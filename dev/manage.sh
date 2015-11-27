@@ -37,6 +37,11 @@ start() {
     echo "Using docker default DNS settings ..."
     cat /etc/resolv.conf
   fi
+
+  if [ ! -z $http_proxy ]; then
+    npm config set proxy ${http_proxy}
+    npm config set https-proxy ${https_proxy:-$http_proxy}
+  fi
 }
 
 monitor() {

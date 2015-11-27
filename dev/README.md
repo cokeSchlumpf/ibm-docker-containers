@@ -40,7 +40,6 @@ touch ~/.gitconfig ~/.git-credentials \
     -v ~/.git-credentials:/home/dev/.git-credentials \
     -v ~/.m2:/home/dev/.m2 \
     -v ~/.npm:/home/dev/.npm \
-    -v ~/.npmrc:/home/dev/.npmrc \
     -v ~/.ssh:/home/dev/.ssh \
     -v ~/Workspaces:/var/opt/workspace \
     -p 7080:8080 \
