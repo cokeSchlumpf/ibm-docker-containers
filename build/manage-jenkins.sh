@@ -98,8 +98,8 @@ update_plugins() {
 }
 
 setJDK() {
-  rm configure-jdk.groovy && touch configure-jdk.groovy
-  echo 'name = "Native Java";' >> configure-jdk.groovy
+  rm configure-jdk.groovy || true
+  echo 'name = "Native Java";' > configure-jdk.groovy
   echo 'home = "/opt/jdk";' >> configure-jdk.groovy
   echo '' >> configure-jdk.groovy
   echo 'dis = new hudson.model.JDK.DescriptorImpl();' >> configure-jdk.groovy
@@ -107,8 +107,8 @@ setJDK() {
   echo '' >> configure-jdk.groovy
   echo 'println "$name defined with $home";' >> configure-jdk.groovy
 
-  curl --data-urlencode "script=$(<./test)" $jenkins_url/scriptText
-  rm configure-jdk.groovy
+  curl --data-urlencode "script=$(<./configure-jdk.groovy)" $jenkins_url/scriptText
+  rm configure-jdk.groovy || true
 }
 
 setGit() {

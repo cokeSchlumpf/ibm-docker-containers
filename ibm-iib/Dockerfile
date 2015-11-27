@@ -2,10 +2,11 @@
 FROM ibm/base-centos
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
-# Set up some configuration environment variables
-ENV DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
+# Define Versions
+ENV \
+  DOWNLOAD_BASE_URL="http-server.docker:8080" \
   WMQ_VERSION=7.5.0.3 \
-  IIB_VERSION=9.0
+  IIB_VERSION=9.0.0.2
 
 # Install helpful tools and IIB prerequisites
 RUN yum -y update \

@@ -2,12 +2,15 @@
 FROM ubuntu:14.04
 MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 
+# Define Proxy
+ENV \
+  http_proxy_disabled \
+  https_proxy_disabled \
+  no_proxy_disabled
+
 # Define Versions
 ENV \
-  http_proxy=http://proxy-web.group.local:3128 \
-  https_proxy=http://proxy-web.group.local:3128 \
-  no_proxy="10.90.14.29,127.0.0.1,localhost" \
-  DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
+  DOWNLOAD_BASE_URL="http-server.docker:8080" \
   JDK_VERSION=1.8.0_66 \
   NODE_VERSION=5.0.0 \
   NVM_VERSION=0.29.0 \

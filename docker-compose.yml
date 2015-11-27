@@ -1,0 +1,34 @@
+build-dvc:
+  image: ibm/build-dvc
+  container_name: build-dvc
+  volumes:
+    - /var/opt/artifactory
+    - /var/opt/gitlab
+    - /var/opt/jenkins
+
+build:
+  image: ibm/build
+  hostname: build.docker.rodenstock.com
+  ports:
+    - 8080:8080
+    - 9080:9080
+    - 222:22
+  volumes_from:
+    - build-dvc
+  links:
+    - iib:iib.docker.rodenstock.com
+    - wlp:wlp.docker.rodenstock.com
+
+iib:
+  image: ibm/iib
+  ports:
+    - 6414:1414
+    - 6415:4414
+    - 6800:7800
+
+wlp:
+  image: ibm/wlp
+  ports:
+    - 6080:9080
+    - 6443:9443
+    - 223:22

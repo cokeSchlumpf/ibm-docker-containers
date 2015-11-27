@@ -8,9 +8,10 @@ RUN apt-get -y update \
   && apt-get -y clean all
 
 # Define Versions
-ENV DOWNLOAD_BASE_URL=http://wellnr.com/file/installation-files/ \
+ENV \
+  DOWNLOAD_BASE_URL="http-server.docker:8080" \
   ARTIFACTORY_VERSION=4.2.1 \
-  JENKINS_VERSION=1.625.1 \
+  JENKINS_VERSION=1.625.2 \
   GITLAB_VERSION=8.1.2 \
   TOMCAT_VERSION=8.0.28 \
   ARTIFACTORY_HOME=/var/opt/artifactory \
@@ -58,10 +59,6 @@ RUN cd /tmp \
 # Add manage-jenkins script
 COPY manage-jenkins.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
-
-# Configure Jenkins
-RUN ${TOMCAT_HOME}/bin/startup.sh \
-  && manage-jenkins.sh ${TOMCAT_HOME}/webapps/jenkins/WEB-INF/jenkins-cli.jar http://localhost:${TOMCAT_PORT}/jenkins
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
 # The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip

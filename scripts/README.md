@@ -1,71 +1,59 @@
-# Management Scripts
+# scripts
 
-This directory contains some useful scripts for easier development and docker management.
+This directory contains scripts for easier execution of docker management tasks.
 
-## build-all.sh
+## docker-build-all.sh
 
-Builds all docker images within the project. Before building the DOWNLOAD_BASE_URL and the proxy settings may be updated within Dockerfiles.
+This script builds all docker images.
+
 
 Usage:
 
 ```
-build-all [options]
+docker-build-all [ -h | --help | OPTIONS ]
+```
 
 Options:
-  -d|--download-base-url DOWNLOAD_BASE_URL
-          Define DOWNLOAD_BASE_URL to be passed to update-host.sh. See './update-host.sh -h' for details.
-  -m|--proxy-mode disable|enable|auto
-         Define the update mode for update-proxy.sh. See './update-proxy.sh -h' for deatils.
-  -p|--proxy PROXY_HOST:PROXY_PORT
-         Define the proxy url for update-proxy.sh. See './update-proxy.sh -h' for deatils.
-  -h|--help
-         Show this help.
-```
+  * **-f|--files** - Directory which contains the installation files - must be an absolute path. *Optional.*
 
-## docker-cleanup.sh
+## docker-build.sh
 
-Cleans your docker environment:
+This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment.
 
-* Deletes all containers with status `Exited`
-* Removes all root images which don't have a tag (results from unsuccessful `docker build` executions)
-* Removes all unused volumes
 
 Usage:
 
 ```
-docker-cleanup
+docker-build [ -h | --help | OPTIONS ]
 ```
 
-## update-host.sh
+Options:
+  * **-p|--project** - The project to be build, e.g. base-dev, ibm-iib, ... 
+  * **-t|--tagname** - The tagname of the docker image - Will be prefixed with ibm/... *Optional. Default: ${PROJECT}.*
 
-Use this shell script to update `DOWNLOAD_BASE_URL` within Dockerfiles before build.
+## docker-clean.sh
+
+This script cleans docker environment.
+
 
 Usage:
 
 ```
-update-host DOWNLOAD_BASE_URL
+docker-clean [ -h | --help | OPTIONS ]
 ```
 
-## sed.sh
 
-Helper script to distinct between the sed versions of Mac OS and Linux.
+## docker-exec.sh
+
+This script detects whether to call docker with sudo or not. Just calls docker with the given arguments.
+
 
 Usage:
 
 ```
-sed EXPRESSION
+docker-exec [ -h | --help | OPTIONS ]
 ```
 
-## update-proxy.sh
+Options:
+  * **--args** - Arguments passed to docker. 
 
-Use this shell script to update proxy configuration within Dockerfiles before build.
-
-Usage:
-
-```
-update-proxy disable
-            enable PROXY_HOST:PROXY_PORT
-            auto
-```
-
-If mode is set to auto the script uses the environmant variable `http_proxy` to detect whether to set a proxy or not.

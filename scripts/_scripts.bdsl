@@ -1,0 +1,174 @@
+@GenerateReadme(
+	"scripts",
+	"This directory contains scripts for easier execution of docker management tasks.")
+
+script docker-build-all "builds all docker images" {
+
+	optional argument "-f|--files" "Directory which contains the installation files - must be an absolute path"
+
+	def longest_common_prefix {{{
+		declare -a names
+    declare -a parts
+    declare i=0
+
+    names=("$@")
+    name="$1"
+    while x=$(dirname "$name"); [ "$x" != "/" ]
+    do
+        parts[$i]="$x"
+        i=$(($i + 1))
+        name="$x"
+    done
+
+    for prefix in "${parts[@]}" /
+    do
+        for name in "${names[@]}"
+        do
+            if [ "${name#$prefix/}" = "${name}" ]
+            then continue 2
+            fi
+        done
+        echo "$prefix"
+        break
+    done
+	}}}
+
+	{{{
+		HTTP_STARTED=$(./docker-exec --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
+
+		if [ ! -z $FILES ] && [ $HTTP_STARTED -eq 0 ]; then
+			echo "Stoping and removing container http-server ..."
+			./docker-exec.sh --args rm -f http-server || true
+
+			LINKS=(find ./installation-files -type l -ls | awk -F\> '{ print $2 }' | sed -e 's/^[ \t]*//' | tr '\n' ' ')
+			VOLUMES = "-v ${FILES}:/var/opt/http"
+
+			if [ ${#LINKS[@]} -gt 0 ]; then
+				VOLUME_PATH=`longest_common_prefix ${LINKS[@]}`
+				VOLUMES = "${VOLUMES} -v ${VOLUME_PATH}:${VOLUME_PATH}"
+
+				echo "Using volumes ${VOLUMES} ..."
+			fi;
+
+			# Build and start http-server
+			echo "Building ibm/http-server ..."
+			./docker-build.sh -p http-server
+
+			# Start http-server
+			echo "Running ibm/http-server ..."
+			./docker-exec.sh --args run -id \
+				--privileged=true \
+			  -v ${VOLUMES} \
+				-P \
+			  --name http-server \
+			  --hostname http-server \
+			  ibm/http-server
+		fi
+
+		./docker-build.sh -p base-dev
+		./docker-build.sh -p build/build-dvc -t build-dvc
+		./docker-build.sh -p build
+
+		./docker-build.sh -p base-centos
+		./docker-build.sh -p ibm-wlp -t wlp
+		./docker-build.sh -p ibm-iib -t iib
+	}}}
+
+}
+
+script docker-build "builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment" {
+
+	argument "-p|--project" "The project to be build, e.g. base-dev, ibm-iib, ..."
+
+	optional argument "-t|--tagname" with default "${PROJECT}" "The tagname of the docker image - Will be prefixed with ibm/..."
+
+	{{{
+		HTTP_SERVER_EXISTS=$(./docker-exec.sh --args ps -a | grep "http-server" > /dev/null && echo 0 || echo 1)
+
+		if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
+			export DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+			export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
+			echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
+		else
+			unset DOWNLOAD_HOST
+			unset DOWNLOAD_BASE_URL
+		fi
+
+		if [ ! -z ${http_proxy} ]; then
+			echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
+
+			NEED_HTTP=$(cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
+
+			httpProxy=${http_proxy}
+			httpsProxy=${https_proxy}
+
+			if [ $NEED_HTTP -eq 0 ]; then
+				echo "Using Proxy with http:// ..."
+				httpProxy="http://${httpProxy}"
+				httpsProxy="http://${httpsProxy}"
+			fi
+
+			cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../${PROJECT}/Dockerfile.proxy
+			sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../${PROJECT}/Dockerfile.proxy
+
+			if [ "${DOWNLOAD_HOST}" = "" ]; then
+				sed -i "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
+			else
+				sed -i "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
+				sed -i "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../${PROJECT}/Dockerfile.proxy
+			fi
+
+			echo "Transformed Dockerfile:"
+			cat ../${PROJECT}/Dockerfile.proxy
+
+			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.proxy ../${PROJECT}/
+			rm ../${PROJECT}/Dockerfile.proxy
+		else
+			if [ "${DOWNLOAD_HOST}" = "" ]; then
+				cat ../${PROJECT}/Dockerfile > ../${PROJECT}/Dockerfile.tmp
+			else
+				cat ../${PROJECT}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" > ../${PROJECT}/Dockerfile.tmp
+			fi
+
+			echo "Transformed Dockerfile:"
+			cat ../${PROJECT}/Dockerfile.tmp
+
+			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.tmp ../${PROJECT}/
+			rm ../${PROJECT}/Dockerfile.tmp
+		fi
+
+		unset DOWNLOAD_HOST
+		unset DOWNLOAD_BASE_URL
+	}}}
+
+}
+
+script docker-clean "cleans docker environment" {
+
+	{{{
+		./docker-exec.sh --args ps -a | grep 'Exited' | awk '{print $1}' | xargs ./docker-exec.sh --args rm -v  || true
+		./docker-exec.sh --args  images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
+		./docker-exec.sh --args  volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
+	}}}
+
+}
+
+script docker-exec "detects whether to call docker with sudo or not. Just calls docker with the given arguments" {
+
+	argument "--args" reads remaining "Arguments passed to docker"
+
+	{{{
+		echo "Evaluating if sudo is needed for docker ..."
+
+		SUDO=$(docker ps > /dev/null && echo 0 || echo 1)
+
+	  if [ "$SUDO" -gt 0 ]; then
+			echo "Executing docker with sudo ..."
+			sudo docker ${ARGS[@]}
+		else
+			echo "Executing docker ..."
+			docker ${ARGS[@]}
+		fi
+	}}}
+
+}
