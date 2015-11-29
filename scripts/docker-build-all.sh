@@ -25,18 +25,25 @@ main() {
   cd ${BASEDIR} 
   read_variables "$@"
   
-  HTTP_STARTED=$(./docker-exec --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
+  HTTP_STARTED=$(./docker-exec.sh --args ps | grep "http-server" > /dev/null && echo "0" || echo "1")
   
-  if [ ! -z $FILES ] && [ $HTTP_STARTED -eq 0 ]; then
+  echo "http-server started: ${HTTP_STARTED}"
+  
+  if [ -z ${FILES} ] && [ ${HTTP_STARTED} -eq 1 ]; then
+  	>&2 echo "No installation-files directory defined and http-server not started yet. Specifiy installation files the http-server container."
+  	exit 1
+  fi
+  
+  if [ ! -z ${FILES} ]; then
   	echo "Stoping and removing container http-server ..."
   	./docker-exec.sh --args rm -f http-server || true
   
-  	LINKS=(find ./installation-files -type l -ls | awk -F\> '{ print $2 }' | sed -e 's/^[ \t]*//' | tr '\n' ' ')
-  	VOLUMES = "-v ${FILES}:/var/opt/http"
+  	LINKS=($(find ${FILES} -type l -ls | awk -F\> '{ print $2 }' | sed -e 's/^[ \t]*//' | tr '\n' ' '))
+  	VOLUMES="-v ${FILES}:/var/opt/http"
   
   	if [ ${#LINKS[@]} -gt 0 ]; then
   		VOLUME_PATH=`longest_common_prefix ${LINKS[@]}`
-  		VOLUMES = "${VOLUMES} -v ${VOLUME_PATH}:${VOLUME_PATH}"
+  		VOLUMES="${VOLUMES} -v ${VOLUME_PATH}:${VOLUME_PATH}"
   
   		echo "Using volumes ${VOLUMES} ..."
   	fi;
@@ -49,7 +56,7 @@ main() {
   	echo "Running ibm/http-server ..."
   	./docker-exec.sh --args run -id \
   		--privileged=true \
-  	  -v ${VOLUMES} \
+  	  ${VOLUMES} \
   		-P \
   	  --name http-server \
   	  --hostname http-server \

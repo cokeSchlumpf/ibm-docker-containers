@@ -1,0 +1,15 @@
+skydns:
+  image: crosbymichael/skydns
+  container_name: skydns
+  ports:
+    - ${DOCKER_BRIDGE_IP}:53:53/udp
+  command: -nameserver ${DNS}:53 -domain ${DOMAIN}
+
+skydock:
+  image: crosbymichael/skydock
+  container_name: skydock
+  links:
+    - skydns
+  volumes:
+    - /var/run/docker.sock:/docker.sock
+  command: -ttl 30 -environment docker -s /docker.sock -domain ${DOCKER_BRIDGE_IP} -name skydns

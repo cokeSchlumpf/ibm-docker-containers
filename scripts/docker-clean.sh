@@ -20,8 +20,8 @@ main() {
   read_variables "$@"
   
   ./docker-exec.sh --args ps -a | grep 'Exited' | awk '{print $1}' | xargs ./docker-exec.sh --args rm -v  || true
-  ./docker-exec.sh --args  images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
-  ./docker-exec.sh --args  volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
+  ./docker-exec.sh --args images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
+  ./docker-exec.sh --args volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
   cd ${CURRENTDIR}
 }
 

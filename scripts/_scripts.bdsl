@@ -34,18 +34,25 @@ script docker-build-all "builds all docker images" {
 	}}}
 
 	{{{
-		HTTP_STARTED=$(./docker-exec --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
+		HTTP_STARTED=$(./docker-exec.sh --args ps | grep "http-server" > /dev/null && echo "0" || echo "1")
 
-		if [ ! -z $FILES ] && [ $HTTP_STARTED -eq 0 ]; then
+		echo "http-server started: ${HTTP_STARTED}"
+
+		if [ -z ${FILES} ] && [ ${HTTP_STARTED} -eq 1 ]; then
+			>&2 echo "No installation-files directory defined and http-server not started yet. Specifiy installation files the http-server container."
+			exit 1
+		fi
+
+		if [ ! -z ${FILES} ]; then
 			echo "Stoping and removing container http-server ..."
 			./docker-exec.sh --args rm -f http-server || true
 
-			LINKS=(find ./installation-files -type l -ls | awk -F\> '{ print $2 }' | sed -e 's/^[ \t]*//' | tr '\n' ' ')
-			VOLUMES = "-v ${FILES}:/var/opt/http"
+			LINKS=($(find ${FILES} -type l -ls | awk -F\> '{ print $2 }' | sed -e 's/^[ \t]*//' | tr '\n' ' '))
+			VOLUMES="-v ${FILES}:/var/opt/http"
 
 			if [ ${#LINKS[@]} -gt 0 ]; then
 				VOLUME_PATH=`longest_common_prefix ${LINKS[@]}`
-				VOLUMES = "${VOLUMES} -v ${VOLUME_PATH}:${VOLUME_PATH}"
+				VOLUMES="${VOLUMES} -v ${VOLUME_PATH}:${VOLUME_PATH}"
 
 				echo "Using volumes ${VOLUMES} ..."
 			fi;
@@ -58,7 +65,7 @@ script docker-build-all "builds all docker images" {
 			echo "Running ibm/http-server ..."
 			./docker-exec.sh --args run -id \
 				--privileged=true \
-			  -v ${VOLUMES} \
+			  ${VOLUMES} \
 				-P \
 			  --name http-server \
 			  --hostname http-server \
@@ -78,67 +85,81 @@ script docker-build-all "builds all docker images" {
 
 script docker-build "builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment" {
 
-	argument "-p|--project" "The project to be build, e.g. base-dev, ibm-iib, ..."
+	argument "-p|--project" "The project to be build (directory names in dockerfiles/, e.g. base-dev, ibm-iib, ...)"
 
-	optional argument "-t|--tagname" with default "${PROJECT}" "The tagname of the docker image - Will be prefixed with ibm/..."
+	optional argument "-d|--download-host" "The host to download the installation files."
+
+	optional argument "-p|--download-port" with default "8080" "The of the download-host to download the installation files."
+
+	optional argument "--no-download" "Set this argument to true if no download-host should be set."
+
+	optional argument "-t|--tagname" with default "${PROJECT}" "The tagname of the docker image - Will be prefixed with 'ibm/...'"
 
 	{{{
-		HTTP_SERVER_EXISTS=$(./docker-exec.sh --args ps -a | grep "http-server" > /dev/null && echo 0 || echo 1)
+		HTTP_SERVER_RUNNING=$(./docker-exec.sh --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
+		SKYDOCK_RUNNING=$(./docker-exec.sh --args ps | grep "skydock" > /dev/null && echo 0 || echo 1)
 
-		if [ $HTTP_SERVER_EXISTS -eq 0 ]; then
-			export DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
-			export DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:8080"
-			echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
-		else
-			unset DOWNLOAD_HOST
-			unset DOWNLOAD_BASE_URL
+		echo "HTTP Server running: ${HTTP_SERVER_RUNNING}"
+		echo "Skydock running: ${SKYDOCK_RUNNING}"
+
+		if [ -z ${DOWNLOAD_HOST} ] && [ ${SKYDOCK_RUNNING} -eq 0 ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
+			ENV=$(./docker-exec.sh --args inspect skydock | grep -A 1 "environment" | tail -n 1 | awk -F\" '{print $2}')
+			DOMAIN=$(./docker-exec.sh --args inspect skydns | grep -A 1 "domain" | tail -n 1 | awk -F\" '{print $2}')
+
+			DOWNLOAD_HOST="http-server.${ENV}.${DOMAIN}"
+
+			echo "Determined ${DOWNLOAD_HOST} as download-host ..."
+		elif [ -z ${DOWNLOAD_HOST} ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
+			DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+
+			echo "Determined ${DOWNLOAD_HOST} as download-host ..."
 		fi
+
+		DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:${DOWNLOAD_PORT}"
+		echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
 
 		if [ ! -z ${http_proxy} ]; then
 			echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
 
-			NEED_HTTP=$(cat ../${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
+			NEED_HTTP=$(cat ../dockerfiles/${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
 
 			httpProxy=${http_proxy}
 			httpsProxy=${https_proxy}
 
-			if [ $NEED_HTTP -eq 0 ]; then
+			if [ ${NEED_HTTP} -eq 0 ]; then
 				echo "Using Proxy with http:// ..."
 				httpProxy="http://${httpProxy}"
 				httpsProxy="http://${httpsProxy}"
 			fi
 
-			cat ../${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../${PROJECT}/Dockerfile.proxy
-			sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../${PROJECT}/Dockerfile.proxy
+			cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
+			sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
 
 			if [ "${DOWNLOAD_HOST}" = "" ]; then
-				sed -i "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
+				sed -i "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
 			else
-				sed -i "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" ../${PROJECT}/Dockerfile.proxy
-				sed -i "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../${PROJECT}/Dockerfile.proxy
+				sed -i "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+				sed -i "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
 			fi
 
 			echo "Transformed Dockerfile:"
-			cat ../${PROJECT}/Dockerfile.proxy
+			cat ../dockerfiles/${PROJECT}/Dockerfile.proxy
 
-			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.proxy ../${PROJECT}/
-			rm ../${PROJECT}/Dockerfile.proxy
+			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.proxy ../dockerfiles/${PROJECT}/
+			rm ../dockerfiles/${PROJECT}/Dockerfile.proxy
 		else
 			if [ "${DOWNLOAD_HOST}" = "" ]; then
-				cat ../${PROJECT}/Dockerfile > ../${PROJECT}/Dockerfile.tmp
+				cat ../dockerfiles/${PROJECT}/Dockerfile > ../dockerfiles/${PROJECT}/Dockerfile.tmp
 			else
-				cat ../${PROJECT}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" > ../${PROJECT}/Dockerfile.tmp
+				cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" > ../dockerfiles/${PROJECT}/Dockerfile.tmp
 			fi
 
 			echo "Transformed Dockerfile:"
-			cat ../${PROJECT}/Dockerfile.tmp
+			cat ../dockerfiles/${PROJECT}/Dockerfile.tmp
 
-			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../${PROJECT}/Dockerfile.tmp ../${PROJECT}/
-			rm ../${PROJECT}/Dockerfile.tmp
+			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.tmp ../dockerfiles/${PROJECT}/
+			rm ../dockerfiles/${PROJECT}/Dockerfile.tmp
 		fi
-
-		unset DOWNLOAD_HOST
-		unset DOWNLOAD_BASE_URL
 	}}}
 
 }
@@ -147,8 +168,85 @@ script docker-clean "cleans docker environment" {
 
 	{{{
 		./docker-exec.sh --args ps -a | grep 'Exited' | awk '{print $1}' | xargs ./docker-exec.sh --args rm -v  || true
-		./docker-exec.sh --args  images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
-		./docker-exec.sh --args  volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
+		./docker-exec.sh --args images | grep "<none>" | awk '{print $3}' | xargs ./docker-exec.sh --args rmi || true
+		./docker-exec.sh --args volume ls | grep local | awk '{print $2}' | xargs ./docker-exec.sh --args volume rm || true
+	}}}
+
+}
+
+script docker-compose "creates a docker-compose.yml from compose/_PROJECT_/docker-compose.abstract.yml and executes it" {
+
+	argument "-p|--project" "compose project to be used"
+
+	argument "-c|--cmd" reads remaining "docker-compose command"
+
+	optional argument "-y|--yaml" with default "../compose/${PROJECT}/docker-compose.yml" "The yaml file to be used"
+
+	optional argument "-a|--args" "Arguments which will be replaced in the form key=value,key=value,..."
+
+	{{{
+		echo "Executing docker-compose in '../compose/${PROJECT}' with '${CMD[@]}', arguments: '${ARGS}' ..."
+
+		echo "Creating ${YAML} ..."
+		cat ../compose/${PROJECT}/docker-compose.abstract.yml > ${YAML}
+
+		if [ ! -z "${ARGS}" ]; then
+			ARGUMENTS=($(echo "${ARGS}" | tr ',' ' '))
+
+			for ARGUMENT in "${ARGUMENTS[@]}" /
+	    do
+	    	KEY=`echo "${ARGUMENT}" | awk -F= '{print $1}'`
+				VALUE=`echo "${ARGUMENT}" | awk -F= '{print $2}'`
+
+				echo "Replacing '${KEY}' with '${VALUE}' ..."
+
+				./sed.sh --args "s#\${${KEY}}#${VALUE}#g" ${YAML}
+	    done
+		fi;
+
+		echo "Using docker-compose.yaml:"
+		echo "######################################################################"
+		cat ${YAML}
+		echo "######################################################################"
+
+		echo ${CMD[@]}
+
+		docker-compose -f ${YAML} ${CMD[@]} && echo "Successfully executed docker-compose." ||  echo "Error during docker-compose."
+		rm ${YAML} || true
+	}}}
+
+}
+
+script docker-dns "sets up the DNS environment for docker containers" {
+
+	optional argument "--dns" with default "8.8.8.8" "DNS Server to be used for forwarded DNS calls (calls outside docker)"
+
+	optional argument "--domain" with default "ibm.com" "The domain to be used within the docker network"
+
+	optional argument "--docker-machine-name" with default "default" "Name of docker-machine if running with docker-machine"
+
+	{{{
+		echo "Configuring docker DNS environment ..."
+
+		DOCKER_MACHINE_PRESENT=`which docker-machine > /dev/null && echo 0 || echo 1`
+		DOCKER_MACHINE=""
+
+		if [ $DOCKER_MACHINE_PRESENT -eq 0 ]; then
+			DOCKER_MACHINE="docker-machine ssh ${DOCKER_MACHINE_NAME} "
+		fi
+
+		IFCONFIG_PRESENT=`${DOCKER_MACHINE}which ifconfig > /dev/null && echo 0 || echo 1`
+		DOCKER_BRIDGE_IP=""
+
+		if [ $IFCONFIG_PRESENT -eq 0 ]; then
+			DOCKER_BRIDGE_IP=`${DOCKER_MACHINE}ifconfig docker0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'`
+		else
+			DOCKER_BRIDGE_IP=`${DOCKER_MACHINE}ip addr show docker0 | grep "inet " | awk -F' ' '{ print $2 }' | awk -F/ '{ print $1 }'`
+		fi
+
+		echo "docker0 ip is ${DOCKER_BRIDGE_IP} ..."
+
+		./docker-compose.sh --project dns --args "DOCKER_BRIDGE_IP=${DOCKER_BRIDGE_IP},DOMAIN=${DOMAIN},DNS=${DNS}" --cmd "up --force-recreate -d"
 	}}}
 
 }
@@ -169,6 +267,22 @@ script docker-exec "detects whether to call docker with sudo or not. Just calls 
 			echo "Executing docker ..."
 			docker ${ARGS[@]}
 		fi
+	}}}
+
+}
+
+script sed "checks for different versions of sed and executes inplace replacement" {
+
+	argument "-a|--args" reads remaining "Arguments passed to sed."
+
+	{{{
+		CHECK_SED=`(sed -h 2>&1 >/dev/null | grep "i extension" > /dev/null) && echo 0 || echo 1`
+
+		if [ $CHECK_SED -eq 0 ]; then
+		  sed -i '' -e ${ARGS[@]}
+		else
+		  sed -i -e ${ARGS[@]}
+		fi;
 	}}}
 
 }

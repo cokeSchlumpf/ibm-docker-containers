@@ -28,8 +28,11 @@ docker-build [ -h | --help | OPTIONS ]
 ```
 
 Options:
-  * **-p|--project** - The project to be build, e.g. base-dev, ibm-iib, ... 
-  * **-t|--tagname** - The tagname of the docker image - Will be prefixed with ibm/... *Optional. Default: ${PROJECT}.*
+  * **-p|--project** - The project to be build (directory names in dockerfiles/, e.g. base-dev, ibm-iib, ...). 
+  * **-d|--download-host** - The host to download the installation files. *Optional.*
+  * **-p|--download-port** - The of the download-host to download the installation files. *Optional. Default: 8080.*
+  * **--no-download** - Set this argument to true if no download-host should be set. *Optional.*
+  * **-t|--tagname** - The tagname of the docker image - Will be prefixed with 'ibm/...'. *Optional. Default: ${PROJECT}.*
 
 ## docker-clean.sh
 
@@ -42,6 +45,39 @@ Usage:
 docker-clean [ -h | --help | OPTIONS ]
 ```
 
+
+## docker-compose.sh
+
+This script creates a docker-compose.yml from compose/_PROJECT_/docker-compose.abstract.yml and executes it.
+
+
+Usage:
+
+```
+docker-compose [ -h | --help | OPTIONS ]
+```
+
+Options:
+  * **-p|--project** - compose project to be used. 
+  * **-c|--cmd** - docker-compose command. 
+  * **-y|--yaml** - The yaml file to be used. *Optional. Default: ../compose/${PROJECT}/docker-compose.yml.*
+  * **-a|--args** - Arguments which will be replaced in the form key=value,key=value,... *Optional.*
+
+## docker-dns.sh
+
+This script sets up the DNS environment for docker containers.
+
+
+Usage:
+
+```
+docker-dns [ -h | --help | OPTIONS ]
+```
+
+Options:
+  * **--dns** - DNS Server to be used for forwarded DNS calls (calls outside docker). *Optional. Default: 8.8.8.8.*
+  * **--domain** - The domain to be used within the docker network. *Optional. Default: ibm.com.*
+  * **--docker-machine-name** - Name of docker-machine if running with docker-machine. *Optional. Default: default.*
 
 ## docker-exec.sh
 
@@ -56,4 +92,18 @@ docker-exec [ -h | --help | OPTIONS ]
 
 Options:
   * **--args** - Arguments passed to docker. 
+
+## sed.sh
+
+This script checks for different versions of sed and executes inplace replacement.
+
+
+Usage:
+
+```
+sed [ -h | --help | OPTIONS ]
+```
+
+Options:
+  * **-a|--args** - Arguments passed to sed. 
 
