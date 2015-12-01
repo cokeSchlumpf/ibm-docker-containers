@@ -83,6 +83,10 @@ To create the DNS Server execute the `./scripts/docker-dns.sh`.
 Execute `docker-build-all` script:
 
 ```
+# First run
+./scripts/docker-build-all.ssh --files ${INSTALLATION_FILES}
+
+# Every other (with running http-server)
 ./scripts/docker-build-all.ssh
 ```
 

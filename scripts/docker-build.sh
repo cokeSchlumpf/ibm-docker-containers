@@ -79,8 +79,8 @@ main() {
   
   	if [ ${NEED_HTTP} -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
-  		httpProxy="http://${httpProxy}"
-  		httpsProxy="http://${httpsProxy}"
+  		HTTP_PROXY="http://${httpProxy}"
+  		HTTPS_PROXY="http://${httpsProxy}"
   	fi
   
   	cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${HTTP_PROXY}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
@@ -104,7 +104,9 @@ main() {
   	fi
   
   	echo "Transformed Dockerfile:"
+  	echo "######################################################################"
   	cat ../dockerfiles/${PROJECT}/Dockerfile.tmp
+  	echo "######################################################################"
   
   	./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.tmp ../dockerfiles/${PROJECT}/
   	rm ../dockerfiles/${PROJECT}/Dockerfile.tmp
