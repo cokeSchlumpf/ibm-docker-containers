@@ -15,3 +15,4 @@ skydock:
   volumes:
     - /var/run/docker.sock:/docker.sock
   command: -ttl 30 -environment docker -s /docker.sock -domain ${DOCKER_BRIDGE_IP} -name skydns
+  privileged: true
