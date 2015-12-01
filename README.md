@@ -12,9 +12,9 @@ There some more abstract images. The dependencies between the images is shown be
 
 ```
 ubuntu:14.05
-  | ibm/base-dev
-  | ├ ibm/dev
-  | └ ibm/build
+  ├ ibm/base-dev
+  │ ├ ibm/dev
+  │ └ ibm/build
   └ ibm/http-server
 
 centos:6.6
@@ -34,6 +34,14 @@ Files which are used during image build process are located within [installation
 ## Building the images
 
 Some helpful scripts to manage docker and this repository are located within the [scripts](./scripts) directory. Depending on the goal and environment you need to execute different steps.
+
+## Scripts
+
+The `scripts` directory contains several management scripts. Ensure that the scripts are executable.
+
+```
+chmod +x ./scripts/*.sh
+```
 
 ### Setup whole continuous build environment
 
@@ -68,6 +76,35 @@ To create the DNS Server execute the `./scripts/docker-dns.sh`.
 
 # If you like to use your cooperate DNS
 ./scripts/docker-dns --dns 10.99.14.10
+```
+
+#### 3. Build all containers
+
+Execute `docker-build-all` script:
+
+```
+./scripts/docker-build-all.ssh
+```
+
+This will build all images necessary for the build environment. Afterwards list docker images to check if everything is created:
+
+```
+> docker images
+REPOSITORY              TAG                 IMAGE ID            CREATED             VIRTUAL SIZE
+ibm/iib                 latest              561589f9ee3c        8 minutes ago       8.268 GB
+ibm/wlp                 latest              e2dcd03d119f        45 hours ago        1.057 GB
+ibm/base-centos         latest              5a4122d0721e        45 hours ago        461.3 MB
+ibm/build               latest              4d78b9fa366a        45 hours ago        2.37 GB
+ibm/base-dev            latest              1bf286835f2f        2 days ago          1.152 GB
+ibm/http-server         latest              ff7785697601        2 days ago          211.4 MB
+ibm/dev                 latest              7c2b0dd44e21        7 days ago          1.187 GB
+test                    latest              81a6c42ded2c        8 days ago          1.152 GB
+ibm/build-dvc           latest              e58d548e657c        2 weeks ago         187.9 MB
+ubuntu                  latest              e9ae3c220b23        3 weeks ago         187.9 MB
+ubuntu                  14.04               1d073211c498        5 weeks ago         187.9 MB
+centos                  6.6                 bec9806dbc09        6 weeks ago         202.6 MB
+crosbymichael/skydock   latest              294adbed0885        20 months ago       510.7 MB
+crosbymichael/skydns    latest              d7a3877e5c61        22 months ago       137.5 MB
 ```
 
 ## Tips & Tricks

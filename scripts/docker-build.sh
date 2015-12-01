@@ -48,15 +48,19 @@ main() {
   echo "HTTP Server running: ${HTTP_SERVER_RUNNING}"
   echo "Skydock running: ${SKYDOCK_RUNNING}"
   
+  NO_PROXY=""
+  
   if [ -z ${DOWNLOAD_HOST} ] && [ ${SKYDOCK_RUNNING} -eq 0 ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
   	ENV=$(./docker-exec.sh --args inspect skydock | grep -A 1 "environment" | tail -n 1 | awk -F\" '{print $2}')
   	DOMAIN=$(./docker-exec.sh --args inspect skydns | grep -A 1 "domain" | tail -n 1 | awk -F\" '{print $2}')
   
   	DOWNLOAD_HOST="http-server.${ENV}.${DOMAIN}"
+  	NO_PROXY=".${ENV}.${DOMAIN},"
   
   	echo "Determined ${DOWNLOAD_HOST} as download-host ..."
   elif [ -z ${DOWNLOAD_HOST} ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
   	DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
+  	NO_PROXY="${DOWNLOAD_HOST},"
   
   	echo "Determined ${DOWNLOAD_HOST} as download-host ..."
   fi
@@ -69,8 +73,9 @@ main() {
   
   	NEED_HTTP=$(cat ../dockerfiles/${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
   
-  	httpProxy=${http_proxy}
-  	httpsProxy=${https_proxy}
+  	HTTP_PROXY=`echo ${http_proxy} | sed "s#http://\([\.]*\)#\1#g"`
+  	HTTPS_PROXY=`echo ${https_proxy} | sed "s#http://\([\.]*\)#\1#g"`
+  	NO_PROXY="${NO_PROXY}${no_proxy}"
   
   	if [ ${NEED_HTTP} -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
@@ -78,14 +83,12 @@ main() {
   		httpsProxy="http://${httpsProxy}"
   	fi
   
-  	cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${httpProxy}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
-  	sed -i "s#https_proxy_disabled#https_proxy=${httpsProxy}#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+  	cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${HTTP_PROXY}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
+  	./sed.sh "s#https_proxy_disabled#https_proxy=${HTTPS_PROXY}#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+  	./sed.sh "s#no_proxy_disabled#no_proxy=\"${NO_PROXY}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
   
-  	if [ "${DOWNLOAD_HOST}" = "" ]; then
-  		sed -i "s#no_proxy_disabled#no_proxy=\"docker,${no_proxy}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
-  	else
-  		sed -i "s#no_proxy_disabled#no_proxy=\"${DOWNLOAD_HOST},docker,${no_proxy}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
-  		sed -i "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+  	if [ ! "${DOWNLOAD_HOST}" = "" ]; then
+  		./sed.sh "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
   	fi
   
   	echo "Transformed Dockerfile:"

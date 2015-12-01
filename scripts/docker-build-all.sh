@@ -30,7 +30,7 @@ main() {
   echo "http-server started: ${HTTP_STARTED}"
   
   if [ -z ${FILES} ] && [ ${HTTP_STARTED} -eq 1 ]; then
-  	>&2 echo "No installation-files directory defined and http-server not started yet. Specifiy installation files the http-server container."
+  	>&2 echo "No installation-files directory defined and http-server not started yet. Specifiy installation files or start the http-server container."
   	exit 1
   fi
   
