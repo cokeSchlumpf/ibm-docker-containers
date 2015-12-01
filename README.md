@@ -84,10 +84,10 @@ Execute `docker-build-all` script:
 
 ```
 # First run
-./scripts/docker-build-all.ssh --files ${INSTALLATION_FILES}
+./scripts/docker-build-all.sh --files ${INSTALLATION_FILES}
 
 # Every other (with running http-server)
-./scripts/docker-build-all.ssh
+./scripts/docker-build-all.sh
 ```
 
 This will build all images necessary for the build environment. Afterwards list docker images to check if everything is created:

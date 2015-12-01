@@ -79,8 +79,8 @@ main() {
   
   	if [ ${NEED_HTTP} -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
-  		HTTP_PROXY="http://${httpProxy}"
-  		HTTPS_PROXY="http://${httpsProxy}"
+  		HTTP_PROXY="http://${HTTP_PROXY}"
+  		HTTPS_PROXY="http://${HTTPS_PROXY}"
   	fi
   
   	cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${HTTP_PROXY}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
