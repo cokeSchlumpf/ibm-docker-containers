@@ -72,10 +72,10 @@ To create the DNS Server execute the `./scripts/docker-dns.sh`.
 
 ```
 # Simple use-case
-./scripts/docker-dns
+./scripts/docker-dns.sh
 
 # If you like to use your cooperate DNS
-./scripts/docker-dns --dns 10.99.14.10
+./scripts/docker-dns.sh --dns 10.99.14.10
 ```
 
 #### 3. Build all containers
