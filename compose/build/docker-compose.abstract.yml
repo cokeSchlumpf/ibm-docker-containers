@@ -1,15 +1,7 @@
-build-dvc:
-  image: ibm/build-dvc
-  container_name: build-dvc
-  volumes:
-    - /var/opt/artifactory
-    - /var/opt/gitlab
-    - /var/opt/jenkins
-
 build:
   image: ibm/build
   container_name: build
-  hostname: build.${DOMAIN}
+  hostname: build.${ENV}.${DOMAIN}
   ports:
     - 8080:8080
     - 9080:9080
@@ -19,8 +11,8 @@ build:
 
 iib:
   image: ibm/iib
-  container_name: iib-test
-  hostname: iib-test.${DOMAIN}
+  container_name: iib-test-1
+  hostname: iib-test-1.${ENV}.${DOMAIN}
   ports:
     - 6414:1414
     - 6415:4414
@@ -28,7 +20,8 @@ iib:
 
 wlp:
   image: ibm/wlp
-  hostname: iib-test.${DOMAIN}
+  container_name: wlp-test-1
+  hostname: wlp-test-1.${ENV}.${DOMAIN}
   ports:
     - 6080:9080
     - 6443:9443

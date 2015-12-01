@@ -42,6 +42,19 @@ main() {
   echo "Creating ${YAML} ..."
   cat ../compose/${PROJECT}/docker-compose.abstract.yml > ${YAML}
   
+  SKYDOCK_RUNNING=$(./docker-exec.sh --args ps | grep "skydock" > /dev/null && echo 0 || echo 1)
+  
+  if [ ${SKYDOCK_RUNNING} -eq 0 ]; then
+  	ENV=$(./docker-exec.sh --args inspect skydock | grep -A 1 "environment" | tail -n 1 | awk -F\" '{print $2}')
+  	DOMAIN=$(./docker-exec.sh --args inspect skydns | grep -A 1 "domain" | tail -n 1 | awk -F\" '{print $2}')
+  
+  	if [ ! -z "${ARGS}" ]; then
+  		ARGS="ENV=${ENV},DOMAIN=${DOMAIN},${ARGS}"
+  	else
+  		ARGS="ENV=${ENV},DOMAIN=${DOMAIN}"
+  	fi
+  fi;
+  
   if [ ! -z "${ARGS}" ]; then
   	ARGUMENTS=($(echo "${ARGS}" | tr ',' ' '))
   

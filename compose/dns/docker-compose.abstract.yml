@@ -3,6 +3,7 @@ skydns:
   container_name: skydns
   ports:
     - ${DOCKER_BRIDGE_IP}:53:53/udp
+    - 18080:8080
   command: -nameserver ${DNS}:53 -domain ${DOMAIN}
 
 skydock:
