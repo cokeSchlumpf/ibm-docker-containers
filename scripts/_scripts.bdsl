@@ -138,11 +138,11 @@ script docker-build "builds the docker image for the Dockerfile within the given
 			fi
 
 			cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${HTTP_PROXY}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
-			./sed.sh "s#https_proxy_disabled#https_proxy=${HTTPS_PROXY}#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
-			./sed.sh "s#no_proxy_disabled#no_proxy=\"${NO_PROXY}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+			./sed.sh --args "s#https_proxy_disabled#https_proxy=${HTTPS_PROXY}#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+			./sed.sh --args "s#no_proxy_disabled#no_proxy=\"${NO_PROXY}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
 
 			if [ ! "${DOWNLOAD_HOST}" = "" ]; then
-				./sed.sh "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
+				./sed.sh --args "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
 			fi
 
 			echo "Transformed Dockerfile:"
