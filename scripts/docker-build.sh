@@ -92,7 +92,9 @@ main() {
   	fi
   
   	echo "Transformed Dockerfile:"
+  	echo "######################################################################"
   	cat ../dockerfiles/${PROJECT}/Dockerfile.proxy
+  	echo "######################################################################"
   
   	./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.proxy ../dockerfiles/${PROJECT}/
   	rm ../dockerfiles/${PROJECT}/Dockerfile.proxy

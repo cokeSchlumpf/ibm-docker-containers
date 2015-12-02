@@ -146,7 +146,9 @@ script docker-build "builds the docker image for the Dockerfile within the given
 			fi
 
 			echo "Transformed Dockerfile:"
+			echo "######################################################################"
 			cat ../dockerfiles/${PROJECT}/Dockerfile.proxy
+			echo "######################################################################"
 
 			./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.proxy ../dockerfiles/${PROJECT}/
 			rm ../dockerfiles/${PROJECT}/Dockerfile.proxy

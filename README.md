@@ -158,8 +158,8 @@ Execute the build scripts and provide `DOWNLOAD_HOST` and `DOWNLOAD_PORT` if you
 ./scripts/docker-build.sh --project dev --download-host ${DOWNLOAD_HOST} --download-port ${DOWNLOAD_PORT}
 
 # e.g.:
-./scripts/docker-build.sh --project base-dev --download-host "http://10.90.14.29" --download-port "32768"
-./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "32768"
+./scripts/docker-build.sh --project base-dev --download-host "http://10.90.14.29" --download-port "11080"
+./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "11080"
 ```
 
 #### 3. Start the development environment
