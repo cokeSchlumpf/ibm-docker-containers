@@ -3,9 +3,9 @@ build:
   container_name: build
   hostname: build.${ENV}.${DOMAIN}
   ports:
-    - 8080:8080
-    - 9080:9080
-    - 222:22
+    - "8080:8080"
+    - "9080:9080"
+    - "222:22"
   volumes_from:
     - build-dvc
 
@@ -14,15 +14,14 @@ iib:
   container_name: iib-test-1
   hostname: iib-test-1.iib.${ENV}.${DOMAIN}
   ports:
-    - 6414:1414
-    - 6415:4414
-    - 6800:7800
+    - "6414:1414"
+    - "6415:4414"
+    - "6800:7800"
 
 wlp:
   image: ibm/wlp
   container_name: wlp-test-1
   hostname: wlp-test-1.wlp.${ENV}.${DOMAIN}
   ports:
-    - 6080:9080
-    - 6443:9443
-    - 223:22
+    - "6080:9080"
+    - "6443:9443"
