@@ -75,7 +75,7 @@ main() {
 
   	HTTP_PROXY=`echo ${http_proxy} | sed "s#http://\([\.]*\)#\1#g"`
   	HTTPS_PROXY=`echo ${https_proxy} | sed "s#http://\([\.]*\)#\1#g"`
-  	NO_PROXY=`echo "${NO_PROXY}${no_proxy}" | sed "s#[[:blank:]]##g"`
+  	NO_PROXY=`echo "${NO_PROXY}${no_proxy}" | sed "s# ##g" | sed "s#[[:blank:]]##g" | sed "s#[[:space:]]##g"`
 
   	if [ ${NEED_HTTP} -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
