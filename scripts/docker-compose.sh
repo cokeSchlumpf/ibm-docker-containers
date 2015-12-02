@@ -58,7 +58,7 @@ main() {
   if [ ! -z "${ARGS}" ]; then
   	ARGUMENTS=($(echo "${ARGS}" | tr ',' ' '))
   
-  	for ARGUMENT in "${ARGUMENTS[@]}" /
+  	for ARGUMENT in "${ARGUMENTS[@]}"
      do
      	KEY=`echo "${ARGUMENT}" | awk -F= '{print $1}'`
   		VALUE=`echo "${ARGUMENT}" | awk -F= '{print $2}'`
