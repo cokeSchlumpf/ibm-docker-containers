@@ -3,10 +3,10 @@
 # (c) michael.wellner@de.ibm.com 2015.
 #
 # This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment.
-# 
+#
 # Usage:
 # docker-build [ -h | --help | OPTIONS ]
-# 
+#
 # Options:
 #   -p|--project
 #     The project to be build (directory names in dockerfiles/, e.g. base-dev, ibm-iib, ...).
@@ -37,63 +37,63 @@ TAGNAME=
 
 
 main() {
-  cd ${BASEDIR} 
+  cd ${BASEDIR}
   read_variables "$@"
   check_required
   init_defaults
-  
+
   HTTP_SERVER_RUNNING=$(./docker-exec.sh --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
   SKYDOCK_RUNNING=$(./docker-exec.sh --args ps | grep "skydock" > /dev/null && echo 0 || echo 1)
-  
+
   echo "HTTP Server running: ${HTTP_SERVER_RUNNING}"
   echo "Skydock running: ${SKYDOCK_RUNNING}"
-  
+
   NO_PROXY=""
-  
+
   if [ -z ${DOWNLOAD_HOST} ] && [ ${SKYDOCK_RUNNING} -eq 0 ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
   	ENV=$(./docker-exec.sh --args inspect skydock | grep -A 1 "environment" | tail -n 1 | awk -F\" '{print $2}')
   	DOMAIN=$(./docker-exec.sh --args inspect skydns | grep -A 1 "domain" | tail -n 1 | awk -F\" '{print $2}')
-  
+
   	DOWNLOAD_HOST="http-server.${ENV}.${DOMAIN}"
   	NO_PROXY=".${ENV}.${DOMAIN},"
-  
+
   	echo "Determined ${DOWNLOAD_HOST} as download-host ..."
   elif [ -z ${DOWNLOAD_HOST} ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
   	DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
   	NO_PROXY="${DOWNLOAD_HOST},"
-  
+
   	echo "Determined ${DOWNLOAD_HOST} as download-host ..."
   fi
-  
+
   DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:${DOWNLOAD_PORT}"
   echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
-  
+
   if [ ! -z ${http_proxy} ]; then
   	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
-  
+
   	NEED_HTTP=$(cat ../dockerfiles/${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
-  
+
   	HTTP_PROXY=`echo ${http_proxy} | sed "s#http://\([\.]*\)#\1#g"`
   	HTTPS_PROXY=`echo ${https_proxy} | sed "s#http://\([\.]*\)#\1#g"`
-  	NO_PROXY=`echo "${NO_PROXY}${no_proxy}" | tr ' ' . | sed "s#\.##g"`
-  
+  	NO_PROXY=`echo "${NO_PROXY}${no_proxy}" | sed "s# ##g" | sed "s#[[:blank:]]##g" | sed "s#[[:space:]]##g"`
+
   	if [ ${NEED_HTTP} -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
   		HTTP_PROXY="http://${HTTP_PROXY}"
   		HTTPS_PROXY="http://${HTTPS_PROXY}"
   	fi
-  
+
   	cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#http_proxy_disabled#http_proxy=${HTTP_PROXY}#g" > ../dockerfiles/${PROJECT}/Dockerfile.proxy
   	./sed.sh --args "s#https_proxy_disabled#https_proxy=${HTTPS_PROXY}#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
   	./sed.sh --args "s#no_proxy_disabled#no_proxy=\"${NO_PROXY}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
-  
+
   	if [ ! "${DOWNLOAD_HOST}" = "" ]; then
   		./sed.sh --args "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" ../dockerfiles/${PROJECT}/Dockerfile.proxy
   	fi
-  
+
   	echo "Transformed Dockerfile:"
   	cat ../dockerfiles/${PROJECT}/Dockerfile.proxy
-  
+
   	./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.proxy ../dockerfiles/${PROJECT}/
   	rm ../dockerfiles/${PROJECT}/Dockerfile.proxy
   else
@@ -102,12 +102,12 @@ main() {
   	else
   		cat ../dockerfiles/${PROJECT}/Dockerfile | sed "s#DOWNLOAD_BASE_URL=\"\([^\"]*\)\"#DOWNLOAD_BASE_URL=\"${DOWNLOAD_BASE_URL}\"#g" > ../dockerfiles/${PROJECT}/Dockerfile.tmp
   	fi
-  
+
   	echo "Transformed Dockerfile:"
   	echo "######################################################################"
   	cat ../dockerfiles/${PROJECT}/Dockerfile.tmp
   	echo "######################################################################"
-  
+
   	./docker-exec.sh --args build -t ibm/${TAGNAME} -f ../dockerfiles/${PROJECT}/Dockerfile.tmp ../dockerfiles/${PROJECT}/
   	rm ../dockerfiles/${PROJECT}/Dockerfile.tmp
   fi
@@ -181,7 +181,7 @@ show_help_and_exit() {
   echo "    The tagname of the docker image - Will be prefixed with 'ibm/...'."
   echo
   sleep 3
-  
+
   cd ${CURRENTDIR}
   exit $1
 }
