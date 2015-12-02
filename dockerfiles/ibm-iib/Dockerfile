@@ -38,6 +38,14 @@ RUN usermod -G mqbrkrs mqm \
   && usermod -a -G mqbrkrs iibuser \
   && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
 
+# Add SSH-Settings
+RUN mkdir -p /home/mqm/.ssh \
+  && echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyod44T9cOtQu8njkehz2aKiA4Nm6RiQc2AYcj7tjYwxRB0WGQcu4rUZVd2xbAfT0lWuDB5XPK5NPmgKrNEgWIDMPSKCH+9dLL6RRlU72vkBSgEQG6Rz5YVA2LMuJCycf3zFEvH0fYWqMdZiI4GAcKVBS73vtCd2rFKkRTmRKLoziGKqqsrkimXClS57mAiqCo0jrQxcf4V8jpGe+4NYXTk1rgeWozspy5CktmYN6NPDxLKVbeB7dwik2SVvF1592Fv8a5ZsRdvvNha9W8PZM+45p4pEiDcG0/5tct34V0OrhbqqZUJDcFYGOGhBHhDdmQ7T/5BQXQr28m6zdY1k9P jenkins@buildserver.com" >> /home/mqm/.ssh/authorized_keys \
+  && chown -R mqm /home/mqm/.ssh \
+  && chgrp -R mqm /home/mqm/.ssh \
+  && chmod 700 /home/mqm/.ssh \
+  && chmod 600 /home/mqm/.ssh/authorized_keys
+
 # Configure system, use lsof to overcome "Bad Interpreter Error"
 COPY kernel-settings.sh /tmp/
 RUN chmod +x /tmp/kernel-settings.sh \

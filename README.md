@@ -136,6 +136,70 @@ Use docker-compose to start the build environment:
 ./scripts/docker-compose.sh --project build --cmd up -d
 ```
 
+### Setup developer environment
+
+There is also an image present which can be used as development environment on a developer machine. Execute the following steps to create it:
+
+#### 1. Provide installation-files
+
+You need to provide a directory containing all required installation files to build the images. For the development environment only the JDK is required. See [installation-files](./installation-files).
+
+#### 2. Build the images
+
+Execute the build scripts and provide `DOWNLOAD_HOST` and `DOWNLOAD_PORT` if you are not using the http-server container to serve the files.
+
+```
+# Using http-server container
+./scripts/docker-build.sh --project base-dev
+./scripts/docker-build.sh --project dev
+
+# Using another host to provide the files
+./scripts/docker-build.sh --project base-dev --download-host ${DOWNLOAD_HOST} --download-port ${DOWNLOAD_PORT}
+./scripts/docker-build.sh --project dev --download-host ${DOWNLOAD_HOST} --download-port ${DOWNLOAD_PORT}
+
+# e.g.:
+./scripts/docker-build.sh --project base-dev --download-host "http://10.90.14.29" --download-port "32768"
+./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "32768"
+```
+
+#### 3. Start the development environment
+
+Start the development environment using your local workspaces and configurations:
+
+```
+# With docker-machine/boot2docker
+touch ~/.gitconfig ~/.git-credentials \
+  && docker run -id \
+    -v ~/.gitconfig:/root/.gitconfig \
+    -v ~/.git-credentials:/root/.git-credentials \
+    -v ~/.m2:/root/.m2 \
+    -v ~/.npm:/root/.npm \
+    -v ~/.ssh:/root/.ssh \
+    -v ~/Workspaces:/var/opt/workspace \
+    -p 7080:80 \
+    -p 7443:443 \
+    --name dev \
+    --hostname dev \
+    ibm/dev
+
+# Within a Linux Host, you should use
+touch ~/.gitconfig ~/.git-credentials \
+  && docker run -id \
+    -e UID=`id -u $(whoami)` \
+    -e GID=`id -g $(whoami)` \
+    -v ~/.gitconfig:/home/dev/.gitconfig \
+    -v ~/.git-credentials:/home/dev/.git-credentials \
+    -v ~/.m2:/home/dev/.m2 \
+    -v ~/.npm:/home/dev/.npm \
+    -v ~/.ssh:/home/dev/.ssh \
+    -v ~/Workspaces:/var/opt/workspace \
+    -p 7080:8080 \
+    -p 7443:8443 \
+    --name dev \
+    --hostname dev \
+    ibm/dev
+```
+
 ## Tips & Tricks
 ### Volumes on CentOS
 
