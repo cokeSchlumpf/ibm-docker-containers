@@ -48,7 +48,7 @@ RUN apt-get install -y build-essential libssl-dev \
   && nvm alias default $NODE_VERSION \
   && nvm use default \
   && node -v \
-  && npm -v \
+  && npm -v
 
 ENV \
   NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules \
