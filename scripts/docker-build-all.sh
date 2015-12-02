@@ -57,7 +57,7 @@ main() {
   	./docker-exec.sh --args run -id \
   		--privileged=true \
   	  ${VOLUMES} \
-  		-P \
+  		-p 118080:8080 \
   	  --name http-server \
   	  --hostname http-server \
   	  ibm/http-server
