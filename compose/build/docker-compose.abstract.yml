@@ -12,7 +12,7 @@ build:
 iib:
   image: ibm/iib
   container_name: iib-test-1
-  hostname: iib-test-1.${ENV}.${DOMAIN}
+  hostname: iib-test-1.iib.${ENV}.${DOMAIN}
   ports:
     - 6414:1414
     - 6415:4414
@@ -21,7 +21,7 @@ iib:
 wlp:
   image: ibm/wlp
   container_name: wlp-test-1
-  hostname: wlp-test-1.${ENV}.${DOMAIN}
+  hostname: wlp-test-1.wlp.${ENV}.${DOMAIN}
   ports:
     - 6080:9080
     - 6443:9443
