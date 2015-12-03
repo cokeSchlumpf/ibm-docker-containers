@@ -5,7 +5,7 @@
 # This script builds all docker images.
 # 
 # Usage:
-# docker-build-all [ -h | --help | OPTIONS ]
+# docker-build-all.sh [ -h | --help | OPTIONS ]
 # 
 # Options:
 #   -f|--files
@@ -97,7 +97,7 @@ show_help_and_exit() {
   echo "This script builds all docker images."
   echo ""
   echo "Usage:"
-  echo "docker-build-all [ -h | --help | OPTIONS ]"
+  echo "docker-build-all.sh [ -h | --help | OPTIONS ]"
   echo ""
   echo "Options:"
   echo "  -f|--files"

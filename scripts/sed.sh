@@ -5,7 +5,7 @@
 # This script checks for different versions of sed and executes inplace replacement.
 # 
 # Usage:
-# sed [ -h | --help | OPTIONS ]
+# sed.sh [ -h | --help | OPTIONS ]
 # 
 # Options:
 #   -a|--args
@@ -66,7 +66,7 @@ show_help_and_exit() {
   echo "This script checks for different versions of sed and executes inplace replacement."
   echo ""
   echo "Usage:"
-  echo "sed [ -h | --help | OPTIONS ]"
+  echo "sed.sh [ -h | --help | OPTIONS ]"
   echo ""
   echo "Options:"
   echo "  -a|--args"

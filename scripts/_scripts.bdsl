@@ -237,7 +237,19 @@ script docker-compose "creates a docker-compose.yml from compose/_PROJECT_/docke
 
 }
 
-script docker-dns "sets up the DNS environment for docker containers" {
+script docker-dns "sets up the DNS environment for docker containers." {
+
+	description {{{
+		This scripts starts a DNS environment based on [skydock](https://github.com/crosbymichael/skydock). Before running the script configure docker bridge ip and default DNS of docker daemon:
+
+		```
+		DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1"
+		```
+
+		**NOTE:** You must restart the docker daemon after changing `DOCKER_OPTS`.
+
+		After running the script all docker containers can be reached from another container using ${CONTAINER_NAME}.${IMAGE_NAME}.docker.${DOMAIN}.
+	}}}
 
 	optional argument "--dns" with default "8.8.8.8" "DNS Server to be used for forwarded DNS calls (calls outside docker)"
 

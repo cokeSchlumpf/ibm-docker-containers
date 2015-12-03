@@ -5,7 +5,7 @@
 # This script detects whether to call docker with sudo or not. Just calls docker with the given arguments.
 # 
 # Usage:
-# docker-exec [ -h | --help | OPTIONS ]
+# docker-exec.sh [ -h | --help | OPTIONS ]
 # 
 # Options:
 #   --args
@@ -70,7 +70,7 @@ show_help_and_exit() {
   echo "This script detects whether to call docker with sudo or not. Just calls docker with the given arguments."
   echo ""
   echo "Usage:"
-  echo "docker-exec [ -h | --help | OPTIONS ]"
+  echo "docker-exec.sh [ -h | --help | OPTIONS ]"
   echo ""
   echo "Options:"
   echo "  --args"
