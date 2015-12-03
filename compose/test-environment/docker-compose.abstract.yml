@@ -10,3 +10,5 @@ wlp:
   ports:
     - "9080"
     - "9443"
+  links:
+    - iib:iib
