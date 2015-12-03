@@ -12,7 +12,7 @@ ENV \
 ENV \
   DOWNLOAD_BASE_URL="http-server.docker:8080" \
   JDK_VERSION=1.8.0_66 \
-  NODE_VERSION=5.0.0 \
+  NODE_VERSION=5.1.0 \
   NVM_VERSION=0.29.0 \
   NVM_DIR=/usr/local/nvm
 
