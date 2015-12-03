@@ -9,7 +9,7 @@ build:
   volumes_from:
     - build-dvc
 
-iib_test_1:
+iib:
   image: ibm/iib
   container_name: iib-test-1
   hostname: iib-test-1.iib.${ENV}.${DOMAIN}
@@ -27,7 +27,7 @@ iib_test_2:
     - "6417:4414"
     - "6801:7800"
 
-wlp_test_1:
+wlp:
   image: ibm/wlp
   container_name: wlp-test-1
   hostname: wlp-test-1.wlp.${ENV}.${DOMAIN}
