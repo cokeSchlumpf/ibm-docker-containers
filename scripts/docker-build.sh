@@ -5,7 +5,7 @@
 # This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment.
 # 
 # Usage:
-# docker-build [ -h | --help | OPTIONS ]
+# docker-build.sh [ -h | --help | OPTIONS ]
 # 
 # Options:
 #   -p|--project
@@ -164,7 +164,7 @@ show_help_and_exit() {
   echo "This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment."
   echo ""
   echo "Usage:"
-  echo "docker-build [ -h | --help | OPTIONS ]"
+  echo "docker-build.sh [ -h | --help | OPTIONS ]"
   echo ""
   echo "Options:"
   echo "  -p|--project"

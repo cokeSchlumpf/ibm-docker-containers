@@ -5,7 +5,7 @@
 # This script cleans docker environment.
 # 
 # Usage:
-# docker-clean [ -h | --help | OPTIONS ]
+# docker-clean.sh [ -h | --help | OPTIONS ]
 #
 
 # Fail if one of the commands fails
@@ -47,7 +47,7 @@ show_help_and_exit() {
   echo "This script cleans docker environment."
   echo ""
   echo "Usage:"
-  echo "docker-clean [ -h | --help | OPTIONS ]"
+  echo "docker-clean.sh [ -h | --help | OPTIONS ]"
   echo
   sleep 3
   

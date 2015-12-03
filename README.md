@@ -210,3 +210,18 @@ su -c "setenforce 0"
 ```
 
 before...
+
+### Manuelle Konfigurationsschritte
+
+* Beim ersten Login in GitLab muss ein neues Password vergeben werden. Initialer Login root/5iveL!fe.
+* Anlegen eines weiteren Admin Benutzers in GitLab
+* Anlegen der Gruppe "rodenstock-fue-rgf" in GitLab
+* Anlegen des Projektes "jenkins-jobs" in GitLab
+* Anlegen Benutzer "Jenkins" in GitLab, hinzufügen des SSH-Keys vom buildserver
+* Im build-container einmal via ssh zu sich selbst verbinden (mit Benutzer git) um Host-Key-Verification durchzuführen.
+* Configure Jenkins
+  * Jenkins URL
+  * JDK       "Native JDK"    /opt/jdk
+  * Maven     "Native Maven"  /usr/share/maven
+  * Git git   
+* NPM Proxy

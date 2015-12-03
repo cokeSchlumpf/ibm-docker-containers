@@ -5,7 +5,7 @@
 # This script creates a docker-compose.yml from compose/_PROJECT_/docker-compose.abstract.yml and executes it.
 # 
 # Usage:
-# docker-compose [ -h | --help | OPTIONS ]
+# docker-compose.sh [ -h | --help | OPTIONS ]
 # 
 # Options:
 #   -p|--project
@@ -128,7 +128,7 @@ show_help_and_exit() {
   echo "This script creates a docker-compose.yml from compose/_PROJECT_/docker-compose.abstract.yml and executes it."
   echo ""
   echo "Usage:"
-  echo "docker-compose [ -h | --help | OPTIONS ]"
+  echo "docker-compose.sh [ -h | --help | OPTIONS ]"
   echo ""
   echo "Options:"
   echo "  -p|--project"

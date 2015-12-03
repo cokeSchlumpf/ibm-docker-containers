@@ -4,8 +4,18 @@
 #
 # This script sets up the DNS environment for docker containers.
 # 
+# This scripts starts a DNS environment based on [skydock](https://github.com/crosbymichael/skydock). Before running the script configure docker bridge ip and default DNS of docker daemon:
+# 
+# ```
+# DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1"
+# ```
+# 
+# **NOTE:** You must restart the docker daemon after changing `DOCKER_OPTS`.
+# 
+# After running the script all docker containers can be reached from another container using ${CONTAINER_NAME}.${IMAGE_NAME}.docker.${DOMAIN}.
+# 
 # Usage:
-# docker-dns [ -h | --help | OPTIONS ]
+# docker-dns.sh [ -h | --help | OPTIONS ]
 # 
 # Options:
 #   --dns
@@ -97,8 +107,18 @@ read_variables() {
 show_help_and_exit() {
   echo "This script sets up the DNS environment for docker containers."
   echo ""
+  echo "This scripts starts a DNS environment based on [skydock](https://github.com/crosbymichael/skydock). Before running the script configure docker bridge ip and default DNS of docker daemon:"
+  echo ""
+  echo "\`\`\`"
+  echo "DOCKER_OPTS="--bip=172.17.42.1/16 --dns=172.17.42.1""
+  echo "\`\`\`"
+  echo ""
+  echo "**NOTE:** You must restart the docker daemon after changing \`DOCKER_OPTS\`."
+  echo ""
+  echo "After running the script all docker containers can be reached from another container using \${CONTAINER_NAME}.\${IMAGE_NAME}.docker.\${DOMAIN}."
+  echo ""
   echo "Usage:"
-  echo "docker-dns [ -h | --help | OPTIONS ]"
+  echo "docker-dns.sh [ -h | --help | OPTIONS ]"
   echo ""
   echo "Options:"
   echo "  --dns"
