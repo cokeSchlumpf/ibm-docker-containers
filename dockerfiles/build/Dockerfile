@@ -82,15 +82,15 @@ RUN chmod +rx /usr/local/bin/*.sh
 # Expose Ports
 EXPOSE 22 "${TOMCAT_PORT}" ${GITLAB_PORT}
 
-# Set the locale
+# Generate the locale
 RUN locale-gen en_US.UTF-8
+
+# Set locale and TERM
 ENV \
   LANG="en_US.UTF-8" \
   LANGUAGE="en_US:en" \
-  LC_ALL="en_US.UTF-8"
-
-# Set TERM again
-ENV TERM=xterm
+  LC_ALL="en_US.UTF-8" \
+  TERM="xterm"
 
 # Set entrypoint to run management script
 ENTRYPOINT ["manage.sh"]
