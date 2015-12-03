@@ -1,16 +1,14 @@
 iib:
   image: ibm/iib
-  container_name: iib-test-${LEVEL}
   hostname: iib-test-1.iib.${ENV}.${DOMAIN}
   ports:
-    - "${IIB_ADMIN_PORT}:1414"
-    - "${IIB_WEB_UI_PORT}:4414"
-    - "${IIB_HTTP_PORT}:7800"
+    - "1414"
+    - "4414"
+    - "7800"
 
 wlp:
   image: ibm/wlp
-  container_name: wlp-test-${LEVEL}
   hostname: wlp-test-1.wlp.${ENV}.${DOMAIN}
   ports:
-    - "${WLP_HTTP_PORT}:9080"
-    - "${WLP_HTTPS_PORT}:9443"
+    - "9080"
+    - "9443"
