@@ -13,7 +13,7 @@ monitor() {
 
 	# Loop forever by default - container must be stopped manually.
 	while [ -z "$EXIT_CONTAINER" ]; do
-		tail -f /op/wlp/usr/servers/defaultServer/logs/messages.log
+		tail -f /opt/wlp/usr/servers/defaultServer/logs/messages.log
 	done
 
   echo "Received stopping signal. Stopping now."
