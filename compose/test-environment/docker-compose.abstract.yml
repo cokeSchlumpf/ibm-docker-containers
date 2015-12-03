@@ -1,6 +1,5 @@
 iib:
   image: ibm/iib
-  hostname: iib-test-1.iib.${ENV}.${DOMAIN}
   ports:
     - "1414"
     - "4414"
@@ -8,7 +7,6 @@ iib:
 
 wlp:
   image: ibm/wlp
-  hostname: wlp-test-1.wlp.${ENV}.${DOMAIN}
   ports:
     - "9080"
     - "9443"
