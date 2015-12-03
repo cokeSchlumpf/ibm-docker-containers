@@ -16,6 +16,9 @@ start() {
     echo "Written /usr/local/apache-tomcat/bin/setenv.sh ..."
     cat /usr/local/apache-tomcat/bin/setenv.sh
     chmod +x /usr/local/apache-tomcat/bin/setenv.sh
+
+    npm config set proxy http://${httpProxyHost}:${httpProxyPort}
+    npm config set https-proxy http://${httpProxyHost}:${httpProxyPort}
   fi
 
   # Start Tomcat
