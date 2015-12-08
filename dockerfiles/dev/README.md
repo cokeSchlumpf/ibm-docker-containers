@@ -79,6 +79,10 @@ Afterwards you are able to run build and tests within the container:
 root@devserver:/# cd /var/opt/workspace/${PROJECT_DIR}
 root@devserver:/# npm install
 ```
+If you are behind a corporate proxy with NTLM based authentication then it is recommended to start the cntlm-proxy docker container with the following command:
+```
+> docker start cntlm-proxy
+```
 
 ### Available volumes
 
