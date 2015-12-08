@@ -14,5 +14,5 @@ skydock:
     - skydns
   volumes:
     - /var/run/docker.sock:/docker.sock
-  command: -ttl 0 -environment docker -s /docker.sock -domain ${DOMAIN} -name skydns
+  command: -ttl 86400 -environment docker -s /docker.sock -domain ${DOMAIN} -name skydns
   privileged: true
