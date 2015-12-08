@@ -2,7 +2,7 @@
 #
 # (c) michael.wellner@de.ibm.com 2015.
 #
-# This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment.
+# This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if HTTP_PROXY is set within environment.
 # 
 # Usage:
 # docker-build.sh [ -h | --help | OPTIONS ]
@@ -22,6 +22,15 @@
 #   -t|--tagname
 #     Optional. Default: ${PROJECT}.
 #     The tagname of the docker image - Will be prefixed with 'ibm/...'.
+#   --http-proxy
+#     Optional. Default: ${http_proxy}.
+#     The http proxy.
+#   --https-proxy
+#     Optional. Default: ${https_proxy}.
+#     The https proxy.
+#   --no-proxy
+#     Optional. Default: ${no_proxy}.
+#     Ignore proxy domains.
 #
 
 # Fail if one of the commands fails
@@ -34,6 +43,9 @@ DOWNLOAD_HOST=
 DOWNLOAD_PORT=
 NO_DOWNLOAD=
 TAGNAME=
+HTTP_PROXY=
+HTTPS_PROXY=
+NO_PROXY=
 
 
 main() {
@@ -48,7 +60,7 @@ main() {
   echo "HTTP Server running: ${HTTP_SERVER_RUNNING}"
   echo "Skydock running: ${SKYDOCK_RUNNING}"
   
-  NO_PROXY=""
+  NO_PROXY=${NO_PROXY}
   
   if [ -z ${DOWNLOAD_HOST} ] && [ ${SKYDOCK_RUNNING} -eq 0 ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
   	ENV=$(./docker-exec.sh --args inspect skydock | grep -A 1 "environment" | tail -n 1 | awk -F\" '{print $2}')
@@ -68,14 +80,14 @@ main() {
   DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:${DOWNLOAD_PORT}"
   echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
   
-  if [ ! -z ${http_proxy} ]; then
-  	echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
+  if [ ! -z ${HTTP_PROXY} ]; then
+  	echo "Using proxy ${HTTP_PROXY} to build ${PROJECT}/Dockerfile ..."
   
   	NEED_HTTP=$(cat ../dockerfiles/${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
   
-  	HTTP_PROXY=`echo ${http_proxy} | sed "s#http://\([\.]*\)#\1#g"`
-  	HTTPS_PROXY=`echo ${https_proxy} | sed "s#http://\([\.]*\)#\1#g"`
-  	NO_PROXY=`echo "${NO_PROXY}${no_proxy}" | sed "s# ##g" | sed "s#[[:blank:]]##g" | sed "s#[[:space:]]##g"`
+  	HTTP_PROXY=`echo ${HTTP_PROXY} | sed "s#http://\([\.]*\)#\1#g"`
+  	HTTPS_PROXY=`echo ${HTTPS_PROXY} | sed "s#http://\([\.]*\)#\1#g"`
+  	NO_PROXY=`echo "${NO_PROXY}" | sed "s# ##g" | sed "s#[[:blank:]]##g" | sed "s#[[:space:]]##g"`
   
   	if [ ${NEED_HTTP} -eq 0 ]; then
   		echo "Using Proxy with http:// ..."
@@ -130,6 +142,15 @@ init_defaults() {
 	if [ -z "${TAGNAME}" ]; then
 	  TAGNAME="${PROJECT}"
 	fi;
+	if [ -z "${HTTP_PROXY}" ]; then
+	  HTTP_PROXY="${http_proxy}"
+	fi;
+	if [ -z "${HTTPS_PROXY}" ]; then
+	  HTTPS_PROXY="${https_proxy}"
+	fi;
+	if [ -z "${NO_PROXY}" ]; then
+	  NO_PROXY="${no_proxy}"
+	fi;
 }
 
 read_variables() {
@@ -147,6 +168,12 @@ read_variables() {
         NO_DOWNLOAD="$2";;
       -t|--tagname)
         TAGNAME="$2";;
+      --http-proxy)
+        HTTP_PROXY="$2";;
+      --https-proxy)
+        HTTPS_PROXY="$2";;
+      --no-proxy)
+        NO_PROXY="$2";;
       -h|--help)
         show_help_and_exit 0;;
       *)
@@ -161,7 +188,7 @@ read_variables() {
 }
 
 show_help_and_exit() {
-  echo "This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment."
+  echo "This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if HTTP_PROXY is set within environment."
   echo ""
   echo "Usage:"
   echo "docker-build.sh [ -h | --help | OPTIONS ]"
@@ -181,6 +208,15 @@ show_help_and_exit() {
   echo "  -t|--tagname"
   echo "    Optional. Default: \${PROJECT}."
   echo "    The tagname of the docker image - Will be prefixed with 'ibm/...'."
+  echo "  --http-proxy"
+  echo "    Optional. Default: \${http_proxy}."
+  echo "    The http proxy."
+  echo "  --https-proxy"
+  echo "    Optional. Default: \${https_proxy}."
+  echo "    The https proxy."
+  echo "  --no-proxy"
+  echo "    Optional. Default: \${no_proxy}."
+  echo "    Ignore proxy domains."
   echo
   sleep 3
   

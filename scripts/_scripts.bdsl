@@ -83,7 +83,7 @@ script docker-build-all "builds all docker images" {
 
 }
 
-script docker-build "builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment" {
+script docker-build "builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if HTTP_PROXY is set within environment" {
 
 	argument "-p|--project" "The project to be build (directory names in dockerfiles/, e.g. base-dev, ibm-iib, ...)"
 
@@ -95,6 +95,12 @@ script docker-build "builds the docker image for the Dockerfile within the given
 
 	optional argument "-t|--tagname" with default "${PROJECT}" "The tagname of the docker image - Will be prefixed with 'ibm/...'"
 
+	optional argument "--http-proxy" with default "${http_proxy}" "The http proxy"
+
+	optional argument "--https-proxy" with default "${https_proxy}" "The https proxy"
+
+	optional argument "--no-proxy" with default "${no_proxy}" "Ignore proxy domains"
+
 	{{{
 		HTTP_SERVER_RUNNING=$(./docker-exec.sh --args ps | grep "http-server" > /dev/null && echo 0 || echo 1)
 		SKYDOCK_RUNNING=$(./docker-exec.sh --args ps | grep "skydock" > /dev/null && echo 0 || echo 1)
@@ -102,7 +108,7 @@ script docker-build "builds the docker image for the Dockerfile within the given
 		echo "HTTP Server running: ${HTTP_SERVER_RUNNING}"
 		echo "Skydock running: ${SKYDOCK_RUNNING}"
 
-		NO_PROXY=""
+		NO_PROXY=${NO_PROXY}
 
 		if [ -z ${DOWNLOAD_HOST} ] && [ ${SKYDOCK_RUNNING} -eq 0 ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
 			ENV=$(./docker-exec.sh --args inspect skydock | grep -A 1 "environment" | tail -n 1 | awk -F\" '{print $2}')
@@ -122,14 +128,14 @@ script docker-build "builds the docker image for the Dockerfile within the given
 		DOWNLOAD_BASE_URL="${DOWNLOAD_HOST}:${DOWNLOAD_PORT}"
 		echo "Using ${DOWNLOAD_BASE_URL} for installation files ..."
 
-		if [ ! -z ${http_proxy} ]; then
-			echo "Using proxy ${http_proxy} to build ${PROJECT}/Dockerfile ..."
+		if [ ! -z ${HTTP_PROXY} ]; then
+			echo "Using proxy ${HTTP_PROXY} to build ${PROJECT}/Dockerfile ..."
 
 			NEED_HTTP=$(cat ../dockerfiles/${PROJECT}/Dockerfile | grep "FROM ubuntu" > /dev/null && echo 0 || echo 1)
 
-			HTTP_PROXY=`echo ${http_proxy} | sed "s#http://\([\.]*\)#\1#g"`
-			HTTPS_PROXY=`echo ${https_proxy} | sed "s#http://\([\.]*\)#\1#g"`
-			NO_PROXY=`echo "${NO_PROXY}${no_proxy}" | sed "s# ##g" | sed "s#[[:blank:]]##g" | sed "s#[[:space:]]##g"`
+			HTTP_PROXY=`echo ${HTTP_PROXY} | sed "s#http://\([\.]*\)#\1#g"`
+			HTTPS_PROXY=`echo ${HTTPS_PROXY} | sed "s#http://\([\.]*\)#\1#g"`
+			NO_PROXY=`echo "${NO_PROXY}" | sed "s# ##g" | sed "s#[[:blank:]]##g" | sed "s#[[:space:]]##g"`
 
 			if [ ${NEED_HTTP} -eq 0 ]; then
 				echo "Using Proxy with http:// ..."

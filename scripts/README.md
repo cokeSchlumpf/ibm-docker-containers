@@ -17,7 +17,7 @@ Options:
 
 ## docker-build.sh
 
-This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if http_proxy is set within environment.
+This script builds the docker image for the Dockerfile within the given directory, may modify proxy settings for Dockerfile if HTTP_PROXY is set within environment.
 
 Usage:
 
@@ -31,6 +31,9 @@ Options:
   * **-p|--download-port** - The of the download-host to download the installation files. *Optional. Default: 8080.*
   * **--no-download** - Set this argument to true if no download-host should be set. *Optional.*
   * **-t|--tagname** - The tagname of the docker image - Will be prefixed with 'ibm/...'. *Optional. Default: ${PROJECT}.*
+  * **--http-proxy** - The http proxy. *Optional. Default: ${http_proxy}.*
+  * **--https-proxy** - The https proxy. *Optional. Default: ${https_proxy}.*
+  * **--no-proxy** - Ignore proxy domains. *Optional. Default: ${no_proxy}.*
 
 ## docker-clean.sh
 
