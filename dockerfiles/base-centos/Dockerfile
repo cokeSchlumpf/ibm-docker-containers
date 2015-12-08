@@ -10,7 +10,7 @@ ENV \
 
 # Install helpful tools
 RUN yum -y update \
-  && yum install -y nano wget tar unzip sudo which \
+  && yum install -y nano wget tar unzip sudo which rsync \
   && yum -y clean all
 
 RUN cat ~/.bashrc
