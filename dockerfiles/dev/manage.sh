@@ -31,6 +31,7 @@ start() {
     echo "Setting resolv.conf to intranet DNS server ..."
 
     echo "search group.local localdomain" > /etc/resolv.conf
+    echo "nameserver 172.17.0.1" >> /etc/resolv.conf
     echo "nameserver 10.90.14.1" >> /etc/resolv.conf
     echo "nameserver 8.8.8.8" >> /etc/resolv.conf
   else
@@ -39,10 +40,12 @@ start() {
   fi
 
   if [ ! -z $http_proxy ]; then
-    npm config set proxy ${http_proxy}
-    npm config set https-proxy ${https_proxy:-$http_proxy}
-    echo "proxy=${http_proxy}" >> /home/dev/.npmrc
-    echo "https-proxy=${http_proxy}" >> /home/dev/.npmrc
+    #npm config set proxy ${http_proxy}
+    #npm config set https-proxy ${https_proxy:-$http_proxy}
+    #echo "proxy=${http_proxy}" >> /home/dev/.npmrc
+    #echo "https-proxy=${http_proxy}" >> /home/dev/.npmrc
+    echo "proxy=cntlm-proxy.docker.rodenstock.com:3128" >> /home/dev/.npmrc
+    echo "https-proxy=cntlm-proxy.docker.rodenstock.com:3128" >> /home/dev/.npmrc
   fi
 }
 

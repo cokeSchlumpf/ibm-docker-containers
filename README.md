@@ -3,6 +3,7 @@
 This project contains several dockerfiles to create images for the following purposes:
 
 * `ibm/build` - A complete buildserver containing Jenkins, Artifactory and Gitlab. [More ...](./dockerfiles/build)
+* `ibm/cntlm-proxy` - An image which provides a NTLM based proxy such as cntlm for fast NTLM authentication proxy with tunneling. [More ...](./dockerfiles/cntlm-proxy)
 * `ibm/dev` - An image which can be used to run builds webapp maven projects with NodeJS during development. [More ...](./dockerfiles/dev)
 * `ibm/http-server` - An image which provides installation-files via HTTP to build the other containers. [More ...](./dockerfiles/http-server)
 * `ibm/iib` - A container containing IBM Integration Bus v9 for development and testing. [More...](./dockerfiles/ibm-iib)

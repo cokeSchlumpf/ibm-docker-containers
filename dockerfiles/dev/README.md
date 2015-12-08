@@ -102,3 +102,7 @@ You can build the image with the following command (run the command from this di
 ```
 docker build -t ibm/dev .
 ```
+or via
+```
+./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "11080"
+```

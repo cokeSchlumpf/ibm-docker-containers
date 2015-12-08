@@ -28,6 +28,10 @@ You can build the image with the following command (run the command from this di
 ```
 docker build -t ibm/base-dev .
 ```
+or via
+```
+./scripts/docker-build.sh --project base-dev --download-host "http://10.90.14.29" --download-port "11080"
+```
 
 To build the image behind a proxy use:
 
