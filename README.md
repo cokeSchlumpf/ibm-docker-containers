@@ -230,6 +230,6 @@ before...
   * Git git   
 * NPM Proxy
 
-curl http://build.docker.rodenstock.com:9080/rodenstock-fue-rgf/tools/raw/master/buildserver.maven.settings.xml > ~/.m2/settings.xml
+mkdir ~/.m2 && curl http://build.docker.rodenstock.com:9080/rodenstock-fue-rgf/tools/raw/master/buildserver.maven.settings.xml > ~/.m2/settings.xml
 npm config set https-proxy ${http_proxy}
 npm config set proxy ${http_proxy}

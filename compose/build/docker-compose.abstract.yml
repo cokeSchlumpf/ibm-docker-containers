@@ -18,7 +18,7 @@ iib_test_1:
     - "6415:4414"
     - "6800:7800"
   links:
-    - wlp-test-1:rgf-modul-wlp
+    - wlp_test_1:rgf-modul-wlp
 
 iib_test_2:
   image: ibm/iib
@@ -29,7 +29,7 @@ iib_test_2:
     - "6417:4414"
     - "6801:7800"
   links:
-    - wlp-test-2:rgf-modul-wlp
+    - wlp_test_2:rgf-modul-wlp
 
 wlp_test_1:
   image: ibm/wlp
