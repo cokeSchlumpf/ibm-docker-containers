@@ -25,6 +25,10 @@ The container exposes the following ports:
 
 ## Building the image prerequisites
 ```
+sudo -i curl -L https://github.com/docker/compose/releases/download/1.5.1/run.sh > /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo service docker restart
+
 ./scripts/docker-build.sh --project base-dev --download-host "http://10.90.14.29" --download-port "11080"
 ./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "11080"
 
@@ -53,7 +57,7 @@ You can build the image with the following command (run the command from this di
 ```
 docker build -t ibm/cntlm-proxy.
 ```
-or
+or via
 ```
 ./scripts/docker-build.sh -p cntlm-proxy
 
@@ -63,5 +67,11 @@ docker run -id   --privileged=true   -v /etc/cntlm.conf:/etc/cntlm.conf   -p 586
 ## Starting or running the image
 You can run an instance of the image with the following command (run the command from this directory):
 ```
+docker start cntlm-proxy
+```
+If the docker service has been stopped or has been restarted then it is necessary to start the dependent container in the following sequence:
+```
+docker start skydns
+docker start skydock
 docker start cntlm-proxy
 ```

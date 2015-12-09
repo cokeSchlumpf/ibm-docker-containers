@@ -42,10 +42,8 @@ start() {
   if [ ! -z $http_proxy ]; then
     #npm config set proxy ${http_proxy}
     #npm config set https-proxy ${https_proxy:-$http_proxy}
-    #echo "proxy=${http_proxy}" >> /home/dev/.npmrc
-    #echo "https-proxy=${http_proxy}" >> /home/dev/.npmrc
-    echo "proxy=cntlm-proxy.docker.rodenstock.com:3128" >> /home/dev/.npmrc
-    echo "https-proxy=cntlm-proxy.docker.rodenstock.com:3128" >> /home/dev/.npmrc
+    echo "proxy=${http_proxy}" >> /home/dev/.npmrc
+    echo "https-proxy=${http_proxy}" >> /home/dev/.npmrc
   fi
 }
 

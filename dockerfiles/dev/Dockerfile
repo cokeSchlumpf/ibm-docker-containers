@@ -24,17 +24,5 @@ WORKDIR /var/opt/workspace
 # Expose Port for JEE Server
 EXPOSE 8080 8443
 
-# Defined and export Proxy
-ENV  http_proxy 'cntlm-proxy.docker.rodenstock.com:3128'
-ENV  https_proxy 'cntlm-proxy.docker.rodenstock.com:3128'
-ENV  HTTP_PROXY 'cntlm-proxy.docker.rodenstock.com:3128'
-ENV  HTTPS_PROXY 'cntlm-proxy.docker.rodenstock.com:3128'
-ENV  no_proxy_disabled
-
-#ENV \
-#  http_proxy_disabled \
-#  https_proxy_disabled \
-#  no_proxy_disabled
-
 # Set entrypoint to run management script
 ENTRYPOINT ["manage.sh"]

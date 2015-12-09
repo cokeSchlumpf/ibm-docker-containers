@@ -74,14 +74,14 @@ touch ~/.gitconfig ~/.git-credentials \
 Afterwards you are able to run build and tests within the container:
 
 ```
-> docker exec -it dev /bin/bash
+docker exec -it dev /bin/bash
 
 root@devserver:/# cd /var/opt/workspace/${PROJECT_DIR}
 root@devserver:/# npm install
 ```
 If you are behind a corporate proxy with NTLM based authentication then it is recommended to start the cntlm-proxy docker container with the following command:
 ```
-> docker start cntlm-proxy
+docker start cntlm-proxy
 ```
 
 ### Available volumes
@@ -109,4 +109,18 @@ docker build -t ibm/dev .
 or via
 ```
 ./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "11080"
+```
+
+## Starting or running the image
+You can run an instance of the image with the following command (run the command from this directory):
+```
+docker start cntlm-proxy
+```
+
+If the docker service has been stopped or has been restarted then it is necessary to start the dependent container in the following sequence:
+```
+docker start skydns
+docker start skydock
+docker start cntlm-proxy
+docker start dev
 ```
