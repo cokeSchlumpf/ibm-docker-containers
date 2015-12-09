@@ -12,8 +12,8 @@ RUN wget -O /tmp/websphere-liberty.zip ${DOWNLOAD_BASE_URL}/websphere-liberty/we
   && cd /tmp \
   && unzip ./websphere-liberty.zip -d /opt \
   && rm -rf /opt/._websphere-liberty /tmp/* \
-  && export httpProxyHost=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $1}'` \
-  && export httpProxyPort=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $2}'` \
+  && ([ -z $http_proxy ] && export httpProxyHost=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $1}'`) \
+  && ([ -z $http_proxy ] && export httpProxyPort=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $2}'`) \
   && ([ -z $http_proxy ] && mkdir -p /opt/wlp/etc && printf "proxyHost=${httpProxyHost}\nproxyPort=${httpProxyPort}\n" > /opt/wlp/etc/repositories.properties && cat /opt/wlp/etc/repositories.properties || true) \
   && /opt/wlp/bin/featureManager install --acceptLicense jaxws-2.2 --to=usr
 
