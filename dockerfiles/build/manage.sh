@@ -17,8 +17,7 @@ start() {
     cat /usr/local/apache-tomcat/bin/setenv.sh
     chmod +x /usr/local/apache-tomcat/bin/setenv.sh
 
-    npm config set proxy http://${httpProxyHost}:${httpProxyPort}
-    npm config set https-proxy http://${httpProxyHost}:${httpProxyPort}
+    printf "proxy=${http_proxy}\nhttps-proxy=${http_proxy}\n" > ~/.npmrc
   fi
 
   # Start Tomcat
