@@ -115,12 +115,12 @@ script docker-build "builds the docker image for the Dockerfile within the given
 			DOMAIN=$(./docker-exec.sh --args inspect skydns | grep -A 1 "domain" | tail -n 1 | awk -F\" '{print $2}')
 
 			DOWNLOAD_HOST="http-server.${ENV}.${DOMAIN}"
-			NO_PROXY=".${ENV}.${DOMAIN},"
+			NO_PROXY=".${ENV}.${DOMAIN},${NO_PROXY}"
 
 			echo "Determined ${DOWNLOAD_HOST} as download-host ..."
 		elif [ -z ${DOWNLOAD_HOST} ] && [ ${HTTP_SERVER_RUNNING} -eq 0 ]; then
 			DOWNLOAD_HOST=`./docker-exec.sh --args inspect http-server | grep "\"IPA" | awk -F\" '{ print $4 }'`
-			NO_PROXY="${DOWNLOAD_HOST},"
+			NO_PROXY="${DOWNLOAD_HOST},${NO_PROXY}"
 
 			echo "Determined ${DOWNLOAD_HOST} as download-host ..."
 		fi
