@@ -25,29 +25,12 @@ The container exposes the following ports:
 
 ## Building the image prerequisites
 ```
-sudo -i curl -L https://github.com/docker/compose/releases/download/1.5.1/run.sh > /usr/local/bin/docker-compose
+# For more information see https://docs.docker.com/compose/install/
+sudo -i curl -L https://github.com/docker/compose/releases/download/1.5.2/run.sh > /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 sudo service docker restart
 
-./scripts/docker-build.sh --project base-dev --download-host "http://10.90.14.29" --download-port "11080"
-./scripts/docker-build.sh --project dev --download-host "http://10.90.14.29" --download-port "11080"
-
-touch ~/.gitconfig ~/.git-credentials \
-  && docker run -id \
-    -e UID=`id -u $(whoami)` \
-    -e GID=`id -g $(whoami)` \
-    -v ~/.gitconfig:/home/dev/.gitconfig \
-    -v ~/.git-credentials:/home/dev/.git-credentials \
-    -v ~/.m2:/home/dev/.m2 \
-    -v ~/.npm:/home/dev/.npm \
-    -v ~/.ssh:/home/dev/.ssh \
-    -v ~/Workspaces:/var/opt/workspace \
-    -p 7080:8080 \
-    -p 7443:8443 \
-    --name dev \
-    --hostname dev \
-    ibm/dev
-
+# You can also set the domain (default is ibm.com)
 ./scripts/docker-dns.sh --dns 10.90.14.1 --domain rodenstock.com
 ```
 
