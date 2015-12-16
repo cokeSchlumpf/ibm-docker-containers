@@ -28,6 +28,9 @@ start() {
 
   echo "Starting Message Broker ${BROKER_NAME}..."
   mqsistart ${BROKER_NAME}
+
+  # Start SSH server
+  /sbin/service sshd start
 }
 
 stop() {
