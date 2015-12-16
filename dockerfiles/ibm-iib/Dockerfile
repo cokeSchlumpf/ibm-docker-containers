@@ -42,11 +42,11 @@ RUN usermod -G mqbrkrs mqm \
 RUN yum install -y openssh-server openssh-clients
 
 # Configure authorized keys
-RUN mkdir -p /home/mqm/.ssh \
-  && echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyod44T9cOtQu8njkehz2aKiA4Nm6RiQc2AYcj7tjYwxRB0WGQcu4rUZVd2xbAfT0lWuDB5XPK5NPmgKrNEgWIDMPSKCH+9dLL6RRlU72vkBSgEQG6Rz5YVA2LMuJCycf3zFEvH0fYWqMdZiI4GAcKVBS73vtCd2rFKkRTmRKLoziGKqqsrkimXClS57mAiqCo0jrQxcf4V8jpGe+4NYXTk1rgeWozspy5CktmYN6NPDxLKVbeB7dwik2SVvF1592Fv8a5ZsRdvvNha9W8PZM+45p4pEiDcG0/5tct34V0OrhbqqZUJDcFYGOGhBHhDdmQ7T/5BQXQr28m6zdY1k9P jenkins@buildserver.com" >> /home/mqm/.ssh/authorized_keys \
-  && chown -R mqm:mqm /home/mqm/.ssh \
-  && chmod 700 /home/mqm/.ssh \
-  && chmod 600 /home/mqm/.ssh/authorized_keys \
+RUN mkdir -p /var/mqm/.ssh \
+  && echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyod44T9cOtQu8njkehz2aKiA4Nm6RiQc2AYcj7tjYwxRB0WGQcu4rUZVd2xbAfT0lWuDB5XPK5NPmgKrNEgWIDMPSKCH+9dLL6RRlU72vkBSgEQG6Rz5YVA2LMuJCycf3zFEvH0fYWqMdZiI4GAcKVBS73vtCd2rFKkRTmRKLoziGKqqsrkimXClS57mAiqCo0jrQxcf4V8jpGe+4NYXTk1rgeWozspy5CktmYN6NPDxLKVbeB7dwik2SVvF1592Fv8a5ZsRdvvNha9W8PZM+45p4pEiDcG0/5tct34V0OrhbqqZUJDcFYGOGhBHhDdmQ7T/5BQXQr28m6zdY1k9P jenkins@buildserver.com" >> /var/mqm/.ssh/authorized_keys \
+  && chown -R mqm:mqm /var/mqm/.ssh \
+  && chmod 700 /var/mqm/.ssh \
+  && chmod 600 /var/mqm/.ssh/authorized_keys \
   && chown -R mqm:mqm /opt/mqm \
   && chown -R mqm:mqm /opt/ibm/mqsi
 
