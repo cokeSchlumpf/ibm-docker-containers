@@ -66,7 +66,7 @@ COPY ssh-keys.own.zip /tmp/
 RUN cd /tmp \
   && unzip ssh-keys.own.zip -d ./ \
   && mkdir ~/.ssh \
-  && printf "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config \
+  && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > ~/.ssh/config \
   && cp id_rsa* ~/.ssh/ \
   && chmod 0600 ~/.ssh/id_rsa* \
   && rm -rf /tmp/*

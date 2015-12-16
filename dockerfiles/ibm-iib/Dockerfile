@@ -13,6 +13,12 @@ RUN yum -y update \
   && yum install -y glibc.i686 libgcc.x86_64 libgcc.i686 lsof \
   && yum -y clean all
 
+# Add IIB user
+RUN useradd --user-group --create-home --password $(echo "mqm" | openssl passwd -1 -stdin) mqm \
+  && chown -R wlp /opt/wlp \
+  && chgrp -R wlp /opt/wlp \
+  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers  
+
 # Install WebSphere MQ
 RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere-mq_${WMQ_VERSION}.tar.gz \
   && cd /tmp \
@@ -32,11 +38,7 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
-# Add IIB user
-RUN usermod -G mqbrkrs mqm \
-  && useradd -G mqm --create-home --password $(echo "iibuser" | openssl passwd -1 -stdin) iibuser \
-  && usermod -a -G mqbrkrs iibuser \
-  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
+RUN usermod -G mqbrkrs mqm
 
 # Install openssh-server to deploy applications
 RUN yum install -y openssh-server openssh-clients
