@@ -70,9 +70,9 @@ EXPOSE 1414 4414 7800
 RUN yum install -y java-1.7.0-openjdk git \
   && manage-maven.sh \
   && ([ ! -z $http_proxy ] \
-    && echo /home/mqm/.bashrc >> "export http_proxy=${http_proxy}" \
-    && echo /home/mqm/.bashrc >> "export https_proxy=${https_proxy}" \
-    && echo /home/mqm/.bashrc >> "export no_proxy=${no_proxy}")
+    && echo /home/mqm/.bashrc >> "export http_proxy=\"${http_proxy}\"" \
+    && echo /home/mqm/.bashrc >> "export https_proxy=\"${https_proxy}\"" \
+    && echo /home/mqm/.bashrc >> "export no_proxy=\"${no_proxy}\"")
 
 ENV \
   QUEUE_MGR_NAME=IIB_QM \
