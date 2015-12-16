@@ -15,9 +15,7 @@ RUN yum -y update \
 
 # Add IIB user
 RUN useradd --user-group --create-home --password $(echo "mqm" | openssl passwd -1 -stdin) mqm \
-  && chown -R wlp /opt/wlp \
-  && chgrp -R wlp /opt/wlp \
-  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers  
+  && sed -e 's/^%sudo	.*/%sudo	ALL=NOPASSWD:ALL/g' -i /etc/sudoers
 
 # Install WebSphere MQ
 RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere-mq_${WMQ_VERSION}.tar.gz \
