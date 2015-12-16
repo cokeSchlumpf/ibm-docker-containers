@@ -57,7 +57,7 @@ RUN chmod +x /tmp/kernel-settings.sh \
   && /tmp/kernel-settings.sh
 
 # Copy in script files
-COPY manage.sh iib-env.sh /usr/local/bin/
+COPY manage.sh manage-iib.sh iib-env.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Set BASH_ENV to source mqsiprofile when using docker exec bash -c
@@ -65,9 +65,6 @@ ENV BASH_ENV=/usr/local/bin/iib-env.sh
 
 # Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
-
-# Use mqm when starting up.
-USER mqm
 
 ENV \
   QUEUE_MGR_NAME=IIB_QM \
