@@ -98,7 +98,7 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
     && echo "export http_proxy=\"${http_proxy}\"" >> /home/mqm/.bashrc \
     && echo "export https_proxy=\"${https_proxy}\"" >> /home/mqm/.bashrc \
     && echo "export no_proxy=\"${no_proxy}\"" >> /home/mqm/.bashrc) \
-  && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/ibm/mqsi/${IIB_VERSION}\"" >> /home/mqm/.bashrc \
+  && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/ibm/mqsi/${IIB_VERSION}/bin\"" >> /home/mqm/.bashrc \
   && echo "export JAVA_HOME=${JAVA_HOME}" >> /home/mqm/.bashrc \
   && echo "export JRE_HOME=${JRE_HOME}" >> /home/mqm/.bashrc \
   && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin" >> /home/mqm/.bashrc
