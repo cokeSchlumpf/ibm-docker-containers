@@ -44,7 +44,7 @@ RUN usermod -G mqbrkrs mqm
 RUN wget http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm \
   && rpm -Uvh epel-release*rpm \
   && rm epel-release*rpm \
-  && yum install -y openssh-server openssh-clients jq
+  && yum install -y openssh-server openssh-clients jq git
 
 # Configure authorized keys
 RUN mkdir -p /home/mqm/.ssh \
