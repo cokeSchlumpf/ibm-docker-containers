@@ -72,7 +72,8 @@ RUN yum install -y java-1.7.0-openjdk git \
   && ([ ! -z $http_proxy ] \
     && echo "export http_proxy=\"${http_proxy}\"" >> /home/mqm/.bashrc \
     && echo "export https_proxy=\"${https_proxy}\"" >> /home/mqm/.bashrc \
-    && echo "export no_proxy=\"${no_proxy}\"" >> /home/mqm/.bashrc)
+    && echo "export no_proxy=\"${no_proxy}\"" >> /home/mqm/.bashrc) \
+    && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/ibm/mqsi/${IIB_VERSION}\"" >> /home/mqm/.bashrc
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
 # The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
