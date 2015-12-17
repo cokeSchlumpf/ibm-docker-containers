@@ -5,6 +5,7 @@ MAINTAINER "Michael Wellner" <michael.wellner@de.ibm.com>
 # Define Versions
 ENV \
   DOWNLOAD_BASE_URL="http-server.docker:8080" \
+  JDK_VERSION=1.8.0_66 \
   WMQ_VERSION=7.5.0.3 \
   IIB_VERSION=9.0.0.2
 
