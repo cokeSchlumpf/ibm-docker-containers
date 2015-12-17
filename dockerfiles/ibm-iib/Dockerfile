@@ -36,10 +36,14 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
+# As seperate RUN - There was a failure when attached to the previous run command
 RUN usermod -G mqbrkrs mqm
 
 # Install openssh-server to deploy applications
-RUN yum install -y openssh-server openssh-clients
+RUN wget http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm \
+  && rpm -Uvh epel-release*rpm \
+  && rm epel-release*rpm \
+  && yum install -y openssh-server openssh-clients jq
 
 # Configure authorized keys
 RUN mkdir -p /home/mqm/.ssh \
@@ -85,6 +89,9 @@ RUN cd /tmp \
   && chown mqm:mqm /home/mqm/.ssh/* \
   && chmod 0600 /home/mqm/.ssh/id_rsa* \
   && rm -rf /tmp/*
+
+# Install jq for build scripts
+
 
 ENV \
   QUEUE_MGR_NAME=IIB_QM \
