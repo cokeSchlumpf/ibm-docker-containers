@@ -70,28 +70,47 @@ ENV BASH_ENV=/usr/local/bin/iib-env.sh
 # Expose ports from IIB to the outside world.
 EXPOSE 1414 4414 7800
 
+# Add SSH-Keys to allow Jenkins to use SSH for Git
+# The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
+COPY ssh-keys.own.zip /tmp/
+
 # Install necessary tools for Jenkins access
-RUN yum install -y java-1.7.0-openjdk git \
+# Install Java 8
+RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
+  && cd /tmp \
+  && tar -zxvf ./jdk.tar.gz \
+  && mv /tmp/jdk${JDK_VERSION} /opt/jdk \
+  && update-alternatives --install /usr/bin/java java /opt/jdk/bin/java 2 \
+  && update-alternatives --install /usr/bin/jar jar /opt/jdk/bin/jar 2 \
+  && update-alternatives --install /usr/bin/javac javac /opt/jdk/bin/javac 2 \
+  && update-alternatives --set java /opt/jdk/bin/java \
+  && update-alternatives --set jar /opt/jdk/bin/jar \
+  && update-alternatives --set javac /opt/jdk/bin/javac \
+  && rm -rf /tmp/* \
+  && export JAVA_HOME=/opt/jdk \
+  && export JRE_HOME=/opt/jdk/jre \
+  && export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin \
+  && java -version \
+  && which java \
   && manage-maven.sh \
   && ([ ! -z $http_proxy ] \
     && echo "export http_proxy=\"${http_proxy}\"" >> /home/mqm/.bashrc \
     && echo "export https_proxy=\"${https_proxy}\"" >> /home/mqm/.bashrc \
     && echo "export no_proxy=\"${no_proxy}\"" >> /home/mqm/.bashrc) \
-    && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/ibm/mqsi/${IIB_VERSION}\"" >> /home/mqm/.bashrc
-
-# Add SSH-Keys to allow Jenkins to use SSH for Git
-# The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
-COPY ssh-keys.own.zip /tmp/
-RUN cd /tmp \
+  && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/ibm/mqsi/${IIB_VERSION}\"" >> /home/mqm/.bashrc \
+  && echo "export JAVA_HOME=${JAVA_HOME}" >> /home/mqm/.bashrc \
+  && echo "export JRE_HOME=${JRE_HOME}" >> /home/mqm/.bashrc \
+  && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin" >> /home/mqm/.bashrc
+  && echo ""
+  && echo "Configure SSH ...."
+  && echo ""
+  && cd /tmp \
   && unzip ssh-keys.own.zip -d ./ \
   && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > /home/mqm/.ssh/config \
   && cp id_rsa* /home/mqm/.ssh/ \
   && chown mqm:mqm /home/mqm/.ssh/* \
   && chmod 0600 /home/mqm/.ssh/id_rsa* \
   && rm -rf /tmp/*
-
-# Install jq for build scripts
-
 
 ENV \
   QUEUE_MGR_NAME=IIB_QM \

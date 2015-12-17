@@ -14,7 +14,7 @@ rm $DOWNLOAD_TO
 echo 'Configuring Envrionment'
 
 mv $TEMPORARY_DIRECTORY/apache-maven-* /usr/share/maven
-echo -e 'export JAVA_HOME=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64\nexport M2_HOME=/usr/share/maven\nexport PATH=${M2_HOME}/bin:${PATH}' > /etc/profile.d/maven.sh
+echo -e 'export M2_HOME=/usr/share/maven\nexport PATH=${M2_HOME}/bin:${PATH}' > /etc/profile.d/maven.sh
 source /etc/profile.d/maven.sh
 
 
