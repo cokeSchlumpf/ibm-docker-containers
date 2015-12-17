@@ -80,10 +80,10 @@ RUN yum install -y java-1.7.0-openjdk git \
 COPY ssh-keys.own.zip /tmp/
 RUN cd /tmp \
   && unzip ssh-keys.own.zip -d ./ \
-  && mkdir ~/.ssh \
-  && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > ~/.ssh/config \
-  && cp id_rsa* ~/.ssh/ \
-  && chmod 0600 ~/.ssh/id_rsa* \
+  && mkdir /home/mqm/.ssh \
+  && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > /home/mqm/.ssh/config \
+  && cp id_rsa* /home/mqm/.ssh/ \
+  && chmod 0600 /home/mqm/.ssh/id_rsa* \
   && rm -rf /tmp/*
 
 ENV \
