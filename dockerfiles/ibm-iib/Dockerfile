@@ -101,11 +101,13 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/ibm/mqsi/${IIB_VERSION}\"" >> /home/mqm/.bashrc \
   && echo "export JAVA_HOME=${JAVA_HOME}" >> /home/mqm/.bashrc \
   && echo "export JRE_HOME=${JRE_HOME}" >> /home/mqm/.bashrc \
-  && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin" >> /home/mqm/.bashrc \
-  && echo "" \
-  && echo "Configure SSH ...." \
-  && echo "" \
-  && cd /tmp \
+  && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin" >> /home/mqm/.bashrc
+
+# Add SSH-Keys to allow Jenkins to use SSH for Git
+# The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
+COPY ssh-keys.own.zip /tmp/
+
+RUN cd /tmp \
   && unzip ssh-keys.own.zip -d ./ \
   && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > /home/mqm/.ssh/config \
   && cp id_rsa* /home/mqm/.ssh/ \
