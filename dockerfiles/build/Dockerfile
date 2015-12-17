@@ -69,6 +69,8 @@ RUN cd /tmp \
   && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > ~/.ssh/config \
   && cp id_rsa* ~/.ssh/ \
   && chmod 0600 ~/.ssh/id_rsa* \
+  && cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys \
+  && chmod 600 ~/.ssh/authorized_keys \
   && rm -rf /tmp/*
 
 
