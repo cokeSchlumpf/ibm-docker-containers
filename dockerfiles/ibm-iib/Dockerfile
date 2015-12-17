@@ -74,6 +74,17 @@ RUN yum install -y java-1.7.0-openjdk git \
     && echo "export https_proxy=\"${https_proxy}\"" >> /home/mqm/.bashrc \
     && echo "export no_proxy=\"${no_proxy}\"" >> /home/mqm/.bashrc)
 
+# Add SSH-Keys to allow Jenkins to use SSH for Git
+# The SSH Key which is added to known_hosts relates to the keys stored in ssh-keys.zip
+COPY ssh-keys.own.zip /tmp/
+RUN cd /tmp \
+  && unzip ssh-keys.own.zip -d ./ \
+  && mkdir ~/.ssh \
+  && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > ~/.ssh/config \
+  && cp id_rsa* ~/.ssh/ \
+  && chmod 0600 ~/.ssh/id_rsa* \
+  && rm -rf /tmp/*
+
 ENV \
   QUEUE_MGR_NAME=IIB_QM \
   BROKER_NAME=IIB_NODE \
