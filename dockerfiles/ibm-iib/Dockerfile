@@ -34,6 +34,7 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && cd /tmp \
   && tar -zxvf ./integrationbus.tar.gz \
   && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; exit 0  \
+  && cat /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
