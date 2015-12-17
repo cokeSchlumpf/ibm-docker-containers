@@ -19,6 +19,7 @@ iib_test_1:
     - "6800:7800"
   links:
     - wlp_test_1:rgf-modul-wlp
+    - build:build-docker-fue.services.local
 
 iib_test_2:
   image: ibm/iib
