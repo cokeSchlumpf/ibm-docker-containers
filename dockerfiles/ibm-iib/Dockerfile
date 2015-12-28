@@ -115,7 +115,7 @@ RUN cd /tmp \
   && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > /home/mqm/.ssh/config \
   && cp id_rsa* /home/mqm/.ssh/ \
   && chown mqm:mqm /home/mqm/.ssh/* \
-  && chmod 0600 /home/mqm/.ssh/id_rsa*
+  && chmod 0600 /home/mqm/.ssh/id_rsa* \
   && rm -rf /tmp/*
 
 ENV \
