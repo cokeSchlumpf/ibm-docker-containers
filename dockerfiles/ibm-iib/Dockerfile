@@ -35,8 +35,7 @@ RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integ
   && tar -zxvf ./integrationbus.tar.gz \
   && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; exit 0  \
   && cat /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
-  && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
-  && rm -rf /tmp/*
+  && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh
 
 # As seperate RUN - There was a failure when attached to the previous run command
 RUN usermod -G mqbrkrs mqm
@@ -88,7 +87,7 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && update-alternatives --set java /opt/jdk/bin/java \
   && update-alternatives --set jar /opt/jdk/bin/jar \
   && update-alternatives --set javac /opt/jdk/bin/javac \
-  && rm -rf /tmp/* \
+#  && rm -rf /tmp/* \
   && export JAVA_HOME=/opt/jdk \
   && export JRE_HOME=/opt/jdk/jre \
   && export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin \
@@ -113,8 +112,8 @@ RUN cd /tmp \
   && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > /home/mqm/.ssh/config \
   && cp id_rsa* /home/mqm/.ssh/ \
   && chown mqm:mqm /home/mqm/.ssh/* \
-  && chmod 0600 /home/mqm/.ssh/id_rsa* \
-  && rm -rf /tmp/*
+  && chmod 0600 /home/mqm/.ssh/id_rsa*
+#  && rm -rf /tmp/*
 
 ENV \
   QUEUE_MGR_NAME=IIB_QM \
