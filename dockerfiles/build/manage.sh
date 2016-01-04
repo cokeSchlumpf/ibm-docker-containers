@@ -11,7 +11,7 @@ start() {
     echo "JAVA_OPTS=\"-Dhttp.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
     echo "JAVA_OPTS=\"-Dhttp.proxyPort=${httpProxyPort} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
     echo "JAVA_OPTS=\"-Dhttp.nonProxyHosts=${httpNonProxyHosts} \$JAVA_OPTS\"" >> /usr/local/apache-tomcat/bin/setenv.sh
-    echo "export JAVA_OPTS=${JAVA_OPTS}"
+    echo "export JAVA_OPTS=${JAVA_OPTS}" >> /usr/local/apache-tomcat/bin/setenv.sh
 
     echo "Written /usr/local/apache-tomcat/bin/setenv.sh ..."
     cat /usr/local/apache-tomcat/bin/setenv.sh
