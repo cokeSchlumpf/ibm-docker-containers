@@ -5,7 +5,7 @@ start() {
     # Inject proxy settings into Tomcat.
     httpProxyHost=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $1}'`
     httpProxyPort=`echo $http_proxy | sed "s#\(http://\)\{0,1\}\([\.]*\)#\2#g" | awk -F: '{print $2}'`
-    httpNonProxyHosts=`$no_proxy | sed "s#,#|#g"`
+    httpNonProxyHosts=`echo $no_proxy | sed "s#,#|#g"`
 
     echo "JAVA_OPTS=\"-Dhttp.proxySet=true \${JAVA_OPTS}\"" > /usr/local/apache-tomcat/bin/setenv.sh
     echo "JAVA_OPTS=\"-Dhttp.proxyHost=${httpProxyHost} \${JAVA_OPTS}\"" >> /usr/local/apache-tomcat/bin/setenv.sh
