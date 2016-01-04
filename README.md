@@ -1,10 +1,12 @@
 # IBM Docker Images
 
-This project contains several dockerfiles to create images for the following purposes:
+## Dockerfiles
+
+This project contains several Dockerfiles to create images for the following purposes:
 
 * `ibm/build` - A complete buildserver containing Jenkins, Artifactory and Gitlab. [More ...](./dockerfiles/build)
 * `ibm/cntlm-proxy` - An image which provides a NTLM based proxy such as cntlm for fast NTLM authentication proxy with tunneling. [More ...](./dockerfiles/cntlm-proxy)
-* `ibm/dev` - An image which can be used to run builds webapp maven projects with NodeJS during development. [More ...](./dockerfiles/dev)
+* `ibm/dev` - An image which can be used to run development tests and builds for web application Maven projects with NodeJS. [More ...](./dockerfiles/dev)
 * `ibm/http-server` - An image which provides installation-files via HTTP to build the other containers. [More ...](./dockerfiles/http-server)
 * `ibm/iib` - A container containing IBM Integration Bus v9 for development and testing. [More...](./dockerfiles/ibm-iib)
 * `ibm/wlp` - A container containing WebSphere Liberty Profile for running JEE Applications. [More...](./dockerfiles/ibm-wlp)
@@ -12,10 +14,11 @@ This project contains several dockerfiles to create images for the following pur
 There some more abstract images. The dependencies between the images is shown below:
 
 ```
-ubuntu:14.05
+ubuntu:14.04
   ├ ibm/base-dev
   │ ├ ibm/dev
   │ └ ibm/build
+  ├ ibm/cntlm-proxy
   └ ibm/http-server
 
 centos:6.6
@@ -23,10 +26,6 @@ centos:6.6
     ├ ibm/iib
     └ ibm/wlp
 ```
-
-## Image naming conventions
-
-All image tags should start with `ibm/`. All base images which shouldn't be started as containers are prefixed with `base` e.g. `ibm/base-...`.
 
 ## Installation Files
 
@@ -233,3 +232,7 @@ before...
 mkdir ~/.m2 && curl http://build.docker.rodenstock.com:9080/rodenstock-fue-rgf/tools/raw/master/buildserver.maven.settings.xml > ~/.m2/settings.xml
 npm config set https-proxy ${http_proxy}
 npm config set proxy ${http_proxy}
+
+## Image naming conventions
+
+All image tags should start with `ibm/`. All base images which shouldn't be started as containers are prefixed with `base` e.g. `ibm/base-...`.
