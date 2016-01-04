@@ -33,11 +33,10 @@ RUN wget -O /tmp/websphere_mq.tar.gz ${DOWNLOAD_BASE_URL}/websphere-mq/websphere
 RUN wget -O /tmp/integrationbus.tar.gz ${DOWNLOAD_BASE_URL}/integrationbus/integrationbus_${IIB_VERSION}.tar.gz \
   && cd /tmp \
   && tar -zxvf ./integrationbus.tar.gz \
-  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; exit 0
+  && /tmp/integrationbus/setuplinuxx64 -i silent -DLICENSE_ACCEPTED=TRUE; echo $?; rm -rf /tmp/integrationbus.tar.gz /tmp/integrationbus/IBExplorer /tmp/integrationbus/IE02 /tmp/integrationbus/setuplinuxx64.bin; exit 0
 
 # Install Integration Toolkit
-RUN rm -rf /tmp/integrationbus.tar.gz /tmp/integrationbus/IBExplorer /tmp/integrationbus/IE02 /tmp/integrationbus/setuplinuxx64.bin \
-  && cat /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
+RUN  cat /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && /tmp/integrationbus/Integration_Toolkit/installToolkit-silent.sh \
   && rm -rf /tmp/*
 
