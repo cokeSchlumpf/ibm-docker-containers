@@ -108,7 +108,7 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && echo "export JAVA_HOME=${JAVA_HOME}" >> /home/mqm/.bashrc \
   && echo "export JRE_HOME=${JRE_HOME}" >> /home/mqm/.bashrc \
   && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin" >> /home/mqm/.bashrc \
-  && echo "source ${IBM_MQSI_HOME}/bin/mqsiprofile" >> /home/mqm/.bashrc \
+  && echo "source ${IBM_MQSI_HOME}/bin/mqsiprofile > /dev/null || true > /dev/null" >> /home/mqm/.bashrc \
   && yum install -y glib.i686 gtk2.i686 libSM.i686
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
