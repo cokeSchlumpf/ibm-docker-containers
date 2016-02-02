@@ -2,18 +2,25 @@
 
 start() {
   # Start IIB
-  su -c "manage-iib.sh" mqm
+  BROKERS=($(su -c "mqsilist" mqm | grep BIP128 | awk -F "'" '{print $2}'))
+
+  for BROKER in "${BROKERS[@]}"; do
+    echo "*** Stopping broker ${BROKER}"
+    su -c "mqsistart ${BROKER}"
+  done
 
   # Start SSH server
   /sbin/service sshd start
 }
 
 stop() {
-  echo "Stopping Message Broker..."
-  su -c "mqsistop ${BROKER_NAME}" mqm
+  # echo "Stopping all Message Brokers..."
+  BROKERS=($(su -c "mqsilist" mqm | grep BIP128 | awk -F "'" '{print $2}'))
 
-  echo "Stopping Queue Manager..."
-  su -c "endmqm ${QUEUE_MGR_NAME}" mqm
+  for BROKER in "${BROKERS[@]}"; do
+    echo "*** Stopping broker ${BROKER}"
+    su -c "mqsistop ${BROKER}"
+  done
 }
 
 monitor() {

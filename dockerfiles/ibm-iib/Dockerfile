@@ -67,7 +67,7 @@ RUN chmod +x /tmp/kernel-settings.sh \
   && /tmp/kernel-settings.sh
 
 # Copy in script files
-COPY manage.sh manage-iib.sh manage-maven.sh iib-env.sh /usr/local/bin/
+COPY manage.sh manage-maven.sh iib-env.sh /usr/local/bin/
 RUN chmod +rx /usr/local/bin/*.sh
 
 # Set BASH_ENV to source mqsiprofile when using docker exec bash -c
@@ -107,8 +107,8 @@ RUN wget -O /tmp/jdk.tar.gz ${DOWNLOAD_BASE_URL}/jdk/jdk_${JDK_VERSION}.tar.gz \
   && echo "export IBM_INTEGRATION_TOOLKIT_HOME=\"/opt/IBM/IntegrationToolkit90\"" >> /home/mqm/.bashrc \
   && echo "export JAVA_HOME=${JAVA_HOME}" >> /home/mqm/.bashrc \
   && echo "export JRE_HOME=${JRE_HOME}" >> /home/mqm/.bashrc \
-  && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin" >> /home/mqm/.bashrc \
-  && echo "source ${IBM_MQSI_HOME}/bin/mqsiprofile > /dev/null || true > /dev/null" >> /home/mqm/.bashrc \
+  && echo "export PATH=$PATH:/opt/jdk/bin:/opt/jdk/jre/bin:/usr/share/maven/bin" >> /home/mqm/.bashrc \
+  && echo "source \${IBM_MQSI_HOME}/bin/mqsiprofile > /dev/null 2>&1  || true" >> /home/mqm/.bashrc \
   && yum install -y glib.i686 gtk2.i686 libSM.i686
 
 # Add SSH-Keys to allow Jenkins to use SSH for Git
@@ -117,7 +117,7 @@ COPY ssh-keys.own.zip /tmp/
 
 RUN cd /tmp \
   && unzip ssh-keys.own.zip -d ./ \
-  && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n" > /home/mqm/.ssh/config \
+  && printf "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile /dev/null\n\tLogLevel quiet\n" > /home/mqm/.ssh/config \
   && cp id_rsa* /home/mqm/.ssh/ \
   && chown mqm:mqm /home/mqm/.ssh/* \
   && chmod 0600 /home/mqm/.ssh/id_rsa* \
